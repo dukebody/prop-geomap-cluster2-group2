@@ -132,4 +132,17 @@ public class CountryControllerTest extends TestCase{
         assertEquals("Bulgary", cc.getCountry("Bulgary").getName());
         System.out.println("OK");
     }
+
+    @Test
+    public void testGetZonesController() {
+        System.out.println("Testing getZonesController...");
+
+        System.out.print("\tTesting that getting the zone controller for an existing country is not null...");
+        assertNotNull(cc.getZonesController("Spain"));
+        System.out.println("OK");
+
+        System.out.print("\tTesting that getting the zone controller for a non-existing country returns null...");
+        assertNull(cc.getZonesController("NonExisting"));
+        System.out.println("OK");
+    }
 }

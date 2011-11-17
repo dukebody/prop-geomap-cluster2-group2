@@ -58,5 +58,12 @@ class CountryController {
         return countriesTrie.iteratorPrefix(prefix);
     }
 
+    public ZonesController getZonesController(String countryName) {
+        if (getCountry(countryName) != null)
+            return new ZonesController(countryName);
+        else
+            return null;
+    }
+
 }
 
