@@ -1,0 +1,3 @@
+interface IGetId {
+	String getId();
+}
