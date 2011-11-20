@@ -4,8 +4,10 @@
  *  @author Sergi Sisó Gòdia
  */
 
-public class BorderPoint extends Point {
+import java.util.*;
 
+
+public class BorderPoint extends Point {
     private List<Zone> zones = new ArrayList<Zone>(2);
 
     public BorderPoint(double latitude, double longitude) {
@@ -16,20 +18,21 @@ public class BorderPoint extends Point {
         super(latitude,longitude);
         zones.add(zone);
     }
-
-    public boolean addZone(Zone zone) {
+    
+    public boolean addZone(Zone zone){
+        if(zone==null)return false;
         return zones.add(zone);
     }
-
-    public List<Zone> getZones() {
+    
+    public List<Zone> getZones(){
         return zones;
     }
-
-    public Iterator getZonesIterator() {
+    
+    public Iterator getZonesIterator(){
         return zones.iterator();
     }
-
-    public boolean removeZone(Zone zone) {
+    
+    public boolean removeZone(Zone zone){
         return zones.remove(zone);
     }
 }
