@@ -5,7 +5,7 @@ class ToponymsController {
     
     private Trie<Toponym> toponymsTrie;
     private Trie<TypeToponym> typeToponymsTrie;
-    private QuadTree<Double,Point> toponymsQuadTree;
+    private QuadTree<Double,Toponym> toponymsQuadTree;
 
     private class ToponymsIterator implements Iterator<HashMap<String,String>> {
 
@@ -52,7 +52,7 @@ class ToponymsController {
     public ToponymsController() {
         toponymsTrie = new Trie<Toponym>();
         typeToponymsTrie = new Trie<TypeToponym>();
-        toponymsQuadTree = new QuadTree<Double,Point>();
+        toponymsQuadTree = new QuadTree<Double,Toponym>();
     }
 
     public boolean createToponymType(String name, String category, String code) {
@@ -110,18 +110,26 @@ class ToponymsController {
 
     public boolean addToponym(String nameASCII, String nameUTF, double latitude, double longitude, String typeCode) {
 
+        Toponym toponym;
+        TypeToponym type = typeToponymsTrie.get(typeCode);
+
+        try {
+            toponym = new Toponym(nameASCII, nameUTF, latitude, longitude, type);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
         // check that there doesn't exist already a toponym at the specified point
         Interval<Double> intX = new Interval<Double>(latitude, latitude);
         Interval<Double> intY = new Interval<Double>(longitude, longitude);
         Interval2D<Double> rect = new Interval2D<Double>(intX, intY);
-        if (toponymsQuadTree.query2D(rect).isEmpty()) {
-            TypeToponym type = typeToponymsTrie.get(typeCode);
-            Toponym toponym = new Toponym(nameASCII, nameUTF, latitude, longitude, type);
+        if (toponymsQuadTree.query2D(rect).isEmpty() && type != null) {
+            
             toponymsTrie.put(toponym, nameUTF);
             toponymsQuadTree.insert(latitude, longitude, toponym);
             return true;
         }
-        return false; // point already existent
+        return false; // point already exists
     }
 
     public List<HashMap<String,String>> getToponymsByName(String name) {
@@ -140,11 +148,19 @@ class ToponymsController {
                                  double newLongitude, String newTypeCode) {
         // erase old toponym from the quadtree and the trie
         HashMap<String, String> oldToponym = getToponymByNameAndId(nameUTF, id);
+        boolean result;
+
         if (oldToponym != null) {
-            toponymsTrie.remove(nameUTF, id);
-            toponymsQuadTree.remove(new Double(oldToponym.get("latitude")), new Double(oldToponym.get("longitude")));
-            addToponym(newNameASCII, newNameUTF, newLatitude, newLongitude, newTypeCode);
-            return true;
+            try {
+                result = addToponym(newNameASCII, newNameUTF, newLatitude, newLongitude, newTypeCode);
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+            if (result) {  // toponym added successfully
+                toponymsTrie.remove(nameUTF, id);
+                toponymsQuadTree.remove(new Double(oldToponym.get("latitude")), new Double(oldToponym.get("longitude")));
+                return true;
+            }
         }
         return false;  // original toponym not found
     }
