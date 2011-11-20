@@ -18,8 +18,8 @@ public class ToponymsControllerTest extends TestCase {
 
         tc.addToponym("Madrid", "Madrid", 34.3332, 12.4333, "CA");
         tc.addToponym("Barcelona", "Barcelona", 12.14, 1.2333, "CA");
-        tc.addToponym("Norilandia", "Ñorilandia", 345.2, 46.24, "CA");
-        tc.addToponym("Norilandia", "Norilandia", 346.2, 49.24, "CB");
+        tc.addToponym("Norilandia", "Ñorilandia", 35.2, 46.24, "CA");
+        tc.addToponym("Norilandia", "Norilandia", 36.2, 49.24, "CB");
         tc.addToponym("Mandril", "Mandril", 45.14, 22.563, "CB");
         tc.addToponym("Mandril", "Mandril", 45.18, 22.580, "CB");
     }
