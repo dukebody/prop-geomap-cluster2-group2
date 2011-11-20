@@ -6,6 +6,9 @@
  * 
  *************************************************************************/
 
+import java.util.*;
+
+
 public class QuadTree<Key extends Comparable<Key>, Value>  {
     private Node root;
 
@@ -40,27 +43,71 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
         return h;
     }
 
+  /***********************************************************************
+    *  Remove (x, y) from appropriate quadrant
+    ***********************************************************************/
+    public void remove(Key x, Key y) {
+        root = remove(root, x, y);
+    }
+
+    public Node remove(Node h, Key x, Key y) {
+        if (h == null) 
+            return null;  // the node doesn't exist, we don't do anything
+        else if (eq(x, h.x) && eq(y, h.y)) {
+            return null;  // delete found node
+        }
+        else if ( less(x, h.x) &&  less(y, h.y)) h.SW = remove(h.SW, x, y);
+        else if ( less(x, h.x) && !less(y, h.y)) h.NW = remove(h.NW, x, y);
+        else if (!less(x, h.x) &&  less(y, h.y)) h.SE = remove(h.SE, x, y);
+        else if (!less(x, h.x) && !less(y, h.y)) h.NE = remove(h.NE, x, y);
+        return h;
+    }
+
+  /***********************************************************************
+    *  Exact point search
+    ***********************************************************************/
+
+    public Node query(Key x, Key y) {
+        return query(root, x, y);
+    }
+
+    public Node query(Node h, Key x, Key y) {
+        if (h == null) 
+            return null;  // the node doesn't exist
+        else if (eq(x, h.x) && eq(y, h.y)) {
+            return h;  // node found!
+        }
+        else if ( less(x, h.x) &&  less(y, h.y)) h.SW = query(h.SW, x, y);
+        else if ( less(x, h.x) && !less(y, h.y)) h.NW = query(h.NW, x, y);
+        else if (!less(x, h.x) &&  less(y, h.y)) h.SE = query(h.SE, x, y);
+        else if (!less(x, h.x) && !less(y, h.y)) h.NE = query(h.NE, x, y);
+        return h;
+    }
 
   /***********************************************************************
     *  Range search.
     ***********************************************************************/
 
-    public void query2D(Interval2D<Key> rect) {
-        query2D(root, rect);
+    public ArrayList<Node> query2D(Interval2D<Key> rect) {
+        ArrayList<Node> foundNodes = new ArrayList<Node>();
+        return query2D(root, rect, foundNodes);
     }
 
-    private void query2D(Node h, Interval2D<Key> rect) {
-        if (h == null) return;
+    private ArrayList<Node> query2D(Node h, Interval2D<Key> rect, ArrayList<Node> foundNodes) {
+        if (h == null) return foundNodes;
         Key xmin = rect.intervalX.low;
         Key ymin = rect.intervalY.low;
         Key xmax = rect.intervalX.high;
         Key ymax = rect.intervalY.high;
         if (rect.contains(h.x, h.y))
-            System.out.println("    (" + h.x + ", " + h.y + ") " + h.value);
-        if ( less(xmin, h.x) &&  less(ymin, h.y)) query2D(h.SW, rect);
-        if ( less(xmin, h.x) && !less(ymax, h.y)) query2D(h.NW, rect);
-        if (!less(xmax, h.x) &&  less(ymin, h.y)) query2D(h.SE, rect);
-        if (!less(xmax, h.x) && !less(ymax, h.y)) query2D(h.NE, rect);
+            foundNodes.add(h);
+            //System.out.println("    (" + h.x + ", " + h.y + ") " + h.value);
+        if ( less(xmin, h.x) &&  less(ymin, h.y)) query2D(h.SW, rect, foundNodes);
+        if ( less(xmin, h.x) && !less(ymax, h.y)) query2D(h.NW, rect, foundNodes);
+        if (!less(xmax, h.x) &&  less(ymin, h.y)) query2D(h.SE, rect, foundNodes);
+        if (!less(xmax, h.x) && !less(ymax, h.y)) query2D(h.NE, rect, foundNodes);
+
+        return foundNodes;
     }
 
 
