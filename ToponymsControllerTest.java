@@ -17,7 +17,6 @@ public class ToponymsControllerTest extends TestCase {
         tc.createTypeToponym("City B", "City", "CB");
 
         tc.addToponym("Madrid", "Madrid", 34.3332, 12.4333, "CA");
-        System.out.println(tc.getToponymsByName("Madrid"));
         tc.addToponym("Barcelona", "Barcelona", 12.14, 1.2333, "CA");
         tc.addToponym("Norilandia", "Ñorilandia", 345.2, 46.24, "CA");
         tc.addToponym("Norilandia", "Norilandia", 346.2, 49.24, "CB");
