@@ -7,7 +7,7 @@
  *
  * @Justine Mugisa
  */
-public class TypeToponym {
+public class TypeToponym implements IGetId {
    private String name;
    private String category;
    private String code;
@@ -40,5 +40,9 @@ public class TypeToponym {
 
    public void setName(String name) {
        this.name = name;
+   }
+
+   public String getId() {
+     return this.code;
    }
 }
