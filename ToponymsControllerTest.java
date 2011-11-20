@@ -87,6 +87,25 @@ public class ToponymsControllerTest extends TestCase {
     }
 
     @Test
+    public void testToponymsPrefixIterator() {
+        System.out.println("Testing getToponymByNamePrefix...");
+
+        Iterator<HashMap<String,String>> toponyms = tc.getToponymsPrefixIterator("Ma");
+        
+        System.out.print("\tLooking for a prefix matching one or more elements should return them...");
+        while (toponyms.hasNext()) {
+            HashMap<String,String> toponym = toponyms.next();
+            assertTrue(toponym.get("nameUTF").startsWith("Ma"));
+        }
+        System.out.println("OK");
+
+        toponyms = tc.getToponymsPrefixIterator("NotMatchingPrefix");
+        System.out.print("\tLooking for a prefix not matching any element should return null...");
+        assertFalse(toponyms.hasNext());
+        System.out.println("OK");
+    }
+
+    @Test
     public void testAddToponym() {
         System.out.println("Testing addToponym...");
 

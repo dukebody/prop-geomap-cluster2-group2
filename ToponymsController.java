@@ -7,6 +7,26 @@ class ToponymsController {
     private Trie<TypeToponym> typeToponymsTrie;
     private QuadTree<Double,Point> toponymsQuadTree;
 
+    private class ToponymsIterator implements Iterator<HashMap<String,String>> {
+
+        private Iterator<Toponym> trieIterator;
+
+        public ToponymsIterator(Iterator trieIterator) {
+            this.trieIterator = trieIterator;
+        }
+
+        public boolean hasNext() {
+            return trieIterator.hasNext();
+        }
+
+        public HashMap<String,String> next() {
+            return getMap(trieIterator.next());
+        }
+
+        public void remove() {
+            trieIterator.remove();
+        }
+    }
 
     public ToponymsController() {
         toponymsTrie = new Trie<Toponym>();
@@ -66,6 +86,10 @@ class ToponymsController {
 
     public HashMap<String,String> getToponymByNameAndId(String name, String id) {
         return getMap(toponymsTrie.get(name, id));
+    }
+
+    public Iterator<HashMap<String,String>> getToponymsPrefixIterator(String name) {
+        return new ToponymsIterator(toponymsTrie.iteratorPrefix(name));
     }
 
     public boolean modifyToponym(String nameUTF, String id, String newNameASCII, String newNameUTF, double newLatitude, 
