@@ -63,14 +63,14 @@ public class BordersFileParserIterator implements Iterator<HashMap<String,String
         try {
             // prepare new point
             _currentLine = _reader.readLine();  // advance one line for the next iteration
-
-            if (_currentLine != null) {
-            _currentBorderPoint = getCurrentBorderPoint();
-            } else { // EOF
-                _currentBorderPoint = null;
-            }
         } catch (IOException e) {
             _currentLine = null;
+            _currentBorderPoint = null;
+        }
+
+        if (_currentLine != null) {
+            _currentBorderPoint = getCurrentBorderPoint();
+        } else { // EOF
             _currentBorderPoint = null;
         }
 
