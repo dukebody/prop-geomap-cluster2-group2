@@ -34,10 +34,16 @@ public class ToponymsControllerTest extends TestCase {
 
     @Test
     public void testgetMap() {
-        HashMap<String,String> map = new HashMap();
-        map.put("id", "6"); map.put("nameASCII", "Madrid"); map.put("nameUTF", "Madrid"); map.put("latitude", "34.3332"); map.put("longitude", "12.4333");
-        map.put("type", "CA");
-        assertEquals(map, tc.getMap(new Toponym("Madrid", "Madrid", 34.3332, 12.4333, new TypeToponym("City A", "City", "CA"))));
+        System.out.println("Testing getMap for single toponym...");
+
+
+        TypeToponym cityA = new TypeToponym("City A", "City", "CA");
+        HashMap<String,String> map = tc.getMap(new Toponym("Madrid", "Madrid", 34.3332, 12.4333, cityA));
+        assertEquals("Madrid", map.get("nameASCII"));
+        assertEquals("Madrid", map.get("nameUTF"));
+        assertEquals("34.3332", map.get("latitude"));
+        assertEquals("12.4333", map.get("longitude"));
+        assertEquals("CA", map.get("type"));
     }
 
     @Test
@@ -71,11 +77,12 @@ public class ToponymsControllerTest extends TestCase {
         System.out.println("Testing getToponymByName for names matching more than one element...");
 
         List<HashMap<String,String>> toponyms = tc.getToponymsByName("Mandril");
-        String secondId = toponyms.get(1).get("id");
-        HashMap<String,String> mandril = tc.getToponymByNameAndId("Mandril", secondId);
-        System.out.print("\tGetting an non-unique existing toponym by ascii name and id should return the toponym with that name and id...");
+        HashMap<String,String> secondToponym = toponyms.get(1);
+        String secondId = secondToponym.get("id");
+        HashMap<String,String> target = tc.getToponymByNameAndId("Mandril", secondId);
+        System.out.print("\tGetting an non-unique existing toponym by ascii name and id should return the toponyms with that name and id...");
         // The last inserted toponym is the last one by id in the associated Trie
-        assertEquals(new Double(45.18).toString(), mandril.get("latitude"));
+        assertEquals(secondToponym.get("latitude"), target.get("latitude"));
         System.out.println("OK");
     }
 
@@ -98,12 +105,12 @@ public class ToponymsControllerTest extends TestCase {
         System.out.println("Testing addToponym on top on an existing one (location-wise)...");
 
         System.out.print("\tChecking that this returns false...");
-        assertFalse(tc.addToponym("Zaragoza", "Zaragoza", 45.14, 22.563, "CA"));
+        assertFalse(tc.addToponym("Zaragoza", "Zaragoza", 12.14, 1.2333, "CA"));
         System.out.println("OK");
 
-        HashMap<String,String> mandril = tc.getToponymsByName("Mandril").get(0);
+        HashMap<String,String> barcelona = tc.getToponymsByName("Barcelona").get(0);
         System.out.print("\tChecking that the old toponym remains at its place...");
-        assertEquals("45.14", mandril.get("latitude"));
+        assertEquals("12.14", barcelona.get("latitude"));
         System.out.println("OK");
     }
 

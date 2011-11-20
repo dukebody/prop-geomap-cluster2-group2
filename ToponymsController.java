@@ -73,13 +73,11 @@ class ToponymsController {
         // erase old toponym from the quadtree and the trie
         HashMap<String, String> oldToponym = getToponymByNameAndId(nameUTF, id);
         if (oldToponym != null) {
-            System.out.println("chivato1");
             toponymsTrie.remove(nameUTF, id);
             toponymsQuadTree.remove(new Double(oldToponym.get("latitude")), new Double(oldToponym.get("longitude")));
             addToponym(newNameASCII, newNameUTF, newLatitude, newLongitude, newTypeCode);
             return true;
         }
-        System.out.println("chivato2");
         return false;  // original toponym not found
     }
 }
