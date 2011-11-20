@@ -13,7 +13,7 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
     private Node root;
 
     // helper node data type
-    private class Node {
+    public class Node {
         Key x, y;              // x- and y- coordinates
         Node NW, NE, SE, SW;   // four subtrees
         Value value;           // associated data
@@ -71,7 +71,7 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
         return query(root, x, y);
     }
 
-    public Node query(Node h, Key x, Key y) {
+    private Node query(Node h, Key x, Key y) {
         if (h == null) 
             return null;  // the node doesn't exist
         else if (eq(x, h.x) && eq(y, h.y)) {
