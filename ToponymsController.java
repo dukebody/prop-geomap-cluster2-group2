@@ -28,16 +28,48 @@ class ToponymsController {
         }
     }
 
+    private class ToponymTypesIterator implements Iterator<HashMap<String,String>> {
+
+        private Iterator<TypeToponym> trieIterator;
+
+        public ToponymTypesIterator(Iterator trieIterator) {
+            this.trieIterator = trieIterator;
+        }
+
+        public boolean hasNext() {
+            return trieIterator.hasNext();
+        }
+
+        public HashMap<String,String> next() {
+            return getMap(trieIterator.next());
+        }
+
+        public void remove() {
+            trieIterator.remove();
+        }
+    }
+
     public ToponymsController() {
         toponymsTrie = new Trie<Toponym>();
         typeToponymsTrie = new Trie<TypeToponym>();
         toponymsQuadTree = new QuadTree<Double,Point>();
     }
 
-    public boolean createTypeToponym(String name, String category, String code) {
-        TypeToponym typeToponym = new TypeToponym(name, category, code);
-        typeToponymsTrie.put(typeToponym, code);
-        return true;
+    public boolean createToponymType(String name, String category, String code) {
+        if (getToponymType(code) == null) {
+            TypeToponym typeToponym = new TypeToponym(name, category, code);
+            typeToponymsTrie.put(typeToponym, code);
+            return true;
+        }
+        return false;  // already existing toponym type with that code
+    }
+
+    public HashMap<String,String> getToponymType(String code) {
+        return getMap(typeToponymsTrie.get(code));
+    }
+
+    public Iterator<HashMap<String,String>> getToponymTypesIterator() {
+        return new ToponymTypesIterator(typeToponymsTrie.iterator());
     }
 
     public HashMap<String,String> getMap(Toponym toponym) {
@@ -49,6 +81,18 @@ class ToponymsController {
             map.put("latitude", new Double(toponym.getLatitude()).toString());
             map.put("longitude", new Double(toponym.getLongitude()).toString());
             map.put("type", toponym.getType().getCode());
+            return map;
+        }
+
+        return null;
+    }
+
+    public HashMap<String,String> getMap(TypeToponym type) {
+        HashMap<String,String> map = new HashMap<String,String>();
+        if (type != null) {
+            map.put("name", type.getName());
+            map.put("category", type.getCategory());
+            map.put("code", type.getCode());
             return map;
         }
 

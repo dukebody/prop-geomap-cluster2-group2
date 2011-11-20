@@ -13,8 +13,8 @@ public class ToponymsControllerTest extends TestCase {
     public void setUp() throws Exception {
         tc = new ToponymsController();
 
-        tc.createTypeToponym("City A", "City", "CA");
-        tc.createTypeToponym("City B", "City", "CB");
+        tc.createToponymType("City A", "City", "CA");
+        tc.createToponymType("City B", "City", "CB");
 
         tc.addToponym("Madrid", "Madrid", 34.3332, 12.4333, "CA");
         tc.addToponym("Barcelona", "Barcelona", 12.14, 1.2333, "CA");
@@ -33,9 +33,40 @@ public class ToponymsControllerTest extends TestCase {
     // }
 
     @Test
-    public void testgetMap() {
-        System.out.println("Testing getMap for single toponym...");
+    public void testGetToponymType() {
+        System.out.println("Testing getToponymType...");
 
+        System.out.println("Checking that getting an existing toponym by code returns the related map...");
+        HashMap<String,String> type = tc.getToponymType("CA");
+        assertEquals("City A", type.get("name"));
+        assertEquals("City", type.get("category"));
+        assertEquals("CA", type.get("code"));
+        System.out.println("OK");
+
+        System.out.println("Checking that getting a non-existing toponym by code returns null...");
+        assertNull(tc.getToponymType("BADCODE"));
+        System.out.println("OK");
+    }
+
+    @Test 
+    public void testGetToponymTypesIterator() {
+        System.out.println("Testing getToponymTypesIterator...");
+
+        Iterator<HashMap<String,String>> types = tc.getToponymTypesIterator();
+        int count = 0;
+        while (types.hasNext()) {
+            types.next();
+            count++;
+        }
+        System.out.println("Checking getToponymTypesIterator returns an iterator to all the toponym types...");
+        assertEquals(2, count);
+        System.out.println("OK");
+    }
+
+
+    @Test
+    public void testGetMapToponym() {
+        System.out.println("Testing getMap for a single toponym...");
 
         TypeToponym cityA = new TypeToponym("City A", "City", "CA");
         HashMap<String,String> map = tc.getMap(new Toponym("Madrid", "Madrid", 34.3332, 12.4333, cityA));
@@ -44,6 +75,19 @@ public class ToponymsControllerTest extends TestCase {
         assertEquals("34.3332", map.get("latitude"));
         assertEquals("12.4333", map.get("longitude"));
         assertEquals("CA", map.get("type"));
+        System.out.println("OK");
+    }
+
+    @Test
+    public void testGetMapToponymType() {
+        System.out.println("Testing getMap for a single toponymtype...");
+
+        TypeToponym cityA = new TypeToponym("City A", "City", "CA");
+        HashMap<String,String> map = tc.getMap(cityA);
+        assertEquals("City A", map.get("name"));
+        assertEquals("City", map.get("category"));
+        assertEquals("CA", map.get("code"));
+        System.out.println("OK");
     }
 
     @Test
