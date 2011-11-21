@@ -31,11 +31,11 @@ public class QuadTreeTest extends TestCase {
         System.out.println("Testing query(x, y)...");
 
         System.out.print("\tChecking that query(x, y) gets an existing point...");
-        assertNotNull(qt.query(7, 2));
+        assertEquals("P4", qt.query(7, 2).value);
         System.out.println("OK");
 
         System.out.print("\tChecking that query(x, y) returns null for a non-existing point...");
-        assertNotNull(qt.query(7, 3));
+        assertNull(qt.query(7, 3));
         System.out.println("OK");
     }
 

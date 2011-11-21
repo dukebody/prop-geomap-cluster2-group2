@@ -68,21 +68,16 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
     ***********************************************************************/
 
     public Node query(Key x, Key y) {
-        return query(root, x, y);
+        Interval<Key> intX = new Interval<Key>(x, x);
+        Interval<Key> intY = new Interval<Key>(y, y);
+        Interval2D<Key> rect = new Interval2D<Key>(intX, intY);
+        ArrayList<Node> nodes = query2D(rect);
+        if (!nodes.isEmpty()) {
+            return nodes.get(0);
+        }
+        return null;
     }
 
-    private Node query(Node h, Key x, Key y) {
-        if (h == null) 
-            return null;  // the node doesn't exist
-        else if (eq(x, h.x) && eq(y, h.y)) {
-            return h;  // node found!
-        }
-        else if ( less(x, h.x) &&  less(y, h.y)) h.SW = query(h.SW, x, y);
-        else if ( less(x, h.x) && !less(y, h.y)) h.NW = query(h.NW, x, y);
-        else if (!less(x, h.x) &&  less(y, h.y)) h.SE = query(h.SE, x, y);
-        else if (!less(x, h.x) && !less(y, h.y)) h.NE = query(h.NE, x, y);
-        return h;
-    }
 
   /***********************************************************************
     *  Range search.
