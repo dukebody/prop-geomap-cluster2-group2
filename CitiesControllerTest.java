@@ -238,4 +238,32 @@ public class CitiesControllerTest extends TestCase {
         assertTrue(tc.getCitiesByName("Almeria").isEmpty());
         System.out.println("OK");
     }
+
+    @Test
+    public void testDeleteCity() {
+        System.out.println("Testing deleteExistentCity...");
+
+        String id = tc.getCitiesByName("Madrid").get(0).get("id");
+        System.out.print("\tChecking that deleteCity(valid_name, valid_id) returns True...");
+        assertTrue(tc.deleteCity("Madrid", id));
+        System.out.println("OK");
+    
+        System.out.print("\tChecking that the deleted city doesn't exist...");
+        assertTrue(tc.getCitiesByName("Almeria").isEmpty());
+        System.out.println("OK");
+    }
+
+    @Test
+    public void testDeleteUnexistentCity() {
+        System.out.println("Testing deleteUnexistentCity...");
+
+        System.out.print("\tChecking that deleteCity(valid_name, invalid_id) returns True...");
+        assertFalse(tc.deleteCity("Madrid", "30024"));
+        System.out.println("OK");
+
+        String id = tc.getCitiesByName("Madrid").get(0).get("id");
+        System.out.print("\tChecking that deleteCity(valid_name, invalid_id) returns True...");
+        assertFalse(tc.deleteCity("Madrida", id));
+        System.out.println("OK");
+    }
 }

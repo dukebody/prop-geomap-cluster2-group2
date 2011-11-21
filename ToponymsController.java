@@ -1,17 +1,17 @@
 import java.util.*;
 
 
-class ToponymsController {
+class CitiesController {
     
-    private Trie<Toponym> toponymsTrie;
-    private Trie<TypeToponym> typeToponymsTrie;
-    private QuadTree<Double,Toponym> toponymsQuadTree;
+    private Trie<City> citiesTrie;
+    private Trie<TypeCity> typeCitiesTrie;
+    private QuadTree<Double,City> citiesQuadTree;
 
-    private class ToponymsIterator implements Iterator<HashMap<String,String>> {
+    private class CitiesIterator implements Iterator<HashMap<String,String>> {
 
-        private Iterator<Toponym> trieIterator;
+        private Iterator<City> trieIterator;
 
-        public ToponymsIterator(Iterator trieIterator) {
+        public CitiesIterator(Iterator trieIterator) {
             this.trieIterator = trieIterator;
         }
 
@@ -28,11 +28,11 @@ class ToponymsController {
         }
     }
 
-    private class ToponymTypesIterator implements Iterator<HashMap<String,String>> {
+    private class CityTypesIterator implements Iterator<HashMap<String,String>> {
 
-        private Iterator<TypeToponym> trieIterator;
+        private Iterator<TypeCity> trieIterator;
 
-        public ToponymTypesIterator(Iterator trieIterator) {
+        public CityTypesIterator(Iterator trieIterator) {
             this.trieIterator = trieIterator;
         }
 
@@ -49,45 +49,45 @@ class ToponymsController {
         }
     }
 
-    public ToponymsController() {
-        toponymsTrie = new Trie<Toponym>();
-        typeToponymsTrie = new Trie<TypeToponym>();
-        toponymsQuadTree = new QuadTree<Double,Toponym>();
+    public CitiesController() {
+        citiesTrie = new Trie<City>();
+        typeCitiesTrie = new Trie<TypeCity>();
+        citiesQuadTree = new QuadTree<Double,City>();
     }
 
-    public boolean createToponymType(String name, String category, String code) {
-        if (getToponymType(code) == null) {
-            TypeToponym typeToponym = new TypeToponym(name, category, code);
-            typeToponymsTrie.put(typeToponym, code);
+    public boolean createCityType(String name, String category, String code) {
+        if (getCityType(code) == null) {
+            TypeCity typeCity = new TypeCity(name, category, code);
+            typeCitiesTrie.put(typeCity, code);
             return true;
         }
-        return false;  // already existing toponym type with that code
+        return false;  // already existing city type with that code
     }
 
-    public HashMap<String,String> getToponymType(String code) {
-        return getMap(typeToponymsTrie.get(code));
+    public HashMap<String,String> getCityType(String code) {
+        return getMap(typeCitiesTrie.get(code));
     }
 
-    public Iterator<HashMap<String,String>> getToponymTypesIterator() {
-        return new ToponymTypesIterator(typeToponymsTrie.iterator());
+    public Iterator<HashMap<String,String>> getCityTypesIterator() {
+        return new CityTypesIterator(typeCitiesTrie.iterator());
     }
 
-    public HashMap<String,String> getMap(Toponym toponym) {
+    public HashMap<String,String> getMap(City city) {
         HashMap<String,String> map = new HashMap<String,String>();
-        if (toponym != null) {
-            map.put("id", toponym.getId());
-            map.put("nameASCII", toponym.getNameASCII());
-            map.put("nameUTF", toponym.getNameUTF());
-            map.put("latitude", new Double(toponym.getLatitude()).toString());
-            map.put("longitude", new Double(toponym.getLongitude()).toString());
-            map.put("type", toponym.getType().getCode());
+        if (city != null) {
+            map.put("id", city.getId());
+            map.put("nameASCII", city.getNameASCII());
+            map.put("nameUTF", city.getNameUTF());
+            map.put("latitude", new Double(city.getLatitude()).toString());
+            map.put("longitude", new Double(city.getLongitude()).toString());
+            map.put("type", city.getType().getCode());
             return map;
         }
 
         return null;
     }
 
-    public HashMap<String,String> getMap(TypeToponym type) {
+    public HashMap<String,String> getMap(TypeCity type) {
         HashMap<String,String> map = new HashMap<String,String>();
         if (type != null) {
             map.put("name", type.getName());
@@ -99,69 +99,69 @@ class ToponymsController {
         return null;
     }
 
-    public List<HashMap<String,String>> getMap(List<Toponym> toponymList) {
+    public List<HashMap<String,String>> getMap(List<City> cityList) {
         List<HashMap<String,String>> mapList = new LinkedList<HashMap<String,String>>();
-        for (Toponym toponym: toponymList) {
-            mapList.add(getMap(toponym));
+        for (City city: cityList) {
+            mapList.add(getMap(city));
         }
 
         return mapList;
     }
 
-    public boolean addToponym(String nameASCII, String nameUTF, double latitude, double longitude, String typeCode) {
+    public boolean addCity(String nameASCII, String nameUTF, double latitude, double longitude, String typeCode) {
 
-        Toponym toponym;
-        TypeToponym type = typeToponymsTrie.get(typeCode);
+        City city;
+        TypeCity type = typeCitiesTrie.get(typeCode);
 
         try {
-            toponym = new Toponym(nameASCII, nameUTF, latitude, longitude, type);
+            city = new City(nameASCII, nameUTF, latitude, longitude, type);
         } catch (IllegalArgumentException e) {
             return false;
         }
 
-        // check that there doesn't exist already a toponym at the specified point
+        // check that there doesn't exist already a city at the specified point
         Interval<Double> intX = new Interval<Double>(latitude, latitude);
         Interval<Double> intY = new Interval<Double>(longitude, longitude);
         Interval2D<Double> rect = new Interval2D<Double>(intX, intY);
-        if (toponymsQuadTree.query2D(rect).isEmpty() && type != null) {
+        if (citiesQuadTree.query2D(rect).isEmpty() && type != null) {
             
-            toponymsTrie.put(toponym, nameUTF);
-            toponymsQuadTree.insert(latitude, longitude, toponym);
+            citiesTrie.put(city, nameUTF);
+            citiesQuadTree.insert(latitude, longitude, city);
             return true;
         }
         return false; // point already exists
     }
 
-    public List<HashMap<String,String>> getToponymsByName(String name) {
-        return getMap(toponymsTrie.getList(name));
+    public List<HashMap<String,String>> getCitiesByName(String name) {
+        return getMap(citiesTrie.getList(name));
     }
 
-    public HashMap<String,String> getToponymByNameAndId(String name, String id) {
-        return getMap(toponymsTrie.get(name, id));
+    public HashMap<String,String> getCityByNameAndId(String name, String id) {
+        return getMap(citiesTrie.get(name, id));
     }
 
-    public Iterator<HashMap<String,String>> getToponymsPrefixIterator(String name) {
-        return new ToponymsIterator(toponymsTrie.iteratorPrefix(name));
+    public Iterator<HashMap<String,String>> getCitiesPrefixIterator(String name) {
+        return new CitiesIterator(citiesTrie.iteratorPrefix(name));
     }
 
-    public boolean modifyToponym(String nameUTF, String id, String newNameASCII, String newNameUTF, double newLatitude, 
+    public boolean modifyCity(String nameUTF, String id, String newNameASCII, String newNameUTF, double newLatitude, 
                                  double newLongitude, String newTypeCode) {
-        // erase old toponym from the quadtree and the trie
-        HashMap<String, String> oldToponym = getToponymByNameAndId(nameUTF, id);
+        // erase old city from the quadtree and the trie
+        HashMap<String, String> oldCity = getCityByNameAndId(nameUTF, id);
         boolean result;
 
-        if (oldToponym != null) {
+        if (oldCity != null) {
             try {
-                result = addToponym(newNameASCII, newNameUTF, newLatitude, newLongitude, newTypeCode);
+                result = addCity(newNameASCII, newNameUTF, newLatitude, newLongitude, newTypeCode);
             } catch (IllegalArgumentException e) {
                 return false;
             }
-            if (result) {  // toponym added successfully
-                toponymsTrie.remove(nameUTF, id);
-                toponymsQuadTree.remove(new Double(oldToponym.get("latitude")), new Double(oldToponym.get("longitude")));
+            if (result) {  // city added successfully
+                citiesTrie.remove(nameUTF, id);
+                citiesQuadTree.remove(new Double(oldCity.get("latitude")), new Double(oldCity.get("longitude")));
                 return true;
             }
         }
-        return false;  // original toponym not found
+        return false;  // original city not found
     }
 }

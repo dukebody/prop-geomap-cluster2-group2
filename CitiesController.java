@@ -154,12 +154,22 @@ class CitiesController {
             } catch (IllegalArgumentException e) {
                 return false;
             }
-            if (result) {  // city added successfully
+            if (result) {  // city created successfully
                 citiesTrie.remove(nameUTF, id);
                 citiesQuadTree.remove(new Double(oldCity.get("latitude")), new Double(oldCity.get("longitude")));
                 return true;
             }
         }
         return false;  // original city not found
+    }
+
+    public boolean deleteCity(String name, String id) {
+        HashMap<String,String> city = getCityByNameAndId(name, id);
+        if (city != null) {
+            citiesTrie.remove(name, id);
+            citiesQuadTree.remove(new Double(city.get("latitude")), new Double(city.get("longitude")));
+            return true;
+        }
+        return false;
     }
 }

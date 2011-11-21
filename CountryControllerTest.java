@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 
-public class CountryControllerTest extends TestCase{
+public class CountryControllerTest extends TestCase {
 
     private CountryController cc;
     private ArrayList<String> elements;
@@ -143,6 +143,15 @@ public class CountryControllerTest extends TestCase{
 
         System.out.print("\tTesting that getting the zone controller for a non-existing country returns null...");
         assertNull(cc.getZonesController("NonExisting"));
+        System.out.println("OK");
+    }
+
+    @Test
+    public void testGetBorderPointsItrs() {
+        System.out.println("Testing getBorderPointsItrs...");
+
+        System.out.print("\tTesting that getting the zone controller for an existing country is not null...");
+        assertNotNull(cc.getZonesController("Spain"));
         System.out.println("OK");
     }
 }
