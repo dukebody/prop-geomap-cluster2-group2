@@ -3,14 +3,49 @@ import java.util.*;
 class CountryController {
 
     private Trie<Country> countriesTrie;
+    private QuadTree<Double,BorderPoint> borderPointsQuadTree;
+
+    private class CountriesIterator implements Iterator<HashMap<String,String>> {
+
+        private Iterator<Country> trieIterator;
+
+        public CountriesIterator(Iterator trieIterator) {
+            this.trieIterator = trieIterator;
+        }
+
+        public boolean hasNext() {
+            return trieIterator.hasNext();
+        }
+
+        public HashMap<String,String> next() {
+            return getMap(trieIterator.next());
+        }
+
+        public void remove() {
+            trieIterator.remove();
+        }
+    }
 
     public CountryController() {
         countriesTrie = new Trie<Country>();
     }
 
-    public boolean addCountry(String name) {
+    private HashMap<String,String> getMap(Country country) {
+        HashMap<String,String> map = new HashMap<String,String>();
+        if (country != null) {
+            map.put("name", country.getName());
+            map.put("code", country.getCode());
+            return map;
+        }
+
+        return null;
+    }
+
+
+    public boolean addCountry(String name, String code) {
         Country country = new Country(name);
-        if (countriesTrie.get(name) == null) {
+        country.setCode("code");
+        if (countriesTrie.get(name) == null && name != null) {
             countriesTrie.put(country, name);
             return true;
         }
@@ -18,11 +53,11 @@ class CountryController {
         return false; // a country with this name already exists
     }
 
-    public Country getCountry(String name) {
-        return countriesTrie.get(name);
+    public HashMap<String,String> getCountry(String name) {
+        return getMap(countriesTrie.get(name));
     }
 
-    public boolean modifyCountry(String oldName, String newName) {
+    public boolean modifyCountry(String oldName, String newName, String newCode) {
         Country oldCountry = countriesTrie.get(oldName);
         if (oldCountry != null) {  // the origin country exists
             if (newName != null && newName.length() != 0 && countriesTrie.get(newName) == null) {
@@ -30,7 +65,8 @@ class CountryController {
 
                 // copy country
                 oldCountry = countriesTrie.get(oldName);
-                Country newCountry = new Country(oldName);
+                Country newCountry = new Country(newName);
+                newCountry.setCode(newCode);
                 newCountry.setZones(oldCountry.getZones());
 
                 // remove old country
@@ -50,20 +86,12 @@ class CountryController {
         return countriesTrie.remove(name, name);
     }
 
-    public Iterator<Country> getAllCountriesIterator() {
-        return countriesTrie.iterator();
+    public CountriesIterator getAllCountriesIterator() {
+        return new CountriesIterator(countriesTrie.iterator());
     }
 
-    public Iterator<Country> getPrefixCountriesIterator(String prefix) {
-        return countriesTrie.iteratorPrefix(prefix);
+    public CountriesIterator getPrefixCountriesIterator(String prefix) {
+        return new CountriesIterator(countriesTrie.iteratorPrefix(prefix));
     }
-
-    public ZonesController getZonesController(String countryName) {
-        if (getCountry(countryName) != null)
-            return new ZonesController(countryName);
-        else
-            return null;
-    }
-
 }
 

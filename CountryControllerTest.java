@@ -8,25 +8,21 @@ import org.junit.Test;
 public class CountryControllerTest extends TestCase {
 
     private CountryController cc;
-    private ArrayList<String> elements;
     
     @Before
     public void setUp() throws Exception {
         cc = new CountryController();
-        elements = new ArrayList<String>(10);
-        elements.add("Spain");
-        elements.add("France");
-        elements.add("Germany");
-        elements.add("China");
-        elements.add("Italy");
-        elements.add("Morocco");
-        elements.add("Bulgary");
-        elements.add("Sweden");
-        elements.add("Finland");
-        elements.add("Norway");
+        cc.addCountry("Spain", "ES");
+        cc.addCountry("France", "FR");
+        cc.addCountry("Germany", "GE");
+        cc.addCountry("China", "CH");
+        cc.addCountry("Italy", "IT");
+        cc.addCountry("Morocco", "MO");
+        cc.addCountry("Bulgary", "BU");
+        cc.addCountry("Sweden", "SW");
+        cc.addCountry("Finland", "FI");
+        cc.addCountry("Norway", "NW");
         
-        for(String e : elements)
-            cc.addCountry(e);
     }
 
     @After
@@ -37,12 +33,12 @@ public class CountryControllerTest extends TestCase {
     public void testGetCountry() {
         System.out.println("Testing getCountry...");
 
-        Country spain = cc.getCountry("Spain");
+        HashMap<String,String> spain = cc.getCountry("Spain");
         System.out.print("\tGetting an existing country should return a country with that name...");
-        assertEquals("Spain", spain.getName());
+        assertEquals("Spain", spain.get("name"));
         System.out.println("OK");
 
-        Country nonexistentCountry = cc.getCountry("NonExistent");
+        HashMap<String,String> nonexistentCountry = cc.getCountry("NonExistent");
         System.out.print("\tGetting an non-existing country should return null...");
         assertNull(nonexistentCountry);
         System.out.println("OK");
@@ -52,18 +48,21 @@ public class CountryControllerTest extends TestCase {
     public void testGetCountriesIterator() {
         System.out.println("Testing getAllCountriesIterator and getPrefixCountriesIterator...");
 
-        Iterator<Country> itr = cc.getAllCountriesIterator();
-        System.out.print("\tTesting that the all-countries iterator returns all the existent countries...");
+        Iterator<HashMap<String,String>> itr = cc.getAllCountriesIterator();
+        int count = 0;
         while (itr.hasNext()) {
-            assertTrue(elements.contains(itr.next().getName()));
+            itr.next();
+            count++;
         }
+        System.out.print("\tTesting that the all-countries iterator returns all the existent countries...");
+        assertEquals(10, count);
         System.out.println("OK");
 
         itr = cc.getPrefixCountriesIterator("S");
         System.out.print("\tTesting that the prefix-countries iterator returns all the existent countries with the specified prefix...");
         while (itr.hasNext()) {
-            String name = itr.next().getName();
-            assertTrue(name == "Sweden" | name == "Spain");
+            String name = itr.next().get("name");
+            assertTrue(name == "Sweden" || name == "Spain");
         }
         System.out.println("OK");
     }
@@ -73,7 +72,11 @@ public class CountryControllerTest extends TestCase {
         System.out.println("Testing addCountry...");
 
         System.out.print("\tTesting that adding a country with an already registered name returns False...");
-        assertFalse(cc.addCountry("Spain"));
+        assertFalse(cc.addCountry("Spain", "SA"));
+        System.out.println("OK");
+
+        System.out.print("\tTesting that adding a country with an empty name returns False...");
+        assertFalse(cc.addCountry("", "IO"));
         System.out.println("OK");
     }
 
@@ -99,59 +102,39 @@ public class CountryControllerTest extends TestCase {
         System.out.println("Testing modifyCountry...");
 
         System.out.print("\tTesting that modifying an existent country returns True...");
-        assertTrue(cc.modifyCountry("Spain", "Singapur"));
+        assertTrue(cc.modifyCountry("Spain", "Singapur", "SI"));
         System.out.println("OK");
 
         System.out.print("\tTesting that the modification actually worked...");
         assertNull(cc.getCountry("Spain"));
         assertNotNull(cc.getCountry("Singapur"));
+        assertEquals("Singapur", cc.getCountry("Singapur").get("name"));
         System.out.println("OK");
 
         System.out.print("\tTesting that modifying a non-existent country returns False...");
-        assertFalse(cc.modifyCountry("Japan", "OMG"));
+        assertFalse(cc.modifyCountry("Japan", "OMG", "OMGA"));
         System.out.println("OK");
 
         System.out.print("\tTesting that modifying an existing country with a null name returns False...");
-        assertFalse(cc.modifyCountry("Italy", null));
+        assertFalse(cc.modifyCountry("Italy", null, "IT"));
         System.out.println("OK");
 
         System.out.print("\tTesting that modifying an existing country with a zero-length name returns False...");
-        assertFalse(cc.modifyCountry("Italy", ""));
+        assertFalse(cc.modifyCountry("Italy", "", "IT"));
         System.out.println("OK");
 
         System.out.print("\tTesting that the country wasn't modified...");
-        assertEquals("Italy", cc.getCountry("Italy").getName());
+        assertEquals("Italy", cc.getCountry("Italy").get("name"));
         System.out.println("OK");
 
         System.out.print("\tTesting that trying to change the name of the country to an existing one returns False...");
-        assertFalse(cc.modifyCountry("Sweden", "Bulgary"));
+        assertFalse(cc.modifyCountry("Sweden", "Bulgary", "BU"));
         System.out.println("OK");
 
         System.out.print("\tTesting that the affected countries weren't modified...");
-        assertEquals("Sweden", cc.getCountry("Sweden").getName());
-        assertEquals("Bulgary", cc.getCountry("Bulgary").getName());
+        assertEquals("Sweden", cc.getCountry("Sweden").get("name"));
+        assertEquals("Bulgary", cc.getCountry("Bulgary").get("name"));
         System.out.println("OK");
     }
 
-    @Test
-    public void testGetZonesController() {
-        System.out.println("Testing getZonesController...");
-
-        System.out.print("\tTesting that getting the zone controller for an existing country is not null...");
-        assertNotNull(cc.getZonesController("Spain"));
-        System.out.println("OK");
-
-        System.out.print("\tTesting that getting the zone controller for a non-existing country returns null...");
-        assertNull(cc.getZonesController("NonExisting"));
-        System.out.println("OK");
-    }
-
-    @Test
-    public void testGetBorderPointsItrs() {
-        System.out.println("Testing getBorderPointsItrs...");
-
-        System.out.print("\tTesting that getting the zone controller for an existing country is not null...");
-        assertNotNull(cc.getZonesController("Spain"));
-        System.out.println("OK");
-    }
 }
