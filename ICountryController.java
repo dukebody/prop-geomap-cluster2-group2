@@ -2,19 +2,11 @@ import java.util.*;
 
 public interface ICountryController {
 
-    private Trie<Country> countriesTrie;  // name index of all countries
-    private QuadTree<Double,BorderPoint> borderPointsQuadTree;
-
-    public CountryController();
-
     public boolean addCountry(String name, String code);
     // Create a new country with this name and code
 
-    private HashMap<String,String> getCountry(String name);
+    public HashMap<String,String> getCountry(String name);
     // get a country by name
-
-    public HashMap<String,String> getMap(Country country);
-    // build a hashmap with name/code of the given country
 
     public boolean modifyCountry(String oldName, String newName, String newCode);
     // return True if the country was modified sucessfully, False otherwise
@@ -22,13 +14,13 @@ public interface ICountryController {
     public boolean removeCountry(String name);
     // return True if the country was deleted sucessfully, False otherwise
 
-    public Iterator<HashMap<String,String>> getAllCountriesIterator();
+    public CountriesIterator getAllCountriesIterator();
     // return an iterator over all the countries
 
-    public Iterator<HashMap<String,String>> getPrefixCountriesIterator(String prefix);
+    public CountriesIterator getPrefixCountriesIterator(String prefix);
     // return an iterator over all the countries starting with prefix
 
-    public List<HashMap<String,String>> getNeighbourCountries(String name);
+    public List<HashMap<String,String>> getNeighborCountries(String name);
     // return a list of countries the country with the given name shares borders with
     // null if the given country does not exist
 
