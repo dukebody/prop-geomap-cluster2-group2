@@ -18,8 +18,8 @@ Canal_de_la_Vinya Canal_de_la_Vinya NULL 42.51667 1.51667 STM 0
 Bosc_de_Villar Bosc_de_Villar NULL 42.6 1.55 FRST 0
 Torrent_de_Vila Torrent_de_Vila NULL 42.53333 1.56667 STM 0
 Vila Vila Casas_Vila,Vila 42.53222 1.57392 PPL 0
-Basers_de_VicenÁ Basers_de_Vicenc NULL 42.48333 1.48333 CLF 0
-Pla_de_Vi‡s Pla_de_Vias NULL 42.58333 1.66667 UPLD 0
+Basers_de_Vicen√ß Basers_de_Vicenc NULL 42.48333 1.48333 CLF 0
+Pla_de_Vi√†s Pla_de_Vias NULL 42.58333 1.66667 UPLD 0
 Vial_del_Cardaire Vial_del_Cardaire NULL 42.56667 1.5 LCTY 0
 Font_del_Vi Font_del_Vi NULL 42.51667 1.48333 SPNG 0
 Font_Verda Font_Verda NULL 42.55 1.56667 SPNG 0
@@ -28,7 +28,7 @@ Costa_Verda Costa_Verda NULL 42.48333 1.56667 SLP 0
 Serrat_de_Ventader Serrat_de_Ventader NULL 42.48333 1.43333 MT 0
 Bony_de_Vellatocina Bony_de_Vellatocina NULL 42.61667 1.5 PK 0
 Pleta_Vella Pleta_Vella NULL 42.51667 1.61667 GRAZ 0
-Sol‡_Vell Sola_Vell NULL 42.46667 1.48333 SLP 0
+Sol√†_Vell Sola_Vell NULL 42.46667 1.48333 SLP 0
 Port_Vell Port_Vell NULL 42.65 1.55 PASS 0
 Port_Negre_del_Pallars Port_Negre_del_Pallars Port_Negre_del_Pallars,Port_Vell 42.56667 1.45 PASS 0
 Bancal_Vedeller Bancal_Vedeller NULL 42.6 1.46667 TRL 0
