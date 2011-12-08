@@ -19,11 +19,12 @@ public class BorderPointsDeserializerTest extends TestCase {
         cc = new CountryController();
         zc = new ZonesController();
 
-        File f = new File("Fronteres_A.txt");
+        File f = new File("Fronteres_all.txt");
         BordersFileParser parser = new BordersFileParser(f);
         Iterator<HashMap<String,String>> itr = parser.getIterator();
 
         bpd = new BorderPointsDeserializer(itr, cc, zc);
+        bpd.generate();
     }
 
     @After
@@ -31,17 +32,30 @@ public class BorderPointsDeserializerTest extends TestCase {
     }
 
     @Test
-    public void testGenerator() throws Exception {
-        bpd.generate();
-        
-        System.out.print("Checking that there are N countries...");
+    public void testTotalNCountries() {
+        System.out.print("Checking that there are 251 countries in total...");
         Iterator itr = cc.getAllCountriesIterator();
         int n = 0;
         while (itr.hasNext()) {
             itr.next();
             n++;
         }
-        assertEquals(5, n);
+        assertEquals(251, n);
+        System.out.println("OK");
+    }
+
+    @Test
+    public void testNCountriesStartingWithA() {
+        bpd.generate();
+        
+        System.out.print("Checking that there are 15 countries starting with A...");
+        Iterator itr = cc.getPrefixCountriesIterator("A");
+        int n = 0;
+        while (itr.hasNext()) {
+            itr.next();
+            n++;
+        }
+        assertEquals(15, n);
         System.out.println("OK");
     }
 
