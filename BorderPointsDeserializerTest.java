@@ -19,7 +19,7 @@ public class BorderPointsDeserializerTest extends TestCase {
         cc = new CountryController();
         zc = new ZonesController();
 
-        File f = new File("Fronteres_all.txt");
+        File f = new File("Fronteres_A.txt");
         BordersFileParser parser = new BordersFileParser(f);
         Iterator<HashMap<String,String>> itr = parser.getIterator();
 
@@ -33,30 +33,46 @@ public class BorderPointsDeserializerTest extends TestCase {
 
     @Test
     public void testTotalNCountries() {
-        System.out.print("Checking that there are 251 countries in total...");
         Iterator itr = cc.getAllCountriesIterator();
         int n = 0;
         while (itr.hasNext()) {
             itr.next();
             n++;
         }
-        assertEquals(251, n);
+        System.out.print("Checking that there are 12 countries in total...");
+        assertEquals(12, n);
         System.out.println("OK");
     }
 
     @Test
     public void testNCountriesStartingWithA() {
-        bpd.generate();
-        
-        System.out.print("Checking that there are 15 countries starting with A...");
         Iterator itr = cc.getPrefixCountriesIterator("A");
         int n = 0;
         while (itr.hasNext()) {
             itr.next();
             n++;
         }
-        assertEquals(15, n);
+        System.out.print("Checking that there are 15 countries starting with A...");
+        assertEquals(12, n);
         System.out.println("OK");
     }
 
+    @Test
+    public void testAandBHasTwoAreas() {
+        Country country = cc.getRawCountry("Antigua_and_Barbuda"); // XXX: This should be done by the zones controller!
+        ArrayList<Zone> zones = country.getZones();
+        System.out.print("Check that Antigua and Barbuda has 2 areas as expected...");
+        assertEquals(2, zones.size());
+        System.out.println("OK");
+    }
+    
+
+    @Test
+    public void testArubaHas19Points() {
+        Country country = cc.getRawCountry("Aruba"); // XXX: This should be done by the zones controller!
+        Zone zone = country.getZones().get(0);
+        System.out.print("Check that check that Aruba has 19 border points as expected...");
+        assertEquals(19, zone.getBorderpoints().size());
+        System.out.println("OK");
+    }
 }

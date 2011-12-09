@@ -28,7 +28,6 @@ class BorderPointsDeserializer {
             // if the country is different from the current one and does not exist, create it
             if ((curr_CountryName == null || !curr_CountryName.equals(currentMap.get("name_country"))) && cc.getCountry(currentMap.get("name_country")) == null) {
                 cc.addCountry(currentMap.get("name_country"), currentMap.get("id_country"));
-                System.out.println("Creating country: " + currentMap.get("name_country"));
             }
 
 
@@ -43,9 +42,12 @@ class BorderPointsDeserializer {
                 zc.createZone(curr_Country, zp);
                 curr_ZoneId = currentMap.get("id_zone");
             }
+
+            curr_Zone = curr_Country.getZones().get(curr_Country.getZones().size()-1);
+
             // add point to current country and zone
             if (curr_Country != null && curr_Zone != null) {
-                curr_Zone = curr_Country.getZones().get(curr_Country.getZones().size()-1);
+                
                 Double latitude = new Double(currentMap.get("latitude"));
                 Double longitude = new Double(currentMap.get("longitude"));
                 zc.addBorderPointZone(curr_Zone, new BorderPoint(latitude,longitude));
