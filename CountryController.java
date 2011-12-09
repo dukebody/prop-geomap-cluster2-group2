@@ -69,6 +69,10 @@ class CountryController {
         return getMap(countriesTrie.get(name));
     }
 
+    public Country getRawCountry(String name) {
+        return countriesTrie.get(name);
+    }
+
     public boolean modifyCountry(String oldName, String newName, String newCode) {
         Country oldCountry = countriesTrie.get(oldName);
         if (oldCountry != null) {  // the origin country exists
@@ -128,9 +132,11 @@ class CountryController {
     }
 
     public List<HashMap<String,String>> getMainCitiesByType(String countryName, List<String> types) {
-        Country country = countriesTrie.get(name);
+        Country country = countriesTrie.get(countryName);
         // for every zone
-        for (Zone z: country.getZones())
+        for (Zone z: country.getZones()) {
+            
+        }
             // get the biggest rectangle containing the zone
             // get the cities belonging to this rectangle
             // discard all cities not belonging to this zone
