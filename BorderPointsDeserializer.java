@@ -2,7 +2,7 @@ import java.lang.*;
 import java.util.*;
 
 
-class BorderPointsDeserializer {
+class BorderPointsDeserializer implements IDeserializer {
 
     private Iterator<HashMap<String,String>> itr;
     private CountryController cc;
@@ -14,7 +14,7 @@ class BorderPointsDeserializer {
         this.zc = zc;
     }
 
-    void generate() {
+    public void generate() {
         Country curr_Country = null;
         String curr_CountryName = null;
         Zone curr_Zone = null;
