@@ -116,13 +116,13 @@ class CitiesController {
 
         try {
             city = new City(nameASCII, nameUTF, latitude, longitude, type, population);
+            // XXX: IMPORTANT - set the zone of the city
         } catch (IllegalArgumentException e) {
             return false;
         }
 
         // check that there doesn't exist already a city at the specified point
         if (citiesQuadTree.query(latitude, longitude) == null && type != null) {
-            
             citiesTrie.put(city, nameUTF);
             citiesQuadTree.insert(latitude, longitude, city);
             return true;
