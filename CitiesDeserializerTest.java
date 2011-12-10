@@ -11,6 +11,7 @@ import org.junit.Test;
 public class CitiesDeserializerTest extends TestCase {
 
     private CitiesDeserializer cd;
+    private ToponymTypesDeserializer ttd;
     private CountryController countryc;
     private ZonesController zonesc;
     private CitiesController citiesc;
@@ -20,6 +21,12 @@ public class CitiesDeserializerTest extends TestCase {
         countryc = new CountryController();
         zonesc = new ZonesController(countryc.getBorderPointsQuadTree());
         citiesc = new CitiesController();
+
+        File ftypes = new File("FeatureCodes_Cities.txt");
+        TypesFileParser typesParser = new TypesFileParser(ftypes);
+        Iterator<HashMap<String,String>> typesItr = typesParser.getIterator();
+        ttd = new ToponymTypesDeserializer(typesItr,citiesc);
+        ttd.generate();
 
         File f = new File("Toponims10000.txt");
         ToponymsFileParser parser = new ToponymsFileParser(f);
