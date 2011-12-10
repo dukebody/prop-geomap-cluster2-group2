@@ -160,5 +160,9 @@ class CountryController {
 
             return mainCities;
     }
+
+    public QuadTree<Double,BorderPoint> getBorderPointsQuadTree() {
+        return borderPointsQuadTree;
+    }
 }
 

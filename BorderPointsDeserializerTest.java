@@ -17,7 +17,7 @@ public class BorderPointsDeserializerTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         cc = new CountryController();
-        zc = new ZonesController();
+        zc = new ZonesController(cc.getBorderPointsQuadTree());
 
         File f = new File("Fronteres_A.txt");
         BordersFileParser parser = new BordersFileParser(f);

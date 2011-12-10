@@ -18,7 +18,7 @@ public class CitiesDeserializerTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         countryc = new CountryController();
-        zonesc = new ZonesController();
+        zonesc = new ZonesController(countryc.getBorderPointsQuadTree());
         citiesc = new CitiesController();
 
         File f = new File("Toponims10000.txt");
