@@ -1,3 +1,8 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +14,8 @@ public class ZonesController {
 
     private QuadTree<Double,BorderPoint> borderPointsQuadTree;
 
-    public ZonesController(){
-        borderPointsQuadTree = new QuadTree<Double,BorderPoint>();
+    public ZonesController(QuadTree<Double,BorderPoint> bpqt){
+        borderPointsQuadTree = bpqt;
     }
 
     //ArrayList<Zone> getZonesFromCountry(String countryCode);
@@ -19,21 +24,44 @@ public class ZonesController {
         ArrayList<Zone> countryZones = country.getZones();
 
         try{
+            boolean isOk = true;
+            try {
+            isOk = LineController.checkGeometricalConsistenceForZone(zonePoints);
+            } catch (Exception e) {
+                System.out.println("Invalid zone-points:"); e.printStackTrace();
+            }
+
+            if (!isOk) {
+                System.out.println("Peta en el checkGeometricalConsistenceForZone");
+                return false;
+            }
+
             Zone zone = new Zone(country);
 
             for (int i=0;i<zonePoints.size();i++) {
                 zone.addBorderPoint(zonePoints.get(i), i);
+                zonePoints.get(i).addZone(zone);
                 borderPointsQuadTree.insert(zonePoints.get(i).getLatitude(), zonePoints.get(i).getLongitude(),zonePoints.get(i));
             }
 
             countryZones.add(zone);
             country.setZones(countryZones);
         } catch (Exception e) {
-            System.out.print("Exception at creating a new zone for country "+country.getName()+": " + e.getMessage());
+            System.out.println("Exception at creating a new zone for country "+country.getName()+": "+e.getMessage());
             return false;
         }
 
         return true;
+    }
+
+    public ArrayList<String> getCountryZoneIds(Country country){
+        ArrayList<String> zoneIds = new ArrayList<String>();
+
+        for (int i=0;i<country.getZones().size();i++) {
+            zoneIds.add(country.getZones().get(i).getId());
+        }
+
+        return zoneIds;
     }
 
     //Zone getZone(Integer id);
@@ -93,4 +121,8 @@ public class ZonesController {
     }
 
     //Boolean validateCorrectGeographicZone(ArrayList<Point> points);
+
+    public LineController getLineController() {
+        return new LineController();
+    }
 }
