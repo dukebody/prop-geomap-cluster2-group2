@@ -26,7 +26,7 @@ public class ZonesController {
         try{
             boolean isOk = true;
             try {
-            isOk = LineController.checkGeometricalConsistenceForZone(zonePoints);
+            isOk = true; //LineController.checkGeometricalConsistenceForZone(zonePoints);
             } catch (Exception e) {
                 System.out.println("Invalid zone-points:"); e.printStackTrace();
             }
