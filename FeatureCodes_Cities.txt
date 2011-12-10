@@ -1,0 +1,18 @@
+---
+P city, village,...
+---
+PPL	populated place	a city, town, village, or other agglomeration of buildings where people live and work
+PPLA	seat of a first-order administrative division	seat of a first-order administrative division (PPLC takes precedence over PPLA)
+PPLA2	seat of a second-order administrative division	
+PPLA3	seat of a third-order administrative division	
+PPLA4	seat of a fourth-order administrative division	
+PPLC	capital of a political entity	
+PPLF	farm village	a populated place where the population is largely engaged in agricultural activities
+PPLG	seat of government of a political entity	
+PPLL	populated locality	an area similar to a locality but with a small group of dwellings or other buildings
+PPLQ	abandoned populated place	
+PPLR	religious populated place	a populated place whose population is largely engaged in religious occupations
+PPLS	populated places	cities, towns, villages, or other agglomerations of buildings where people live and work
+PPLW	destroyed populated place	a village, town or city destroyed by a natural disaster, or by war
+PPLX	section of populated place	
+STLMT	israeli settlement	
