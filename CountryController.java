@@ -106,6 +106,10 @@ class CountryController {
         return new CountriesIterator(countriesTrie.iterator());
     }
 
+    public Iterator<Country> getAllRawCountriesIterator() {
+        return countriesTrie.iterator();
+    }
+
     public CountriesIterator getPrefixCountriesIterator(String prefix) {
         return new CountriesIterator(countriesTrie.iteratorPrefix(prefix));
     }
@@ -163,6 +167,57 @@ class CountryController {
 
     public QuadTree<Double,BorderPoint> getBorderPointsQuadTree() {
         return borderPointsQuadTree;
+    }
+
+    private class RawBorderPointsIterator implements Iterator<BorderPoint> {
+
+        private Iterator<Country> countryItr;
+        private Iterator<Zone> zoneItr;
+        private Iterator<BorderPoint> borderPointItr;
+        private Country currCountry;
+        private Zone currZone;
+        
+        private BorderPoint currBorderPoint;
+
+        public RawBorderPointsIterator() {
+            countryItr = getAllRawCountriesIterator();
+            currCountry = countryItr.next();
+            zoneItr = currCountry.getZones().iterator();
+            currZone = zoneItr.next();
+            borderPointItr = currZone.getBorderpoints().iterator();
+        }
+
+        public boolean hasNext() {
+            if (borderPointItr.hasNext()) {
+                return true;
+            }
+
+            else if (zoneItr.hasNext()) {
+                currZone = zoneItr.next();
+                borderPointItr = currZone.getBorderpoints().iterator();
+                return hasNext();
+            }
+
+            else if (countryItr.hasNext()) {
+                currCountry = countryItr.next();
+                zoneItr = currCountry.getZones().iterator();
+                return hasNext();
+            }
+
+            return false;
+        }
+
+        public BorderPoint next() {
+            return borderPointItr.next();
+        }
+
+        public void remove() {
+            // not implmemented
+        }
+    }
+
+    public Iterator<BorderPoint> getAllRawBorderPointsIterator() {
+        return new RawBorderPointsIterator();
     }
 }
 
