@@ -16,21 +16,17 @@ class BorderPointsDeserializer implements IDeserializer {
 
     public void generate() {
         Country curr_Country = null;
-        String curr_CountryName = null;
+        String curr_CountryName = "INVALID_COUNTRYNAME";
         Zone curr_Zone = null;
-        String curr_ZoneId = null;
+        String curr_ZoneId = "INVALID_ZONEID";
+
 
         while (itr.hasNext()) {
             // get next map
             HashMap<String,String> currentMap = itr.next();
 
-            // if (!currentMap.get("name_country").equals("Spain") && !currentMap.get("name_country").equals("France"))  {//DDD
-                
-            //     continue;
-            // }
-
             // if the country is different from the current one and does not exist, create it
-            if ((curr_CountryName == null || !curr_CountryName.equals(currentMap.get("name_country"))) && cc.getCountry(currentMap.get("name_country")) == null) {
+            if (!curr_CountryName.equals(currentMap.get("name_country")) && cc.getCountry(currentMap.get("name_country")) == null) {
                 cc.addCountry(currentMap.get("name_country"), currentMap.get("id_country"));
             }
 
@@ -39,7 +35,7 @@ class BorderPointsDeserializer implements IDeserializer {
 
             // if the zone id is different from the current one, create a new zone for the current country
             // and set the zone as current
-            if (curr_ZoneId == null || !currentMap.get("id_zone").equals(curr_ZoneId)) {
+            if (!currentMap.get("id_zone").equals(curr_ZoneId)) {
                 curr_Country = cc.getRawCountry(curr_CountryName);
                 ArrayList<BorderPoint> zp = new ArrayList<BorderPoint>();
 
