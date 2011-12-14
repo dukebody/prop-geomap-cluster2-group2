@@ -3,7 +3,7 @@ import java.util.*;
 class CountryController {
 
     private Trie<Country> countriesTrie;
-    private QuadTree<Double,BorderPoint> borderPointsQuadTree;
+    private QuadTree<BorderPoint> borderPointsQuadTree;
     private LineController lc;
 
     private class CountriesIterator implements Iterator<HashMap<String,String>> {
@@ -29,7 +29,7 @@ class CountryController {
 
     public CountryController() {
         countriesTrie = new Trie<Country>();
-        borderPointsQuadTree = new QuadTree<Double,BorderPoint>();
+        borderPointsQuadTree = new QuadTree<BorderPoint>();
         lc = new LineController();
     }
 
@@ -165,7 +165,7 @@ class CountryController {
             return mainCities;
     }
 
-    public QuadTree<Double,BorderPoint> getBorderPointsQuadTree() {
+    public QuadTree<BorderPoint> getBorderPointsQuadTree() {
         return borderPointsQuadTree;
     }
 
