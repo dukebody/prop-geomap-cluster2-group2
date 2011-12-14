@@ -122,7 +122,7 @@ class CitiesController {
         }
 
         // check that there doesn't exist already a city at the specified point
-        if (citiesQuadTree.query(latitude, longitude) == null && type != null) {
+        if (type != null &&citiesQuadTree.query(latitude, longitude) == null) {
             citiesTrie.put(city, nameUTF);
             citiesQuadTree.insert(latitude, longitude, city);
             return true;
