@@ -35,7 +35,7 @@ public class IntegrationTest extends TestCase {
         zonesc = new ZonesController(countryc.getBorderPointsQuadTree());
         citiesc = new CitiesController();
 
-        File fFronteres = new File("Fronteres_A.txt");
+        File fFronteres = new File("Fronteres_OurEurope.txt");
         BordersFileParser parserFronteres = new BordersFileParser(fFronteres);
         Iterator<HashMap<String,String>> itrFronteres = parserFronteres.getIterator();
 
@@ -71,32 +71,32 @@ public class IntegrationTest extends TestCase {
     //     System.out.println("OK");
     // }
 
-    // @Test
-    // public void testGetNeighborCountries() {
-    // 	List<HashMap<String,String>> neighborCountries = countryc.getNeighborCountries("Spain");
-    // 	HashSet<String> countryNames = new HashSet<String>();
-    // 	for (HashMap<String,String> map: neighborCountries) {
-    // 		countryNames.add(map.get("name"));
-    // 	}
-    // 	System.out.print("Checking that Spain limits with France and Portugal...");
-    // 	System.out.print(countryNames);
-    // 	System.out.print(neighborCountries);
-    //     assertTrue(countryNames.contains("France"));
-    //     assertTrue(countryNames.contains("Portugal"));
-    //     System.out.println("OK");
-    // }
+    @Test
+    public void testGetNeighborCountries() {
+    	List<HashMap<String,String>> neighborCountries = countryc.getNeighborCountries("Spain");
+    	HashSet<String> countryNames = new HashSet<String>();
+    	for (HashMap<String,String> map: neighborCountries) {
+    		countryNames.add(map.get("name"));
+    	}
+    	System.out.print("Checking that Spain limits with France, Portugal, Gibraltar and Andorra...");
+        assertTrue(countryNames.contains("France"));
+        assertTrue(countryNames.contains("Portugal"));
+        assertTrue(countryNames.contains("Gibraltar"));
+        assertTrue(countryNames.contains("Andorra"));
+        System.out.println("OK");
+    }
 
 	@Test
     public void testTotalCoastLineLength() {
-    	System.out.print("Checking that Aruba has coast...");
-        assertEquals(25.0, countryc.getTotalCoastlineLength("Aruba"));
+    	System.out.print("Checking that Spain has coast...");
+        assertTrue(countryc.getTotalCoastlineLength("Spain") > 0);
         System.out.println("OK");
     }
 
     @Test
     public void testTotalSharedBorderLength() {
-    	System.out.print("Checking that Aruba has coast...");
-        assertEquals(25.0, countryc.getTotalSharedBorderLength("Aruba"));
+    	System.out.print("Checking that Spain has shared border length...");
+        assertTrue(countryc.getTotalSharedBorderLength("Spain") > 0);
         System.out.println("OK");
     }
 

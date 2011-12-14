@@ -30,25 +30,29 @@ public class LineController {
         ArrayList<Line> countryBorderLines = new ArrayList<Line>();
         ArrayList<Country> lineCountries = new ArrayList<Country>();
         List<BorderPoint> countryPoints = new ArrayList<BorderPoint>();
-        Zone zone = null;
 
-        for (int i=0;i<country.getZones().size();i++){
+        for (Zone zone: country.getZones()) {
             Line line = null;
-            countryPoints = country.getZones().get(i).getBorderpoints();
-            zone = country.getZones().get(i);
+            countryPoints = zone.getBorderpoints();
+            
             for (int j=0;j<countryPoints.size();j++) {
-                if (j<countryPoints.size()-1) line = new Line(zone.getBorderpoint(j),zone.getBorderpoint(j+1));
-                else line = new Line(zone.getBorderpoint(j),zone.getBorderpoint(0));
+                if (j<countryPoints.size()-1) {
+                    line = new Line(zone.getBorderpoint(j),zone.getBorderpoint(j+1));
+                }
+                else {
+                    line = new Line(zone.getBorderpoint(j),zone.getBorderpoint(0));
+                }
 
                 if (line.getType().equals("border")) countryBorderLines.add(line);
             }
         }
 
-        for (int i=0;i<countryBorderLines.size();i++) {
-            lineCountries = countryBorderLines.get(i).getCountries();
-            for (int j=0;j<lineCountries.size();j++) {
-                if (!lineCountries.get(j).equals(country) && !neighborsCountries.contains(country)) {
-                    neighborsCountries.add(country);
+        for (Line l: countryBorderLines) {
+            lineCountries = l.getCountries();
+            for (Country neighborCountry: l.getCountries()) {
+                
+                if (!neighborCountry.equals(country) && !neighborsCountries.contains(neighborCountry)) {
+                    neighborsCountries.add(neighborCountry);
                     break;
                 }
             }
@@ -117,7 +121,6 @@ public class LineController {
 
         for (int i=0;i<country.getZones().size();i++) {
             coastalLength+=getZoneCoastalLength(country.getZones().get(i));
-            System.out.println("one more zone");
         }
 
         return coastalLength;
@@ -128,7 +131,6 @@ public class LineController {
         double coastalLength = 0;
 
         for (int i=0;i<zone.getBorderpoints().size();i++) {
-            System.out.println("creating line");
             if (i<zone.getBorderpoints().size()-1) line = new Line(zone.getBorderpoint(i),zone.getBorderpoint(i+1));
             else line = new Line(zone.getBorderpoint(i),zone.getBorderpoint(0));
 

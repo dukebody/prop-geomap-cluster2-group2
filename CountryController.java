@@ -56,7 +56,7 @@ class CountryController {
 
     public boolean addCountry(String name, String code) {
         Country country = new Country(name);
-        country.setCode("code");
+        country.setCode(code);
         if (countriesTrie.get(name) == null && name != null) {
             countriesTrie.put(country, name);
             return true;

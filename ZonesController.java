@@ -67,9 +67,19 @@ public class ZonesController {
     //Zone getZone(Integer id);
 
     public void addBorderPointZone(Zone zone, BorderPoint newBorderPoint){  //OR BOOLEAN?
-        borderPointsQuadTree.insert(newBorderPoint.getLatitude(), newBorderPoint.getLongitude(), newBorderPoint);
-        zone.addBorderPoint(newBorderPoint, zone.getBorderpoints().size());
-        newBorderPoint.getZones().add(zone);
+        // if the point is already in the QuadTree, simply add the new zone to it
+        BorderPoint existingBorderPoint;
+        if (borderPointsQuadTree.query(newBorderPoint.getLatitude(), newBorderPoint.getLongitude()) != null) {
+            existingBorderPoint = borderPointsQuadTree.query(newBorderPoint.getLatitude(), newBorderPoint.getLongitude()).value;
+            existingBorderPoint.getZones().add(zone);
+            zone.addBorderPoint(existingBorderPoint, zone.getBorderpoints().size());
+        }
+
+        else {
+            borderPointsQuadTree.insert(newBorderPoint.getLatitude(), newBorderPoint.getLongitude(), newBorderPoint);
+            newBorderPoint.getZones().add(zone);
+            zone.addBorderPoint(newBorderPoint, zone.getBorderpoints().size());
+        }
     }
 
     public void modifyBorderPointZone(Zone zone, BorderPoint newBorderPoint, BorderPoint oldBorderPoint, int index){ //INDEX FROM 0 TO SIZE-1, //OR BOOLEAN?

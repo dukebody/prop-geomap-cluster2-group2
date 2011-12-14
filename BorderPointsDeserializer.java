@@ -23,7 +23,11 @@ class BorderPointsDeserializer implements IDeserializer {
         while (itr.hasNext()) {
             // get next map
             HashMap<String,String> currentMap = itr.next();
-            
+
+            // if (!currentMap.get("name_country").equals("Spain") && !currentMap.get("name_country").equals("France"))  {//DDD
+                
+            //     continue;
+            // }
 
             // if the country is different from the current one and does not exist, create it
             if ((curr_CountryName == null || !curr_CountryName.equals(currentMap.get("name_country"))) && cc.getCountry(currentMap.get("name_country")) == null) {
