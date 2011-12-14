@@ -89,4 +89,23 @@ public class IntegrationTest extends TestCase {
         System.out.println("OK");
     }
 
+    @Test
+    public void testSharedBorderLengthWith() {
+        System.out.print("Checking that Spain has a lengthy border with France...");
+        assertTrue(countryc.getSharedBorderLengthWith("Spain", "France") > 0);
+        System.out.println("OK");
+
+        System.out.print("Checking that Spain has a lengthy border with Portugal...");
+        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Portugal") > 0);
+        System.out.println("OK");
+
+        System.out.print("Checking that Spain has a lengthy border with Gibraltar...");
+        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Gibraltar") > 0);
+        System.out.println("OK");
+
+        System.out.print("Checking that Spain has a lengthy border with Andorra...");
+        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Andorra") > 0);
+        System.out.println("OK");
+    }
+
 }
