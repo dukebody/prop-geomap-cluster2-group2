@@ -48,8 +48,8 @@ public class CitiesDeserializerTest extends TestCase {
             itr.next();
             n++;
         }
-        System.out.print("Checking that there are 185 cities starting with A...");
-        assertEquals(185, n);
+        System.out.print("Checking that there are 336 cities starting with A...");
+        assertEquals(336, n);
         System.out.println("OK");
     }
 }

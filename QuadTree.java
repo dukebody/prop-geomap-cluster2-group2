@@ -9,16 +9,16 @@
 import java.util.*;
 
 
-public class QuadTree<Key extends Comparable<Key>, Value>  {
+public class QuadTree<Value>  {
     private Node root;
 
     // helper node data type
     public class Node {
-        Key x, y;              // x- and y- coordinates
+        Double x, y;              // x- and y- coordinates
         Node NW, NE, SE, SW;   // four subtrees
         Value value;           // associated data
 
-        Node(Key x, Key y, Value value) {
+        Node(Double x, Double y, Value value) {
             this.x = x;
             this.y = y;
             this.value = value;
@@ -29,11 +29,11 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
   /***********************************************************************
     *  Insert (x, y) into appropriate quadrant
     ***********************************************************************/
-    public void insert(Key x, Key y, Value value) {
+    public void insert(Double x, Double y, Value value) {
         root = insert(root, x, y, value);
     }
 
-    private Node insert(Node h, Key x, Key y, Value value) {
+    private Node insert(Node h, Double x, Double y, Value value) {
         if (h == null) return new Node(x, y, value);
         //// if (eq(x, h.x) && eq(y, h.y)) h.value = value;  // duplicate
         else if ( less(x, h.x) &&  less(y, h.y)) h.SW = insert(h.SW, x, y, value);
@@ -46,11 +46,11 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
   /***********************************************************************
     *  Remove (x, y) from appropriate quadrant
     ***********************************************************************/
-    public void remove(Key x, Key y) {
+    public void remove(Double x, Double y) {
         root = remove(root, x, y);
     }
 
-    public Node remove(Node h, Key x, Key y) {
+    public Node remove(Node h, Double x, Double y) {
         if (h == null) 
             return null;  // the node doesn't exist, we don't do anything
         else if (eq(x, h.x) && eq(y, h.y)) {
@@ -67,10 +67,10 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
     *  Exact point search
     ***********************************************************************/
 
-    public Node query(Key x, Key y) {
-        Interval<Key> intX = new Interval<Key>(x, x);
-        Interval<Key> intY = new Interval<Key>(y, y);
-        Interval2D<Key> rect = new Interval2D<Key>(intX, intY);
+    public Node query(Double x, Double y) {
+        Interval<Double> intX = new Interval<Double>(x, x);
+        Interval<Double> intY = new Interval<Double>(y, y);
+        Interval2D<Double> rect = new Interval2D<Double>(intX, intY);
         ArrayList<Node> nodes = query2D(rect);
         if (!nodes.isEmpty()) {
             return nodes.get(0);
@@ -83,17 +83,17 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
     *  Range search.
     ***********************************************************************/
 
-    public ArrayList<Node> query2D(Interval2D<Key> rect) {
+    public ArrayList<Node> query2D(Interval2D<Double> rect) {
         ArrayList<Node> foundNodes = new ArrayList<Node>();
         return query2D(root, rect, foundNodes);
     }
 
-    private ArrayList<Node> query2D(Node h, Interval2D<Key> rect, ArrayList<Node> foundNodes) {
+    private ArrayList<Node> query2D(Node h, Interval2D<Double> rect, ArrayList<Node> foundNodes) {
         if (h == null) return foundNodes;
-        Key xmin = rect.intervalX.low;
-        Key ymin = rect.intervalY.low;
-        Key xmax = rect.intervalX.high;
-        Key ymax = rect.intervalY.high;
+        Double xmin = rect.intervalX.low;
+        Double ymin = rect.intervalY.low;
+        Double xmax = rect.intervalX.high;
+        Double ymax = rect.intervalY.high;
         if (rect.contains(h.x, h.y))
             foundNodes.add(h);
             //System.out.println("    (" + h.x + ", " + h.y + ") " + h.value);
@@ -106,44 +106,35 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
     }
 
 
+  /***********************************************************************
+    *  Closer nodes search.
+    ***********************************************************************/
+
+    public ArrayList<Node> getCloserNodes(Double x, Double y) {
+        // return the nodes closer to the specified location, searching
+        // in rectangles of doubling width and height (*4 area)
+        // Starts with width 1, height 1
+        
+        return getCloserNodes(x, y, 1.0, 1.0);
+    }
+
+    private ArrayList<Node> getCloserNodes(Double x, Double y, Double width, Double height) {
+        ArrayList<Node> closerPoints;
+        Interval<Double> intX = new Interval<Double>(x-width, x+width);
+        Interval<Double> intY = new Interval<Double>(y-height, y+height);
+        Interval2D<Double> rect = new Interval2D<Double>(intX, intY);
+        closerPoints = query2D(rect);
+        if (!closerPoints.isEmpty()) {
+            return closerPoints;
+        }
+        return getCloserNodes(x, y, width*2, height*2);
+    }
+
    /*************************************************************************
     *  helper comparison functions
     *************************************************************************/
 
-    private boolean less(Key k1, Key k2) { return k1.compareTo(k2) <  0; }
-    private boolean eq  (Key k1, Key k2) { return k1.compareTo(k2) == 0; }
-
-
-   /*************************************************************************
-    *  test client
-    *************************************************************************/
-    public static void main(String[] args) {
-        int M = Integer.parseInt(args[0]);   // queries
-        int N = Integer.parseInt(args[1]);   // points
-
-        QuadTree<Integer, String> st = new QuadTree<Integer, String>();
-
-        // insert N random points in the unit square
-        for (int i = 0; i < N; i++) {
-            Integer x = (int) (100 * Math.random());
-            Integer y = (int) (100 * Math.random());
-            // System.out.println("(" + x + ", " + y + ")");
-            st.insert(x, y, "P" + i);
-        }
-        System.out.println("Done preprocessing " + N + " points");
-
-        // do some range searches
-        for (int i = 0; i < M; i++) {
-            Integer xmin = (int) (100 * Math.random());
-            Integer ymin = (int) (100 * Math.random());
-            Integer xmax = xmin + (int) (10 * Math.random());
-            Integer ymax = ymin + (int) (20 * Math.random());
-            Interval<Integer> intX = new Interval<Integer>(xmin, xmax);
-            Interval<Integer> intY = new Interval<Integer>(ymin, ymax);
-            Interval2D<Integer> rect = new Interval2D<Integer>(intX, intY);
-            System.out.println(rect + " : ");
-            st.query2D(rect);
-        }
-    }
+    private boolean less(Double k1, Double k2) { return k1.compareTo(k2) <  0; }
+    private boolean eq  (Double k1, Double k2) { return k1.compareTo(k2) == 0; }
 
 }

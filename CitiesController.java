@@ -5,7 +5,7 @@ class CitiesController {
     
     private Trie<City> citiesTrie;
     private Trie<TypeToponym> typeToponymsTrie;
-    private QuadTree<Double,City> citiesQuadTree;
+    private QuadTree<City> citiesQuadTree;
 
     private class CitiesIterator implements Iterator<HashMap<String,String>> {
 
@@ -52,7 +52,7 @@ class CitiesController {
     public CitiesController() {
         citiesTrie = new Trie<City>();
         typeToponymsTrie = new Trie<TypeToponym>();
-        citiesQuadTree = new QuadTree<Double,City>();
+        citiesQuadTree = new QuadTree<City>();
     }
 
     public boolean createToponymType(String name, String category, String code) {

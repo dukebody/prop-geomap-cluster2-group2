@@ -200,7 +200,7 @@ public class CitiesControllerTest extends TestCase {
         System.out.println("OK");
         
         System.out.print("\tChecking that the new city does exist...");
-        assertFalse(tc.getCitiesByName("Almeria").isEmpty());
+        assertFalse(tc.getCitiesByName("Almería").isEmpty());
         System.out.println("OK");
     }
 

@@ -117,6 +117,7 @@ public class LineController {
 
         for (int i=0;i<country.getZones().size();i++) {
             coastalLength+=getZoneCoastalLength(country.getZones().get(i));
+            System.out.println("one more zone");
         }
 
         return coastalLength;
@@ -127,6 +128,7 @@ public class LineController {
         double coastalLength = 0;
 
         for (int i=0;i<zone.getBorderpoints().size();i++) {
+            System.out.println("creating line");
             if (i<zone.getBorderpoints().size()-1) line = new Line(zone.getBorderpoint(i),zone.getBorderpoint(i+1));
             else line = new Line(zone.getBorderpoint(i),zone.getBorderpoint(0));
 

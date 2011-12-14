@@ -13,6 +13,7 @@ public class Line {
 		points[1] = b;
 		length = a.getLinearDistanceTo(b);
 		setType(getCountriesFromPoint(a), getCountriesFromPoint(b));
+		System.out.println("Type: " + getType());
 	}
 
 	private void setType(List<Country> a, List<Country> b){ //REMEMBER TO VALIDATE THE MORE THAN ONE FRONTIER CASE...
@@ -36,6 +37,7 @@ public class Line {
 		while(itr.hasNext()){
 			Zone zone = itr.next();
 			Country country = zone.getCountry();
+			System.out.println(country.getName());
 			if(!countries.contains(country)) countries.add(country);
 		}
 		return countries;

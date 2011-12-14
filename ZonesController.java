@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class ZonesController {
 
-    private QuadTree<Double,BorderPoint> borderPointsQuadTree;
+    private QuadTree<BorderPoint> borderPointsQuadTree;
 
-    public ZonesController(QuadTree<Double,BorderPoint> bpqt){
+    public ZonesController(QuadTree<BorderPoint> bpqt){
         borderPointsQuadTree = bpqt;
     }
 
@@ -69,6 +69,7 @@ public class ZonesController {
     public void addBorderPointZone(Zone zone, BorderPoint newBorderPoint){  //OR BOOLEAN?
         borderPointsQuadTree.insert(newBorderPoint.getLatitude(), newBorderPoint.getLongitude(), newBorderPoint);
         zone.addBorderPoint(newBorderPoint, zone.getBorderpoints().size());
+        newBorderPoint.getZones().add(zone);
     }
 
     public void modifyBorderPointZone(Zone zone, BorderPoint newBorderPoint, BorderPoint oldBorderPoint, int index){ //INDEX FROM 0 TO SIZE-1, //OR BOOLEAN?
