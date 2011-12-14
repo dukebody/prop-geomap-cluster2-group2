@@ -28,7 +28,7 @@ public class CitiesDeserializerTest extends TestCase {
         ttd = new ToponymTypesDeserializer(typesItr,citiesc);
         ttd.generate();
 
-        File f = new File("Toponims10000.txt");
+        File f = new File("Toponims10000Populated.txt");
         ToponymsFileParser parser = new ToponymsFileParser(f);
         Iterator<HashMap<String,String>> itr = parser.getIterator();
 
@@ -41,15 +41,15 @@ public class CitiesDeserializerTest extends TestCase {
     }
 
     @Test
-    public void testNCitiesStartingWithA() {
-        Iterator itr = citiesc.getCitiesPrefixIterator("A");
+    public void testNCitiesStartingWithT() {
+        Iterator itr = citiesc.getCitiesPrefixIterator("T");
         int n = 0;
         while (itr.hasNext()) {
             itr.next();
             n++;
         }
-        System.out.print("Checking that there are 336 cities starting with A...");
-        assertEquals(336, n);
+        System.out.print("Checking that there are 336 cities starting with T...");
+        assertEquals(319, n);
         System.out.println("OK");
     }
 }
