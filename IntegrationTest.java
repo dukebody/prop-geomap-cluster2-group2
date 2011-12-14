@@ -36,6 +36,7 @@ public class IntegrationTest extends TestCase {
         citiesc = new CitiesController();
 
         File fFronteres = new File("Fronteres_OurEurope.txt");
+        //File fFronteres = new File("Fronteres_A.txt");
         BordersFileParser parserFronteres = new BordersFileParser(fFronteres);
         Iterator<HashMap<String,String>> itrFronteres = parserFronteres.getIterator();
 
@@ -45,7 +46,8 @@ public class IntegrationTest extends TestCase {
         Iterator<HashMap<String,String>> itrTypes = typesParser.getIterator();
         
 
-        File fToponyms = new File("Toponims10000.txt");
+        File fToponyms = new File("Toponims10000Populated.txt");
+        //File fToponyms = new File("data/Toponims/Toponims.txt");
         ToponymsFileParser parserToponyms = new ToponymsFileParser(fToponyms);
         Iterator<HashMap<String,String>> itrToponyms = parserToponyms.getIterator();
 
@@ -53,23 +55,10 @@ public class IntegrationTest extends TestCase {
         bpd = new BorderPointsDeserializer(itrFronteres, countryc, zonesc);
         ttd = new ToponymTypesDeserializer(itrTypes, citiesc);
 
-        //ttd.generate();
+        ttd.generate();
         bpd.generate();
-        //cd.generate();
+        cd.generate();
     }
-
-    // @Test
-    // public void testNToponymTypes() {
-    //     Iterator<HashMap<String,String>> itr = citiesc.getToponymTypesIterator();
-    //     int n = 0;
-    //     while (itr.hasNext()) {
-    //         itr.next();
-    //         n++;
-    //     }
-    //     System.out.print("Checking that there are 15 city-like toponym types...");
-    //     assertEquals(15, n);
-    //     System.out.println("OK");
-    // }
 
     @Test
     public void testGetNeighborCountries() {
