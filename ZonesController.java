@@ -68,9 +68,10 @@ public class ZonesController {
 
     public void addBorderPointZone(Zone zone, BorderPoint newBorderPoint){  //OR BOOLEAN?
         // if the point is already in the QuadTree, simply add the new zone to it
+        Node<BorderPoint> node = borderPointsQuadTree.query(newBorderPoint.getLatitude(), newBorderPoint.getLongitude());
         BorderPoint existingBorderPoint;
-        if (borderPointsQuadTree.query(newBorderPoint.getLatitude(), newBorderPoint.getLongitude()) != null) {
-            existingBorderPoint = borderPointsQuadTree.query(newBorderPoint.getLatitude(), newBorderPoint.getLongitude()).value;
+        if (node != null) {
+            existingBorderPoint = node.value;
             existingBorderPoint.getZones().add(zone);
             zone.addBorderPoint(existingBorderPoint, zone.getBorderpoints().size());
         }

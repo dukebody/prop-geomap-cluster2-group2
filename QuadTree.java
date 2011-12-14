@@ -10,20 +10,7 @@ import java.util.*;
 
 
 public class QuadTree<Value>  {
-    private Node root;
-
-    // helper node data type
-    public class Node {
-        Double x, y;              // x- and y- coordinates
-        Node NW, NE, SE, SW;   // four subtrees
-        Value value;           // associated data
-
-        Node(Double x, Double y, Value value) {
-            this.x = x;
-            this.y = y;
-            this.value = value;
-        }
-    }
+    private Node<Value> root;
 
 
   /***********************************************************************
@@ -33,8 +20,8 @@ public class QuadTree<Value>  {
         root = insert(root, x, y, value);
     }
 
-    private Node insert(Node h, Double x, Double y, Value value) {
-        if (h == null) return new Node(x, y, value);
+    private Node<Value> insert(Node<Value> h, Double x, Double y, Value value) {
+        if (h == null) return new Node<Value>(x, y, value);
         //// if (eq(x, h.x) && eq(y, h.y)) h.value = value;  // duplicate
         else if ( less(x, h.x) &&  less(y, h.y)) h.SW = insert(h.SW, x, y, value);
         else if ( less(x, h.x) && !less(y, h.y)) h.NW = insert(h.NW, x, y, value);
@@ -50,7 +37,7 @@ public class QuadTree<Value>  {
         root = remove(root, x, y);
     }
 
-    public Node remove(Node h, Double x, Double y) {
+    public Node<Value> remove(Node<Value> h, Double x, Double y) {
         if (h == null) 
             return null;  // the node doesn't exist, we don't do anything
         else if (eq(x, h.x) && eq(y, h.y)) {
@@ -71,7 +58,7 @@ public class QuadTree<Value>  {
         Interval<Double> intX = new Interval<Double>(x, x);
         Interval<Double> intY = new Interval<Double>(y, y);
         Interval2D<Double> rect = new Interval2D<Double>(intX, intY);
-        ArrayList<Node> nodes = query2D(rect);
+        ArrayList<Node<Value>> nodes = query2D(rect);
         if (!nodes.isEmpty()) {
             return nodes.get(0);
         }
@@ -83,12 +70,12 @@ public class QuadTree<Value>  {
     *  Range search.
     ***********************************************************************/
 
-    public ArrayList<Node> query2D(Interval2D<Double> rect) {
-        ArrayList<Node> foundNodes = new ArrayList<Node>();
+    public ArrayList<Node<Value>> query2D(Interval2D<Double> rect) {
+        ArrayList<Node<Value>> foundNodes = new ArrayList<Node<Value>>();
         return query2D(root, rect, foundNodes);
     }
 
-    private ArrayList<Node> query2D(Node h, Interval2D<Double> rect, ArrayList<Node> foundNodes) {
+    private ArrayList<Node<Value>> query2D(Node<Value> h, Interval2D<Double> rect, ArrayList<Node<Value>> foundNodes) {
         if (h == null) return foundNodes;
         Double xmin = rect.intervalX.low;
         Double ymin = rect.intervalY.low;
@@ -110,7 +97,7 @@ public class QuadTree<Value>  {
     *  Closer nodes search.
     ***********************************************************************/
 
-    public ArrayList<Node> getCloserNodes(Double x, Double y) {
+    public ArrayList<Node<Value>> getCloserNodes(Double x, Double y) {
         // return the nodes closer to the specified location, searching
         // in rectangles of doubling width and height (*4 area)
         // Starts with width 1, height 1
@@ -118,8 +105,8 @@ public class QuadTree<Value>  {
         return getCloserNodes(x, y, 1.0, 1.0);
     }
 
-    private ArrayList<Node> getCloserNodes(Double x, Double y, Double width, Double height) {
-        ArrayList<Node> closerPoints;
+    private ArrayList<Node<Value>> getCloserNodes(Double x, Double y, Double width, Double height) {
+        ArrayList<Node<Value>> closerPoints;
         Interval<Double> intX = new Interval<Double>(x-width, x+width);
         Interval<Double> intY = new Interval<Double>(y-height, y+height);
         Interval2D<Double> rect = new Interval2D<Double>(intX, intY);
