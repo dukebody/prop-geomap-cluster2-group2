@@ -108,4 +108,16 @@ public class IntegrationTest extends TestCase {
         System.out.println("OK");
     }
 
+    @Test
+    public void testSharedBorderLengthTotalCorrect() {
+        Double individualSum = countryc.getSharedBorderLengthWith("Spain", "France") + countryc.getSharedBorderLengthWith("Spain", "Portugal") +
+            countryc.getSharedBorderLengthWith("Spain", "Gibraltar") + countryc.getSharedBorderLengthWith("Spain", "Andorra");
+        Double expectedTotal = countryc.getTotalSharedBorderLength("Spain");
+
+        System.out.print("Checking that the sum of all individual shared borders equals to the calculated total...");
+        assertEquals(individualSum, expectedTotal);
+        System.out.println("OK");
+    }
+
+
 }
