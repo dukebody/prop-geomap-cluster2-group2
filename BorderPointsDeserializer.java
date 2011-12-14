@@ -7,11 +7,13 @@ class BorderPointsDeserializer implements IDeserializer {
     private Iterator<HashMap<String,String>> itr;
     private CountryController cc;
     private ZonesController zc;
-    
+
+
     public BorderPointsDeserializer(Iterator<HashMap<String,String>> itr, CountryController cc, ZonesController zc) {
         this.itr = itr;
         this.cc = cc;
         this.zc = zc;
+
     }
 
     public void generate() {
@@ -26,7 +28,7 @@ class BorderPointsDeserializer implements IDeserializer {
             HashMap<String,String> currentMap = itr.next();
 
             // if the country is different from the current one and does not exist, create it
-            if (!curr_CountryName.equals(currentMap.get("name_country")) && cc.getCountry(currentMap.get("name_country")) == null) {
+            if (!curr_CountryName.equals(currentMap.get("name_country"))) {
                 cc.addCountry(currentMap.get("name_country"), currentMap.get("id_country"));
             }
 
