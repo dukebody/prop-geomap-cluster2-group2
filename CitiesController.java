@@ -160,7 +160,10 @@ class CitiesController {
 
         try {
             city = new City(nameASCII, nameUTF, latitude, longitude, type, population);
-            Zone zone = calculateZone(city); // XXX: IMPORTANT - set the zone of the city
+            Zone zone = calculateZone(city);
+            if (zone == null) {  // zone not found, so drop this city
+                return false;
+            }
             city.setZone(zone);
         } catch (IllegalArgumentException e) {
             return false;
