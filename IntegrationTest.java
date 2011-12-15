@@ -37,7 +37,7 @@ public class IntegrationTest extends TestCase {
         citiesc = new CitiesController(ds);
         linec = new LineController(ds);
 
-        File fFronteres = new File("Fronteres_OurEurope.txt");
+        File fFronteres = new File("Fronteres_all.txt");
         //File fFronteres = new File("Fronteres_A.txt");
         BordersFileParser parserFronteres = new BordersFileParser(fFronteres);
         Iterator<HashMap<String,String>> itrFronteres = parserFronteres.getIterator();
@@ -53,12 +53,13 @@ public class IntegrationTest extends TestCase {
         ToponymsFileParser parserToponyms = new ToponymsFileParser(fToponyms);
         Iterator<HashMap<String,String>> itrToponyms = parserToponyms.getIterator();
 
-        cd = new CitiesDeserializer(itrToponyms, citiesc);
         bpd = new BorderPointsDeserializer(itrFronteres, countryc, zonesc);
-        ttd = new ToponymTypesDeserializer(itrTypes, citiesc);
-
-        ttd.generate();
         bpd.generate();
+
+        ttd = new ToponymTypesDeserializer(itrTypes, citiesc);
+        ttd.generate();
+
+        cd = new CitiesDeserializer(itrToponyms, citiesc);
         cd.generate();
     }
 

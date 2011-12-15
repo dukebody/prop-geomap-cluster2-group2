@@ -12,16 +12,16 @@ class CitiesDeserializer implements IDeserializer {
     public CitiesDeserializer(Iterator<HashMap<String,String>> itr, CitiesController cc) {
         this.itr = itr;
         this.cc = cc;
+    }
 
+    public void generate() {
         // hashset for fast searching
         cityToponymCodes = new HashSet<String>();
         Iterator<HashMap<String,String>> ttItr = cc.getToponymTypesIterator();
         while (ttItr.hasNext()) {
             cityToponymCodes.add(ttItr.next().get("code"));
         }
-    }
 
-    public void generate() {
         while (itr.hasNext()) {
             HashMap<String,String> currentMap = itr.next();
 
