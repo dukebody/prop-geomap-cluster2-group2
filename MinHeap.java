@@ -5,14 +5,14 @@ import java.util.*;
    http://comscigate.com/HW/cs31/src_code/ch21/pqueue/MinHeap.java
    We consider a Heap a "basic" data structure. :)
 */
-public class MinHeap
+public class MinHeap<T extends Comparable>
 {
    /**
       Constructs an empty heap.
    */
    public MinHeap()
    {
-      elements = new ArrayList<Comparable>();
+      elements = new ArrayList<T>();
       elements.add(null); 
    }
 
@@ -20,7 +20,7 @@ public class MinHeap
       Adds a new element to this heap.
       @param newElement the element to add
    */
-   public void add(Comparable newElement)
+   public void add(T newElement)
    {
       // Add a new leaf
       elements.add(null);
@@ -42,7 +42,7 @@ public class MinHeap
       Gets the minimum element stored in this heap.
       @return the minimum element
    */
-   public Comparable peek()
+   public T peek()
    {
       return elements.get(1);
    }
@@ -51,13 +51,13 @@ public class MinHeap
       Removes the minimum element from this heap.
       @return the minimum element
    */
-   public Comparable remove()
+   public T remove()
    {
-      Comparable minimum = elements.get(1);      
+      T minimum = elements.get(1);      
 
       // Remove last element
       int lastIndex = elements.size() - 1;
-      Comparable last = elements.remove(lastIndex);
+      T last = elements.remove(lastIndex);
 
       if (lastIndex > 1)
       {
@@ -74,7 +74,7 @@ public class MinHeap
    */
    private void fixHeap()
    {
-      Comparable root = elements.get(1);
+      T root = elements.get(1);
 
       int lastIndex = elements.size() - 1;
       // Promote children of removed root while they are larger than last      
@@ -89,7 +89,7 @@ public class MinHeap
             // Get smaller child 
 
             // Get left child first
-            Comparable child = getLeftChild(index);
+            T child = getLeftChild(index);
 
             // Use right child instead if it is smaller
             if (getRightChildIndex(index) <= lastIndex 
@@ -166,7 +166,7 @@ public class MinHeap
       @param index the index of a node in this heap
       @return the value of the left child of the given node
    */
-   private Comparable getLeftChild(int index)
+   private T getLeftChild(int index)
    {
       return elements.get(2 * index);
    }
@@ -176,7 +176,7 @@ public class MinHeap
       @param index the index of a node in this heap
       @return the value of the right child of the given node
    */
-   private Comparable getRightChild(int index)
+   private T getRightChild(int index)
    {
       return elements.get(2 * index + 1);
    }
@@ -186,10 +186,10 @@ public class MinHeap
       @param index the index of a node in this heap
       @return the value of the parent of the given node
    */
-   private Comparable getParent(int index)
+   private T getParent(int index)
    {
       return elements.get(index / 2);
    }
 
-   private ArrayList<Comparable> elements;
+   private ArrayList<T> elements;
 }

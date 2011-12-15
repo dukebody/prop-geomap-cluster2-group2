@@ -1,4 +1,4 @@
-class City extends Toponym {
+class City extends Toponym implements Comparable<City> {
 
     private int population;
     private Zone zone;
@@ -22,5 +22,13 @@ class City extends Toponym {
 
     public void setZone(Zone zone) {
         this.zone = zone;
+    }
+
+    public int compareTo(City c2) {  // XXX: Test this!!
+        if (this.getPopulation() < c2.getPopulation())
+            return -1;
+        if (this.getPopulation() > c2.getPopulation())
+            return 1;
+        return 0;
     }
 }

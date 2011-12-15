@@ -189,19 +189,28 @@ class CountryController {
 
             // get the cities belonging to this rectangle
             ArrayList<Node<City>> nodes = citiesQuadTree.query2D(rect);
-            // discard all cities not belonging to this zone
+            
+            MinHeap mh = new MinHeap(); // build minheap with topPercentage items <-- This is IR-based
             for (Node<City> node: nodes) {
                 City city = node.value;
+                // discard all cities not belonging to this zone
                 if (city.getZone().equals(zone)) {
-                    mainCities.add(cc.getMap(city));
+                    // if population >= root => discard root, sink new city
+                    if (mh.size() > 0 && new Integer(city.getPopulation()) > mh.peek().getPopulation()) {
+                        mh.remove();
+                        mh.add(city);
+                        mainCities.add(cc.getMap(city));
+                    }
+                    // if population < root => discard (else)
+                    
                 }
             }
         }
+
         return mainCities;
-            // build minheap with topPercentage items <-- This is IR-for
-            // based every city in the list
-                // if population < root => discard
-                // if population >= root => discard root, sink new city
+            
+                
+                
                 // at the end, sort the top elements in the minheap
 
     }

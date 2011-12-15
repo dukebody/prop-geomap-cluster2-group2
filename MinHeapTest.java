@@ -8,11 +8,11 @@ import org.junit.Test;
 
 public class MinHeapTest extends TestCase {
 
-    MinHeap mh;
+    MinHeap<Integer> mh;
 
     @Before
     public void setUp() throws Exception {
-        mh = new MinHeap();
+        mh = new MinHeap<Integer>();
         mh.add(6);
         mh.add(4);
         mh.add(3);
