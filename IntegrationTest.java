@@ -27,6 +27,7 @@ public class IntegrationTest extends TestCase {
     private CountryController countryc;
     private ZonesController zonesc;
     private CitiesController citiesc;
+    private LineController linec;
 
     @Before
     public void setUp() throws Exception {
@@ -34,6 +35,7 @@ public class IntegrationTest extends TestCase {
         countryc = new CountryController();
         zonesc = countryc.getZonesController();
         citiesc = new CitiesController();
+        linec = zonesc.getLineController();
 
         File fFronteres = new File("Fronteres_OurEurope.txt");
         //File fFronteres = new File("Fronteres_A.txt");
@@ -118,6 +120,20 @@ public class IntegrationTest extends TestCase {
         assertEquals(individualSum, expectedTotal);
         System.out.println("OK");
     }
+
+    @Test
+    public void testPointIsInsideZone() {
+        Zone peninsula = countryc.getRawCountry("Spain").getZones().get(15);
+        System.out.print("Checking that a point inside the Peninsula is detected as so...");
+        assertTrue(linec.checkIfPointIsInsideZone(new Point(40.0, -3.0), peninsula));
+        System.out.println("OK");
+
+        Zone island = countryc.getRawCountry("Spain").getZones().get(14);
+        System.out.print("Checking that a point outside the Peninsula is detected as so...");
+        assertFalse(linec.checkIfPointIsInsideZone(new Point(40.0, -3.0), island));
+        System.out.println("OK");
+    }
+
 
 
 }
