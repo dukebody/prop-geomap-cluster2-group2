@@ -6,6 +6,9 @@ class CitiesController {
     private Trie<City> citiesTrie;
     private Trie<TypeToponym> typeToponymsTrie;
     private QuadTree<City> citiesQuadTree;
+    private QuadTree<BorderPoint> borderPointsQuadTree;
+
+    private LineController lc;
 
     private class CitiesIterator implements Iterator<HashMap<String,String>> {
 
@@ -50,9 +53,11 @@ class CitiesController {
     }
 
     public CitiesController(DataStorage ds) {
+        lc = new LineController(ds);
         citiesTrie = ds.getCitiesTrie();
         typeToponymsTrie = ds.getTypeToponymsTrie();
         citiesQuadTree = ds.getCitiesQuadTree();
+        borderPointsQuadTree = ds.getBorderPointsQuadTree();
     }
 
     public boolean createToponymType(String name, String category, String code) {
@@ -109,9 +114,43 @@ class CitiesController {
         return mapList;
     }
 
-    // private Zone calculateZone(City city) {
-    //     return new Zone();
-    // }
+    private Zone calculateZone(City city) {
+        // create a stack for open (to explore) zones and another for closed (explored) ones
+        Stack<Zone> openZones = new Stack<Zone>();
+        Stack<Zone> closedZones = new Stack<Zone>();
+
+        // get closest borderpoints to the city
+        ArrayList<Node<BorderPoint>> nodes =  borderPointsQuadTree.getCloserNodes(city.getLatitude(), city.getLongitude());
+                    
+        // for every bpoint
+        for (Node node: nodes) {
+            // get the associated zones
+            BorderPoint bp = (BorderPoint) node.value;
+            List<Zone> zones = bp.getZones();
+            for (Zone zone: zones) {
+                // stack the new ones
+                if (openZones.search(zone) == -1 && closedZones.search(zone) == -1) {
+                    openZones.push(zone);
+                }
+            }
+            // while there are zones in the open-zones stack, explore them
+            while (!openZones.empty()) {
+                Zone zone = openZones.pop();
+                if (lc.checkIfPointIsInsideZone(city, zone)) {
+                    return zone;
+                }
+                // if the city wasn't in that zone, mark it as explored
+                closedZones.push(zone);
+            }
+        }
+
+        System.out.println("zone not found for city: " + city.getNameUTF());
+        System.out.println("Checked countries: ");
+        for (Zone z: closedZones) {
+            System.out.println(z.getCountry().getName());
+        }
+        return null;
+    }
 
 
     public boolean addCity(String nameASCII, String nameUTF, double latitude, double longitude, String typeCode, int population) {
@@ -121,8 +160,8 @@ class CitiesController {
 
         try {
             city = new City(nameASCII, nameUTF, latitude, longitude, type, population);
-            // Zone zone = calculateZone(city); // XXX: IMPORTANT - set the zone of the city
-            // city.setZone(zone);
+            Zone zone = calculateZone(city); // XXX: IMPORTANT - set the zone of the city
+            city.setZone(zone);
         } catch (IllegalArgumentException e) {
             return false;
         }
