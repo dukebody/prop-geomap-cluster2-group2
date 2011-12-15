@@ -14,8 +14,8 @@ public class ZonesController {
 
     private QuadTree<BorderPoint> borderPointsQuadTree;
 
-    public ZonesController(QuadTree<BorderPoint> bpqt){
-        borderPointsQuadTree = bpqt;
+    public ZonesController(DataStorage ds){
+        borderPointsQuadTree = ds.getBorderPointsQuadTree();
     }
 
     //ArrayList<Zone> getZonesFromCountry(String countryCode);
@@ -133,8 +133,4 @@ public class ZonesController {
     }
 
     //Boolean validateCorrectGeographicZone(ArrayList<Point> points);
-
-    public LineController getLineController() {
-        return new LineController();
-    }
 }

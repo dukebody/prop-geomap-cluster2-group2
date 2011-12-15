@@ -27,14 +27,10 @@ class CountryController {
         }
     }
 
-    public CountryController() {
-        countriesTrie = new Trie<Country>();
-        borderPointsQuadTree = new QuadTree<BorderPoint>();
-        lc = new LineController();
-    }
-
-    public ZonesController getZonesController() {
-        return new ZonesController(borderPointsQuadTree);
+    public CountryController(DataStorage ds) {
+        countriesTrie = ds.getCountriesTrie();
+        borderPointsQuadTree = ds.getBorderPointsQuadTree();;
+        lc = new LineController(ds);
     }
 
     private HashMap<String,String> getMap(Country country) {

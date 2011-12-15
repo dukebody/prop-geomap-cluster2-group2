@@ -18,9 +18,10 @@ public class CitiesDeserializerTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        countryc = new CountryController();
-        zonesc = new ZonesController(countryc.getBorderPointsQuadTree());
-        citiesc = new CitiesController();
+        DataStorage ds = new DataStorage();
+        countryc = new CountryController(ds);
+        zonesc = new ZonesController(ds);
+        citiesc = new CitiesController(ds);
 
         File ftypes = new File("FeatureCodes_Cities.txt");
         TypesFileParser typesParser = new TypesFileParser(ftypes);

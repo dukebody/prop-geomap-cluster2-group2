@@ -11,7 +11,8 @@ public class CitiesControllerTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        tc = new CitiesController();
+        DataStorage ds = new DataStorage();
+        tc = new CitiesController(ds);
 
         tc.createToponymType("City A", "City", "CA");
         tc.createToponymType("City B", "City", "CB");

@@ -49,10 +49,10 @@ class CitiesController {
         }
     }
 
-    public CitiesController() {
-        citiesTrie = new Trie<City>();
-        typeToponymsTrie = new Trie<TypeToponym>();
-        citiesQuadTree = new QuadTree<City>();
+    public CitiesController(DataStorage ds) {
+        citiesTrie = ds.getCitiesTrie();
+        typeToponymsTrie = ds.getTypeToponymsTrie();
+        citiesQuadTree = ds.getCitiesQuadTree();
     }
 
     public boolean createToponymType(String name, String category, String code) {
@@ -109,6 +109,11 @@ class CitiesController {
         return mapList;
     }
 
+    // private Zone calculateZone(City city) {
+    //     return new Zone();
+    // }
+
+
     public boolean addCity(String nameASCII, String nameUTF, double latitude, double longitude, String typeCode, int population) {
 
         City city;
@@ -116,7 +121,8 @@ class CitiesController {
 
         try {
             city = new City(nameASCII, nameUTF, latitude, longitude, type, population);
-            // XXX: IMPORTANT - set the zone of the city
+            // Zone zone = calculateZone(city); // XXX: IMPORTANT - set the zone of the city
+            // city.setZone(zone);
         } catch (IllegalArgumentException e) {
             return false;
         }

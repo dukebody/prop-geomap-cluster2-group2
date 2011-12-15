@@ -11,7 +11,8 @@ public class CountryControllerTest extends TestCase {
     
     @Before
     public void setUp() throws Exception {
-        cc = new CountryController();
+        DataStorage ds = new DataStorage();
+        cc = new CountryController(ds);
         cc.addCountry("Spain", "ES");
         cc.addCountry("France", "FR");
         cc.addCountry("Germany", "GE");

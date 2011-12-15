@@ -31,11 +31,11 @@ public class IntegrationTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-
-        countryc = new CountryController();
-        zonesc = countryc.getZonesController();
-        citiesc = new CitiesController();
-        linec = zonesc.getLineController();
+        DataStorage ds = new DataStorage();
+        countryc = new CountryController(ds);
+        zonesc = new ZonesController(ds);
+        citiesc = new CitiesController(ds);
+        linec = new LineController(ds);
 
         File fFronteres = new File("Fronteres_OurEurope.txt");
         //File fFronteres = new File("Fronteres_A.txt");

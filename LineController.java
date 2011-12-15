@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class LineController {
 
-    public LineController(){}
+    public LineController(DataStorage ds){}
 
     //ArrayList<Line> getLinesFromZone(Zone zone);  //ALREADY IMPLEMENTED IN ZONE AS A GETTER
 

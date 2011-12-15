@@ -15,7 +15,8 @@ public class ToponymTypesDeserializerTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        citiesc = new CitiesController();
+        DataStorage ds = new DataStorage();
+        citiesc = new CitiesController(ds);
 
         File ftypes = new File("FeatureCodes_Cities.txt");
         TypesFileParser typesParser = new TypesFileParser(ftypes);
