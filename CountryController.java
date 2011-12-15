@@ -4,7 +4,9 @@ class CountryController {
 
     private Trie<Country> countriesTrie;
     private QuadTree<BorderPoint> borderPointsQuadTree;
+    private QuadTree<City> citiesQuadTree;
     private LineController lc;
+    private CitiesController cc;
 
     private class CountriesIterator implements Iterator<HashMap<String,String>> {
 
@@ -29,8 +31,10 @@ class CountryController {
 
     public CountryController(DataStorage ds) {
         countriesTrie = ds.getCountriesTrie();
-        borderPointsQuadTree = ds.getBorderPointsQuadTree();;
+        borderPointsQuadTree = ds.getBorderPointsQuadTree();
+        citiesQuadTree = ds.getCitiesQuadTree();
         lc = new LineController(ds);
+        cc = new CitiesController(ds);
     }
 
     private HashMap<String,String> getMap(Country country) {
@@ -135,34 +139,71 @@ class CountryController {
         return lc.getCountryCoastalLength(country);
     }
 
-    public List<HashMap<String,String>> getMainCitiesByType(String countryName, List<String> types) {
+    public List<HashMap<String,String>> getMainCitiesByType(String countryName, List<String> typeCodes) {
         Country country = countriesTrie.get(countryName);
+        List<HashMap<String,String>> mainCities = new ArrayList<HashMap<String,String>>();
+
         // for every zone
-        for (Zone z: country.getZones()) {
-            
-        }
+        for (Zone zone: country.getZones()) {  // XXX: place this in the zone controller
             // get the biggest rectangle containing the zone
+            ArrayList<Double> extremeValues = lc.getZoneExtremeValues(zone);
+            Double maxLat = extremeValues.get(2);
+            Double minLat = extremeValues.get(3);
+            Double maxLong = extremeValues.get(0);
+            Double minLong = extremeValues.get(1);
+            
+            Interval<Double> intX = new Interval(minLat,maxLat);
+            Interval<Double> intY = new Interval(minLong,maxLong);
+            Interval2D<Double> rect = new Interval2D(intX, intY);
+
             // get the cities belonging to this rectangle
+            ArrayList<Node<City>> nodes = citiesQuadTree.query2D(rect);
             // discard all cities not belonging to this zone
             // filter cities by type
-            List<HashMap<String,String>> mainCities = new ArrayList<HashMap<String,String>>();
-
-            return mainCities;
+            for (Node<City> node: nodes) {
+                City city = node.value;
+                if (typeCodes.contains(city.getType().getCode()) && city.getZone().equals(zone)) {
+                    mainCities.add(cc.getMap(city));
+                }
+            }
+        }
+        return mainCities;
     }
 
     public List<HashMap<String,String>> getMainCitiesByPopulation(String countryName, Double topPercentage) {
+        Country country = countriesTrie.get(countryName);
+        List<HashMap<String,String>> mainCities = new ArrayList<HashMap<String,String>>();
+
         // for every zone
+        for (Zone zone: country.getZones()) {  // XXX: place this in the zone controller
             // get the biggest rectangle containing the zone
+            ArrayList<Double> extremeValues = lc.getZoneExtremeValues(zone);
+            Double maxLat = extremeValues.get(2);
+            Double minLat = extremeValues.get(3);
+            Double maxLong = extremeValues.get(0);
+            Double minLong = extremeValues.get(1);
+            
+            Interval<Double> intX = new Interval(minLat,maxLat);
+            Interval<Double> intY = new Interval(minLong,maxLong);
+            Interval2D<Double> rect = new Interval2D(intX, intY);
+
             // get the cities belonging to this rectangle
+            ArrayList<Node<City>> nodes = citiesQuadTree.query2D(rect);
             // discard all cities not belonging to this zone
+            for (Node<City> node: nodes) {
+                City city = node.value;
+                if (city.getZone().equals(zone)) {
+                    mainCities.add(cc.getMap(city));
+                }
+            }
+        }
+        return mainCities;
             // build minheap with topPercentage items <-- This is IR-for
             // based every city in the list
                 // if population < root => discard
                 // if population >= root => discard root, sink new city
                 // at the end, sort the top elements in the minheap
-            List<HashMap<String,String>> mainCities = new ArrayList<HashMap<String,String>>();
 
-            return mainCities;
     }
 
     public QuadTree<BorderPoint> getBorderPointsQuadTree() {
