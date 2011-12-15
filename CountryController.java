@@ -33,6 +33,10 @@ class CountryController {
         lc = new LineController();
     }
 
+    public ZonesController getZonesController() {
+        return new ZonesController(borderPointsQuadTree);
+    }
+
     private HashMap<String,String> getMap(Country country) {
         HashMap<String,String> map = new HashMap<String,String>();
         if (country != null) {

@@ -32,7 +32,7 @@ public class IntegrationTest extends TestCase {
     public void setUp() throws Exception {
 
         countryc = new CountryController();
-        zonesc = new ZonesController(countryc.getBorderPointsQuadTree());
+        zonesc = countryc.getZonesController();
         citiesc = new CitiesController();
 
         File fFronteres = new File("Fronteres_OurEurope.txt");
