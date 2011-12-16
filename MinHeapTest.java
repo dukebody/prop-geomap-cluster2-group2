@@ -31,25 +31,25 @@ public class MinHeapTest extends TestCase {
     @Test
     public void testPeek() {
         System.out.print("Checking that peek() returns the smallest element...");
-        assertEquals(3, mh.peek());
+        assertEquals(3, (int) mh.peek());
         System.out.println("OK");
     }
 
     @Test
     public void testRemove() {
         System.out.print("Checking that remove() returns the smallest element...");
-        assertEquals(3, mh.remove());
+        assertEquals(3, (int) mh.remove());
         System.out.println("OK");
 
         System.out.print("Checking that after remove() the next smallest element is the expected one...");
-        assertEquals(4, mh.peek());
+        assertEquals(4, (int) mh.peek());
         System.out.println("OK");
     }
 
     @Test
     public void testSize() {
         System.out.print("Checking that size() returns the correct number of elements in the heap...");
-        assertEquals(9, mh.size());
+        assertEquals(9, (int) mh.size());
         System.out.println("OK");
     }
 }
