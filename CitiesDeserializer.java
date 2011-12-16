@@ -27,8 +27,8 @@ class CitiesDeserializer implements IDeserializer {
 
             // create only cities with population > 0
             if (cityToponymCodes.contains(currentMap.get("CodiToponim")) && !currentMap.get("Poblacio").equals("0")) {
-                cc.addCity(currentMap.get("Nom_ASCII").replaceAll("_", " "), 
-                    currentMap.get("Nom_UTF").replaceAll("_", " "), 
+                cc.addCity(currentMap.get("Nom_ASCII"), 
+                    currentMap.get("Nom_UTF"), 
                     new Double(currentMap.get("Latitud")), 
                     new Double(currentMap.get("Longitud")),
                     currentMap.get("CodiToponim"), 
