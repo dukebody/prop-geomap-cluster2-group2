@@ -2,7 +2,7 @@ import java.util.*;
 
 
 class CitiesController {
-    
+
     private Trie<City> citiesTrie;
     private Trie<TypeToponym> typeToponymsTrie;
     private QuadTree<City> citiesQuadTree;
@@ -120,7 +120,7 @@ class CitiesController {
         Stack<Zone> closedZones = new Stack<Zone>();
 
         // get closest borderpoints to the city
-        ArrayList<Node<BorderPoint>> nodes =  borderPointsQuadTree.getCloserNodes(city.getLatitude(), city.getLongitude());
+        ArrayList<Node<BorderPoint>> nodes =  borderPointsQuadTree.getCloserNodes(city.getLatitude(), city.getLongitude(), 0.5, 0.5);
                     
         // for every bpoint
         for (Node node: nodes) {
@@ -144,11 +144,11 @@ class CitiesController {
             }
         }
 
-        System.out.println("zone not found for city: " + city.getNameUTF());
-        System.out.println("Checked countries: ");
-        for (Zone z: closedZones) {
-            System.out.println(z.getCountry().getName());
-        }
+        //System.out.println("zone not found for city: " + city.getNameUTF());
+        //System.out.println("Checked countries: ");
+        // for (Zone z: closedZones) {
+        //     System.out.println(z.getCountry().getName());
+        // }
         return null;
     }
 

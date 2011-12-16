@@ -105,7 +105,7 @@ public class QuadTree<Value>  {
         return getCloserNodes(x, y, 1.0, 1.0);
     }
 
-    private ArrayList<Node<Value>> getCloserNodes(Double x, Double y, Double width, Double height) {
+    public ArrayList<Node<Value>> getCloserNodes(Double x, Double y, Double width, Double height) {
         ArrayList<Node<Value>> closerPoints;
         Interval<Double> intX = new Interval<Double>(x-width, x+width);
         Interval<Double> intY = new Interval<Double>(y-height, y+height);
