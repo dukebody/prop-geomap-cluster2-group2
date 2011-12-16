@@ -156,10 +156,15 @@ public class IntegrationTest extends TestCase {
     public void testGetMainCitiesByPopulation() {
         List<String> typeCodes = new ArrayList<String>();
         typeCodes.add("PPLA");
-        List<HashMap<String,String>> mainCities = countryc.getMainCitiesByPopulation("Andorra", 3);
 
-        System.out.print("Checking getMainCitiesByType with Andorra, expecting 4 cities...");
+        List<HashMap<String,String>> mainCities = countryc.getMainCitiesByPopulation("Andorra", 3);
+        System.out.print("Checking getMainCitiesByPopulation with Andorra, expecting 3 cities...");
         assertEquals(3, mainCities.size());
+        System.out.println("OK");
+
+        mainCities = countryc.getMainCitiesByPopulation("Andorra", 10);
+        System.out.print("Checking getMainCitiesByType never returns more cities than available...");
+        assertEquals(5, mainCities.size());
         System.out.println("OK");
     }
 
