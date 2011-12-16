@@ -170,9 +170,10 @@ class CountryController {
         return mainCities;
     }
 
-    public List<HashMap<String,String>> getMainCitiesByPopulation(String countryName, Double topPercentage) {
+    public List<HashMap<String,String>> getMainCitiesByPopulation(String countryName, int topN) {
         Country country = countriesTrie.get(countryName);
         List<HashMap<String,String>> mainCities = new ArrayList<HashMap<String,String>>();
+        MinHeap<City> mh = new MinHeap<City>(); // build minheap with topPercentage items <-- This is IR-based
 
         // for every zone
         for (Zone zone: country.getZones()) {  // XXX: place this in the zone controller
@@ -189,29 +190,29 @@ class CountryController {
 
             // get the cities belonging to this rectangle
             ArrayList<Node<City>> nodes = citiesQuadTree.query2D(rect);
-            
-            MinHeap mh = new MinHeap(); // build minheap with topPercentage items <-- This is IR-based
             for (Node<City> node: nodes) {
                 City city = node.value;
                 // discard all cities not belonging to this zone
                 if (city.getZone().equals(zone)) {
+                    // fill minheap with topN elements
+                    if (mh.size() < topN)
+                        mh.add(city);
                     // if population >= root => discard root, sink new city
-                    if (mh.size() > 0 && new Integer(city.getPopulation()) > mh.peek().getPopulation()) {
+                    else if (new Integer(city.getPopulation()) > mh.peek().getPopulation()) {
                         mh.remove();
                         mh.add(city);
-                        mainCities.add(cc.getMap(city));
+                        
                     }
-                    // if population < root => discard (else)
-                    
+                    // if population <= root => discard
                 }
             }
         }
 
+        while (mh.size() > 0)
+            mainCities.add(cc.getMap(mh.remove()));
+
         return mainCities;
-            
-                
-                
-                // at the end, sort the top elements in the minheap
+        // at the end, sort the top elements in the minheap
 
     }
 

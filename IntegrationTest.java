@@ -152,5 +152,15 @@ public class IntegrationTest extends TestCase {
         System.out.println("OK");
     }
 
+    @Test
+    public void testGetMainCitiesByPopulation() {
+        List<String> typeCodes = new ArrayList<String>();
+        typeCodes.add("PPLA");
+        List<HashMap<String,String>> mainCities = countryc.getMainCitiesByPopulation("Andorra", 3);
+
+        System.out.print("Checking getMainCitiesByType with Andorra, expecting 4 cities...");
+        assertEquals(3, mainCities.size());
+        System.out.println("OK");
+    }
 
 }
