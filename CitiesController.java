@@ -120,6 +120,9 @@ class CitiesController {
         Stack<Zone> closedZones = new Stack<Zone>();
 
         // get closest borderpoints to the city
+        if (borderPointsQuadTree.isEmpty())
+                return null;
+
         ArrayList<Node<BorderPoint>> nodes =  borderPointsQuadTree.getCloserNodes(city.getLatitude(), city.getLongitude(), 0.5, 0.5);
                     
         // for every bpoint
@@ -157,14 +160,23 @@ class CitiesController {
 
         City city;
         TypeToponym type = typeToponymsTrie.get(typeCode);
+        Zone zone;
 
         try {
             city = new City(nameASCII, nameUTF, latitude, longitude, type, population);
-            Zone zone = calculateZone(city);
-            if (zone == null) {  // zone not found, so drop this city
-                return false;
+
+            // fallback if the quadtree is empty (so tests work)
+            if (borderPointsQuadTree.isEmpty()) {
+                zone = null;
+            } else {
+                zone = calculateZone(city);
+                if (zone == null) {  // zone not found, so drop this city
+                    return false;
+                }
+                city.setZone(zone);
             }
-            city.setZone(zone);
+
+            
         } catch (IllegalArgumentException e) {
             return false;
         }

@@ -12,6 +12,9 @@ import java.util.*;
 public class QuadTree<Value>  {
     private Node<Value> root;
 
+    public boolean isEmpty() {
+        return (root == null);
+    }
 
   /***********************************************************************
     *  Insert (x, y) into appropriate quadrant
