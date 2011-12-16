@@ -3,7 +3,8 @@ import javax.swing.*;
 import java.util.*;
 
 public class Application{
-	
+
+	private static DataStorage ds;
 	private static JFrame frame;
 	private static File file1;
 	private static File file2;
@@ -26,6 +27,7 @@ public class Application{
         frame.setSize(350, 200);
         frame.setVisible(true);
         
+        ds = new DataStorage();
 	}
 	
 	public static void getHomePanel(JPanel p){
@@ -66,10 +68,10 @@ public class Application{
 	private static void setListCountries(){
 		
 		countries = new ArrayList<String>();
-		countryc = new CountryController();
-	    zonesc = new ZonesController(countryc.getBorderPointsQuadTree());
-	    citiesc = new CitiesController();
-	    Iterator<HashMap<String,String>> itrFronteres = null;
+		countryc = new CountryController(ds);
+		zonesc = new ZonesController(ds);
+		citiesc = new CitiesController(ds);
+		Iterator<HashMap<String,String>> itrFronteres = null;
 		
 		try{
 		BordersFileParser parserFronteres = new BordersFileParser(file1);
