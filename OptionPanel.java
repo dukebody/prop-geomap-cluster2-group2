@@ -71,15 +71,15 @@ public class OptionPanel extends JPanel implements ActionListener{
     		String country = Application.getCountry();
     		
 			if(rb1.isSelected()){
-				double result = cc.getTotalSharedBorderLength(country);
+				double result = cc.getTotalSharedBorderLength(country.replaceAll(" ", "_"));
 				JOptionPane.showMessageDialog(null, "The borders length of " + country + " is: " + result + " km!");
 			}
 			else if(rb2.isSelected()){
-				double result = cc.getTotalCoastlineLength(country);
+				double result = cc.getTotalCoastlineLength(country.replaceAll(" ", "_"));
 				JOptionPane.showMessageDialog(null, "The coastal length of " + country + " is: " + result + " km!");
 			}
 			else if(rb3.isSelected()){
-				double result = cc.getTotalCoastlineLength(country)+cc.getTotalSharedBorderLength(country);
+				double result = cc.getTotalCoastlineLength(country.replaceAll(" ", "_"))+cc.getTotalSharedBorderLength(country.replaceAll(" ", "_"));
 				JOptionPane.showMessageDialog(null, "The total length (boarders + coasts) of " + country + " is: " + result + " km!");
 			}
 			else if(rb4.isSelected()){
