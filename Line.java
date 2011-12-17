@@ -1,5 +1,5 @@
 import java.util.*;
-
+import java.lang.Math;
 
 public class Line {
 	private BorderPoint[] points = new BorderPoint[2];
@@ -68,4 +68,13 @@ public class Line {
             length=points[0].getLinearDistanceTo(points[1]);
         }
 
+    public Double getDistanceToPoint(Point p) {
+        // author: Israel
+        // get the equation of the line ax+by+c=0
+        Double a = -(points[1].getLongitude()-points[0].getLongitude())/(points[1].getLongitude()-points[0].getLatitude());
+        Double b = 1.0;
+        Double c = -a*points[0].getLatitude() - points[0].getLongitude();
+
+        return Math.abs(a*points[0].getLatitude()+b*points[1].getLongitude()+c)/Math.sqrt(Math.pow(a,2)+Math.pow(b,2));
+    }
 }

@@ -48,8 +48,8 @@ public class IntegrationTest extends TestCase {
         Iterator<HashMap<String,String>> itrTypes = typesParser.getIterator();
         
 
+        //File fToponyms = new File("TopTop.txt");
         File fToponyms = new File("TopTop.txt");
-        //File fToponyms = new File("data/Toponims/Toponims.txt");
         ToponymsFileParser parserToponyms = new ToponymsFileParser(fToponyms);
         Iterator<HashMap<String,String>> itrToponyms = parserToponyms.getIterator();
 
@@ -63,77 +63,77 @@ public class IntegrationTest extends TestCase {
         cd.generate();
     }
 
- //    @Test
- //    public void testGetNeighborCountries() {
- //    	List<HashMap<String,String>> neighborCountries = countryc.getNeighborCountries("Spain");
- //    	HashSet<String> countryNames = new HashSet<String>();
- //    	for (HashMap<String,String> map: neighborCountries) {
- //    		countryNames.add(map.get("name"));
- //    	}
- //    	System.out.print("Checking that Spain limits with France, Portugal, Gibraltar and Andorra...");
- //        assertTrue(countryNames.contains("France"));
- //        assertTrue(countryNames.contains("Portugal"));
- //        assertTrue(countryNames.contains("Gibraltar"));
- //        assertTrue(countryNames.contains("Andorra"));
- //        System.out.println("OK");
- //    }
+    @Test
+    public void testGetNeighborCountries() {
+    	List<HashMap<String,String>> neighborCountries = countryc.getNeighborCountries("Spain");
+    	HashSet<String> countryNames = new HashSet<String>();
+    	for (HashMap<String,String> map: neighborCountries) {
+    		countryNames.add(map.get("name"));
+    	}
+    	System.out.print("Checking that Spain limits with France, Portugal, Gibraltar and Andorra...");
+        assertTrue(countryNames.contains("France"));
+        assertTrue(countryNames.contains("Portugal"));
+        assertTrue(countryNames.contains("Gibraltar"));
+        assertTrue(countryNames.contains("Andorra"));
+        System.out.println("OK");
+    }
 
-	// @Test
- //    public void testTotalCoastLineLength() {
- //    	System.out.print("Checking that Spain has coast...");
- //        assertTrue(countryc.getTotalCoastlineLength("Spain") > 0);
- //        System.out.println("OK");
- //    }
+	@Test
+    public void testTotalCoastLineLength() {
+    	System.out.print("Checking that Spain has coast...");
+        assertTrue(countryc.getTotalCoastlineLength("Spain") > 0);
+        System.out.println("OK");
+    }
 
- //    @Test
- //    public void testTotalSharedBorderLength() {
- //    	System.out.print("Checking that Spain has shared border length...");
- //        assertTrue(countryc.getTotalSharedBorderLength("Spain") > 0);
- //        System.out.println("OK");
- //    }
+    @Test
+    public void testTotalSharedBorderLength() {
+    	System.out.print("Checking that Spain has shared border length...");
+        assertTrue(countryc.getTotalSharedBorderLength("Spain") > 0);
+        System.out.println("OK");
+    }
 
- //    @Test
- //    public void testSharedBorderLengthWith() {
- //        System.out.print("Checking that Spain has a lengthy border with France...");
- //        assertTrue(countryc.getSharedBorderLengthWith("Spain", "France") > 0);
- //        System.out.println("OK");
+    @Test
+    public void testSharedBorderLengthWith() {
+        System.out.print("Checking that Spain has a lengthy border with France...");
+        assertTrue(countryc.getSharedBorderLengthWith("Spain", "France") > 0);
+        System.out.println("OK");
 
- //        System.out.print("Checking that Spain has a lengthy border with Portugal...");
- //        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Portugal") > 0);
- //        System.out.println("OK");
+        System.out.print("Checking that Spain has a lengthy border with Portugal...");
+        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Portugal") > 0);
+        System.out.println("OK");
 
- //        System.out.print("Checking that Spain has a lengthy border with Gibraltar...");
- //        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Gibraltar") > 0);
- //        System.out.println("OK");
+        System.out.print("Checking that Spain has a lengthy border with Gibraltar...");
+        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Gibraltar") > 0);
+        System.out.println("OK");
 
- //        System.out.print("Checking that Spain has a lengthy border with Andorra...");
- //        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Andorra") > 0);
- //        System.out.println("OK");
- //    }
+        System.out.print("Checking that Spain has a lengthy border with Andorra...");
+        assertTrue(countryc.getSharedBorderLengthWith("Spain", "Andorra") > 0);
+        System.out.println("OK");
+    }
 
- //    @Test
- //    public void testSharedBorderLengthTotalCorrect() {
- //        Double individualSum = countryc.getSharedBorderLengthWith("Spain", "France") + countryc.getSharedBorderLengthWith("Spain", "Portugal") +
- //            countryc.getSharedBorderLengthWith("Spain", "Gibraltar") + countryc.getSharedBorderLengthWith("Spain", "Andorra");
- //        Double expectedTotal = countryc.getTotalSharedBorderLength("Spain");
+    @Test
+    public void testSharedBorderLengthTotalCorrect() {
+        Double individualSum = countryc.getSharedBorderLengthWith("Spain", "France") + countryc.getSharedBorderLengthWith("Spain", "Portugal") +
+            countryc.getSharedBorderLengthWith("Spain", "Gibraltar") + countryc.getSharedBorderLengthWith("Spain", "Andorra");
+        Double expectedTotal = countryc.getTotalSharedBorderLength("Spain");
 
- //        System.out.print("Checking that the sum of all individual shared borders equals to the calculated total...");
- //        assertEquals(individualSum, expectedTotal);
- //        System.out.println("OK");
- //    }
+        System.out.print("Checking that the sum of all individual shared borders equals to the calculated total...");
+        assertEquals(individualSum, expectedTotal);
+        System.out.println("OK");
+    }
 
- //    @Test
- //    public void testPointIsInsideZone() {
- //        Zone peninsula = countryc.getRawCountry("Spain").getZones().get(15);
- //        System.out.print("Checking that a point inside the Peninsula is detected as so...");
- //        assertTrue(linec.checkIfPointIsInsideZone(new Point(40.0, -3.0), peninsula));
- //        System.out.println("OK");
+    @Test
+    public void testPointIsInsideZone() {
+        Zone peninsula = countryc.getRawCountry("Spain").getZones().get(15);
+        System.out.print("Checking that a point inside the Peninsula is detected as so...");
+        assertTrue(linec.checkIfPointIsInsideZone(new Point(40.0, -3.0), peninsula));
+        System.out.println("OK");
 
- //        Zone island = countryc.getRawCountry("Spain").getZones().get(14);
- //        System.out.print("Checking that a point outside the Peninsula is detected as so...");
- //        assertFalse(linec.checkIfPointIsInsideZone(new Point(40.0, -3.0), island));
- //        System.out.println("OK");
- //    }
+        Zone island = countryc.getRawCountry("Spain").getZones().get(14);
+        System.out.print("Checking that a point outside the Peninsula is detected as so...");
+        assertFalse(linec.checkIfPointIsInsideZone(new Point(40.0, -3.0), island));
+        System.out.println("OK");
+    }
 
     @Test
     public void testGetMainCitiesByType() {
@@ -164,6 +164,19 @@ public class IntegrationTest extends TestCase {
 
         mainCities = countryc.getMainCitiesByPopulation("Andorra", 10);
         System.out.print("Checking getMainCitiesByType never returns more cities than available...");
+        assertEquals(5, mainCities.size());
+        System.out.println("OK");
+    }
+
+    @Test
+    public void testGetMainCoastalBorderCities() {
+        List<HashMap<String,String>> mainCities = countryc.getMainCoastalBorderCities("Andorra", 0.01);
+        System.out.print("Checking getMainCoastalBorder with Andorra and 0.01 distance, expecting 1 cities...");
+        assertEquals(1, mainCities.size());
+        System.out.println("OK");
+
+        mainCities = countryc.getMainCoastalBorderCities("Andorra", 10.0);
+        System.out.print("Checking getMainCoastalBorder with Andorra and 10.0 distance, expecting 5 cities...");
         assertEquals(5, mainCities.size());
         System.out.println("OK");
     }

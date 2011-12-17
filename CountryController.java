@@ -216,6 +216,60 @@ class CountryController {
 
     }
 
+
+    public List<HashMap<String,String>> getMainCoastalBorderCities(String countryName, Double dist) {
+        Country country = countriesTrie.get(countryName);
+        List<HashMap<String,String>> mainCities = new ArrayList<HashMap<String,String>>();
+        MinHeap<City> mh = new MinHeap<City>(); // build minheap with topPercentage items <-- This is IR-based
+
+        // for every zone
+        for (Zone zone: country.getZones()) {  // XXX: place this in the zone controller
+            // get the biggest rectangle containing the zone
+            ArrayList<Double> extremeValues = lc.getZoneExtremeValues(zone);
+            Double maxLat = extremeValues.get(2);
+            Double minLat = extremeValues.get(3);
+            Double maxLong = extremeValues.get(0);
+            Double minLong = extremeValues.get(1);
+            
+            Interval<Double> intX = new Interval(minLat,maxLat);
+            Interval<Double> intY = new Interval(minLong,maxLong);
+            Interval2D<Double> rect = new Interval2D(intX, intY);
+
+            // get the cities belonging to this rectangle
+            ArrayList<Node<City>> nodes = citiesQuadTree.query2D(rect);
+            for (Node<City> node: nodes) {
+                City city = node.value;
+                // discard all cities not belonging to this zone
+                if (city.getZone().equals(zone)) {
+                    // get the 2 points closer to it
+                    ArrayList<BorderPoint> closests = new ArrayList<BorderPoint>(2);
+                    ArrayList<Node<BorderPoint>> closerNodes = borderPointsQuadTree.getCloserNodes(city.getLatitude(), city.getLongitude(), 0.5, 0.5);
+                    for (Node<BorderPoint> closerNode: closerNodes) {
+                        BorderPoint bp = closerNode.value;
+                        if (closests.size() < 2) {
+                            closests.add(bp);
+                        } else if (bp.getLinearDistanceTo(city) < closests.get(0).getLinearDistanceTo(city)) {
+                            if (closests.get(0).getLinearDistanceTo(city) < closests.get(1).getLinearDistanceTo(city)) {
+                                closests.set(1, bp);
+                            } else {
+                                closests.set(0, bp);
+                            }
+                        }
+                    }
+                    // if distance < dist, add
+                    Line l = new Line(closests.get(0), closests.get(1));
+                    if (l.getDistanceToPoint(city) < dist) {
+                        mainCities.add(cc.getMap(city));
+                    }
+                }
+            }
+        }
+
+        return mainCities;
+        // at the end, sort the top elements in the minheap
+
+    }
+
     public QuadTree<BorderPoint> getBorderPointsQuadTree() {
         return borderPointsQuadTree;
     }
