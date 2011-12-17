@@ -10,6 +10,7 @@ class CitiesController {
 
     private LineController lc;
 
+
     private class CitiesIterator implements Iterator<HashMap<String,String>> {
 
         private Iterator<City> trieIterator;
@@ -146,12 +147,6 @@ class CitiesController {
                 closedZones.push(zone);
             }
         }
-
-        //System.out.println("zone not found for city: " + city.getNameUTF());
-        //System.out.println("Checked countries: ");
-        // for (Zone z: closedZones) {
-        //     System.out.println(z.getCountry().getName());
-        // }
         return null;
     }
 
