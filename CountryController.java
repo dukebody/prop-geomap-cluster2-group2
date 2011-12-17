@@ -1,6 +1,6 @@
 import java.util.*;
 
-class CountryController {
+public class CountryController {
 
     private Trie<Country> countriesTrie;
     private QuadTree<BorderPoint> borderPointsQuadTree;
@@ -29,6 +29,11 @@ class CountryController {
         }
     }
 
+    /**
+    Spawn a new CountryController attached to the specified data storage.
+
+    @param ds DataStorage object to be attached to.
+    */
     public CountryController(DataStorage ds) {
         countriesTrie = ds.getCountriesTrie();
         borderPointsQuadTree = ds.getBorderPointsQuadTree();
@@ -37,6 +42,11 @@ class CountryController {
         cc = new CitiesController(ds);
     }
 
+
+    /**
+    Get HashMap representation for the specified country.
+    @param country Country to be converted to HashMap.
+    */
     private HashMap<String,String> getMap(Country country) {
         HashMap<String,String> map = new HashMap<String,String>();
         if (country != null) {
@@ -48,6 +58,10 @@ class CountryController {
         return null;
     }
 
+    /**
+    Get HashMap representation for the specified list of countries.
+    @param countryList List of countries to be converted to HashMap.
+    */
     public List<HashMap<String,String>> getMap(List<Country> countryList) {
         List<HashMap<String,String>> mapList = new LinkedList<HashMap<String,String>>();
         for (Country country: countryList) {

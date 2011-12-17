@@ -210,6 +210,9 @@ public class LineController {
         //Check the valid points
         if (zonePoints == null) return false;
 
+        //Killing the last point (there first point appears repeted at the end in the BorderPoints File)
+        zonePoints.remove(zonePoints.size() - 1);
+
         //Check points can form an area
         if (zonePoints.size() < 3) return false;
 
@@ -234,13 +237,16 @@ public class LineController {
         Double crossX = new Double(0);
         Double crossY = new Double(0);
         int altCont = 0;
+        int aux = 0;
 
         for (int i=0;i<zonePoints.size();i++) {
             //Check there are no repeated points
             for (int j=0;j<i;j++) {
+                if (i == 0) aux = zonePoints.size() - 1;
+                else aux = j;
                 try {
-                    if ((zonePoints.get(i).getLatitude() == zonePoints.get(j).getLatitude()) &&
-                        (zonePoints.get(i).getLongitude() == zonePoints.get(j).getLongitude())) {
+                    if ((zonePoints.get(i).getLatitude() == zonePoints.get(aux).getLatitude()) &&
+                        (zonePoints.get(i).getLongitude() == zonePoints.get(aux).getLongitude())) {
                         System.out.println("problemas aquí0 en "+i+"!");
                         return false;
                     } //else repeatedPointCheck.add(zonePoints.get(i));
@@ -264,8 +270,8 @@ public class LineController {
 
                 //Chech that the current pendent is not the exact same as the previous one
                 try {
-                    if ((i > 0) && checkIfOppositePendents(localPointA, localPointB, altPointsA.get(altCont - 1), altPointsB.get(altCont - 1))) {
-                        System.out.println("problemas aquí1 en "+i+"!");
+                    if ((altCont > 0) && checkIfOppositePendents(localPointA, localPointB, altPointsA.get(altCont - 1), altPointsB.get(altCont - 1))) {
+                        System.out.println("problemas aquí1 en "+i+"! (consecutive lines with OPPOSITE pendents)");
                         return false;
                     }
                 } catch (Exception e) { System.out.println("peta aquí1 en "+i+": "+e.getMessage()); }
@@ -276,59 +282,56 @@ public class LineController {
 
             if (i > 1) {
                 //Make loop to previous lines and check that current line doesn't cut or get cut at any point
-                for (int j=0;j<altCont;j++) {
-                    //Calculate crossing point's coordinates of two infinite lines
-                    crossPoint = calculateCrossPoint(localPendent, localCuttingPoint, altPendents.get(j), altCuttingPoints.get(j));
+                for (int j=0;j<(altCont-1);j++) {
+                    //First make sure both lines to be compared (consecutives) don't share a same point
+                    if (!(((i+1) == zonePoints.size()) && (j == 0))) {
+                        //Calculate crossing point's coordinates of two infinite lines
+                        crossPoint = calculateCrossPoint(localPendent, localCuttingPoint, localPointA, altPendents.get(j), altCuttingPoints.get(j), altPointsA.get(j));
 
-                    if ((crossPoint != null) && (crossPoint.size() == 2)) {
-                        crossX = crossPoint.get(0);                             //Longitude
-                        crossY = crossPoint.get(1);                             //Latitude
-                        //Check if the current line does not include the crossing point inside itself
-                        try {
-                        if (localPointA.getLatitude() > localPointB.getLatitude()) {
-                            majorYRange1 = localPointA.getLatitude();
-                            minorYRange1 = localPointB.getLatitude();
-                        } else {
-                            majorYRange1 = localPointB.getLatitude();
-                            minorYRange1 = localPointA.getLatitude();
-                        }
-                        if (localPointA.getLongitude() > localPointB.getLongitude()) {
-                            majorXRange1 = localPointA.getLongitude();
-                            minorXRange1 = localPointB.getLongitude();
-                        } else {
-                            majorXRange1 = localPointB.getLongitude();
-                            minorXRange1 = localPointA.getLongitude();
-                        }
-                        //Check if the current previous line does not include the crossing point inside itself
-                        if (altPointsA.get(j).getLatitude() > altPointsB.get(j).getLatitude()) {
-                            majorYRange2 = altPointsA.get(j).getLatitude();
-                            minorYRange2 = altPointsB.get(j).getLatitude();
-                        } else {
-                            majorYRange2 = altPointsB.get(j).getLatitude();
-                            minorYRange2 = altPointsA.get(j).getLatitude();
-                        }
-                        if (altPointsA.get(j).getLongitude() > altPointsB.get(j).getLongitude()) {
-                            majorXRange2 = altPointsA.get(j).getLongitude();
-                            minorXRange2 = altPointsB.get(j).getLongitude();
-                        } else {
-                            majorXRange2 = altPointsA.get(j).getLongitude();
-                            minorXRange2 = altPointsB.get(j).getLongitude();
-                        }
+                        if ((crossPoint != null) && (crossPoint.size() == 2)) {
+                            crossX = crossPoint.get(0);                             //Longitude
+                            crossY = crossPoint.get(1);                             //Latitude
+                            //Check if the current line would not include the crossing point inside itself
+                            try {
+                                if (localPointA.getLatitude() > localPointB.getLatitude()) {
+                                    majorYRange1 = localPointA.getLatitude();
+                                    minorYRange1 = localPointB.getLatitude();
+                                } else {
+                                    majorYRange1 = localPointB.getLatitude();
+                                    minorYRange1 = localPointA.getLatitude();
+                                }
+                                if (localPointA.getLongitude() > localPointB.getLongitude()) {
+                                    majorXRange1 = localPointA.getLongitude();
+                                    minorXRange1 = localPointB.getLongitude();
+                                } else {
+                                    majorXRange1 = localPointB.getLongitude();
+                                    minorXRange1 = localPointA.getLongitude();
+                                }
+                                //Check if the current previous line would not include the crossing point inside itself
+                                if (altPointsA.get(j).getLatitude() > altPointsB.get(j).getLatitude()) {
+                                    majorYRange2 = altPointsA.get(j).getLatitude();
+                                    minorYRange2 = altPointsB.get(j).getLatitude();
+                                } else {
+                                    majorYRange2 = altPointsB.get(j).getLatitude();
+                                    minorYRange2 = altPointsA.get(j).getLatitude();
+                                }
+                                if (altPointsA.get(j).getLongitude() > altPointsB.get(j).getLongitude()) {
+                                    majorXRange2 = altPointsA.get(j).getLongitude();
+                                    minorXRange2 = altPointsB.get(j).getLongitude();
+                                } else {
+                                    majorXRange2 = altPointsB.get(j).getLongitude();
+                                    minorXRange2 = altPointsA.get(j).getLongitude();
+                                }
 
-                        if ((((crossX > minorXRange1) && (crossX < majorXRange1)) &&
-                             ((crossY > minorYRange1) && (crossY < majorYRange1))) &&
-                            (((crossX >= minorXRange2) && (crossX <= majorXRange2)) &&
-                             ((crossY >= minorYRange2) && (crossY <= majorYRange2)))) {
-                            System.out.println("problemas aquí2.1 en "+i+"!");
-                            return false;
-                        } else if ((((crossX >= minorXRange1) && (crossX <= majorXRange1)) &&
-                                    ((crossY >= minorYRange1) && (crossY <= majorYRange1))) &&
-                                   (((crossX > minorXRange2) && (crossX < majorXRange2)) &&
-                                    ((crossY > minorYRange2) && (crossY < majorYRange2)))) {
-                            System.out.println("problemas aquí2.2 en "+i+"!");
-                            return false;
+                                if ((((crossX > minorXRange1) && (crossX < majorXRange1)) &&
+                                     ((crossY > minorYRange1) && (crossY < majorYRange1))) &&
+                                    (((crossX > minorXRange2) && (crossX < majorXRange2)) &&
+                                     ((crossY > minorYRange2) && (crossY < majorYRange2)))) {
+                                    System.out.println("problemas aquí2.1 en "+i+", "+j+"!");
+                                    return false;
+                                }
+                            } catch (Exception e) { System.out.println("peta aquí3 en "+i+": "+e.getMessage()); }
                         }
-                        } catch (Exception e) { System.out.println("peta aquí3 en "+i+": "+e.getMessage()); }
                     }
                 }
             }
@@ -336,6 +339,7 @@ public class LineController {
 
         return true;
     }
+
 
     public static boolean checkIfPointIsInsideZone(Point point, Zone zone){
         //Check the points exist and points can form an area
@@ -585,15 +589,25 @@ public class LineController {
         return false;
     }
 
-    private static ArrayList<Double> calculateCrossPoint(double pendent1, double cutPoint1, double pendent2, double cutPoint2){
+    private static ArrayList<Double> calculateCrossPoint(double pendent1, double cutPoint1, Point p1, double pendent2, double cutPoint2, Point p2){
         if (pendent1 == pendent2) return null;
 
         ArrayList<Double> crossPoint = new ArrayList<Double>(2);
-        crossPoint.add((cutPoint2 - cutPoint1) / (pendent1 - pendent2));                                //Longitude
-        crossPoint.add(((pendent2 * cutPoint1) - (pendent1 * cutPoint2)) / (pendent2 - pendent1));      //Latitude
+        
+        if ((pendent1 == Double.POSITIVE_INFINITY) || (pendent1 == Double.NEGATIVE_INFINITY)) {
+            crossPoint.add(p1.getLongitude());                                  //Longitude
+            crossPoint.add((pendent2 * p1.getLongitude()) + cutPoint2);         //Latitude
+        } else if ((pendent2 == Double.POSITIVE_INFINITY) || (pendent2 == Double.NEGATIVE_INFINITY)) {
+            crossPoint.add(p2.getLongitude());                                  //Longitude
+            crossPoint.add((pendent1 * p2.getLongitude()) + cutPoint1);         //Latitude
+        } else {
+            crossPoint.add((cutPoint2 - cutPoint1) / (pendent1 - pendent2));                                //Longitude
+            crossPoint.add(((pendent2 * cutPoint1) - (pendent1 * cutPoint2)) / (pendent2 - pendent1));      //Latitude
+        }
 
         return crossPoint;
     }
+
 
     private static double calculatePendent(BorderPoint pointA, BorderPoint pointB){
         if (pointB.getLatitude() == pointA.getLatitude()) return 0;

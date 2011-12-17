@@ -20,32 +20,30 @@ public class ZonesController {
 
     //ArrayList<Zone> getZonesFromCountry(String countryCode);
 
-    public boolean createZone(Country country, ArrayList<BorderPoint> zonePoints){
-        try{
-            try {
-                if (!LineController.checkGeometricalConsistenceForZone(zonePoints)) {
-                    System.out.println("Peta en el checkGeometricalConsistenceForZone");
-                    return false;
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid zone-points:"); e.printStackTrace();
-            }
+    public boolean createZone(Country country, ArrayList<BorderPoint> zonePoints) throws NullPointerException {
+        // try{
+            // try {
+            //     if (!LineController.checkGeometricalConsistenceForZone(zonePoints)) {
+            //         System.out.println("Peta en el checkGeometricalConsistenceForZone");
+            //         return false;
+            //     }
+            // } catch (Exception e) {
+            //     System.out.println("Invalid zone-points:"); e.printStackTrace();
+            // }
             
             Zone zone = new Zone(country);
 
-            for (int i=0;i<zonePoints.size();i++) {
-                zone.addBorderPoint(zonePoints.get(i), i);
-                zonePoints.get(i).addZone(zone);
-                borderPointsQuadTree.insert(zonePoints.get(i).getLatitude(), zonePoints.get(i).getLongitude(),zonePoints.get(i));
+            for (BorderPoint bp: zonePoints) {
+                addBorderPointZone(zone, bp);
             }
 
             ArrayList<Zone> countryZones = country.getZones();
             countryZones.add(zone);
-            country.setZones(countryZones);
-        } catch (Exception e) {
-            System.out.println("Exception at creating a new zone for country "+country.getName()+": "+e.getMessage());
-            return false;
-        }
+            //country.setZones(countryZones);
+        // } catch (Exception e) {
+        //     System.out.println("Exception at creating a new zone for country "+country.getName()+": "+e.getMessage());
+        //     return false;
+        // }
 
         return true;
     }
@@ -69,7 +67,8 @@ public class ZonesController {
          if (node != null) {
              existingBorderPoint = node.value;
              zone.addBorderPoint(existingBorderPoint, zone.getBorderpoints().size());
-             existingBorderPoint.addZone(zone);
+             if (!existingBorderPoint.getZones().contains(zone))
+                existingBorderPoint.addZone(zone);
          }
  
         else {

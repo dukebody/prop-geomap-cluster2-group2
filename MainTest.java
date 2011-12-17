@@ -14,12 +14,12 @@ public class MainTest {
         // suite.addTestSuite(QuadTreeTest.class);
         // suite.addTestSuite(BordersFileWriterTest.class);
         // suite.addTestSuite(ToponymsFileWriterTest.class);
-        // suite.addTestSuite(BorderPointsDeserializerTest.class);
+        suite.addTestSuite(BorderPointsDeserializerTest.class);
         // suite.addTestSuite(ToponymTypesDeserializerTest.class);
         // suite.addTestSuite(CitiesDeserializerTest.class);
-        suite.addTestSuite(MinHeapTest.class);
+        // suite.addTestSuite(MinHeapTest.class);
         runner.doRun(suite);
-        //org.junit.runner.JUnitCore.main("PointTest", "BordersFileParserTest");
+        // org.junit.runner.JUnitCore.main("PointTest", "BordersFileParserTest");
     }
 
 }
