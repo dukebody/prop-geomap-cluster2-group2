@@ -1,7 +1,7 @@
 import java.util.*;
 
 
-class CitiesController {
+public class CitiesController {
 
     private Trie<City> citiesTrie;
     private Trie<TypeToponym> typeToponymsTrie;
@@ -53,6 +53,11 @@ class CitiesController {
         }
     }
 
+    /**
+    Spawn a new CitiesController attached to the specified data storage.
+
+    @param ds DataStorage object to be attached to.
+    */
     public CitiesController(DataStorage ds) {
         lc = new LineController(ds);
         citiesTrie = ds.getCitiesTrie();
@@ -61,6 +66,16 @@ class CitiesController {
         borderPointsQuadTree = ds.getBorderPointsQuadTree();
     }
 
+
+    /**
+    Create a new TypeToponym with the specified parameters.
+
+    @param name Name (description) of the TypeToponym.
+
+    @param category Category of the TypeToponym.
+
+    @param code Code of the TypeToponym.
+    */
     public boolean createToponymType(String name, String category, String code) {
         if (getToponymType(code) == null) {
             TypeToponym typeToponym = new TypeToponym(name, category, code);
@@ -70,14 +85,45 @@ class CitiesController {
         return false;  // already existing city type with that code
     }
 
+    /**
+    Get the HashMap representation of the specified toponym type.
+
+    @param code Code of the toponym type to be retrieved.
+    */
     public HashMap<String,String> getToponymType(String code) {
         return getMap(typeToponymsTrie.get(code));
     }
 
+    /**
+    Get the HashMap representation of the specified toponym type.
+
+    @param city Instance of the TypeToponym to be translated into HashMap.
+    */
+    public HashMap<String,String> getMap(TypeToponym type) {
+        HashMap<String,String> map = new HashMap<String,String>();
+        if (type != null) {
+            map.put("name", type.getName());
+            map.put("category", type.getCategory());
+            map.put("code", type.getCode());
+            return map;
+        }
+
+        return null;
+    }
+
+    /**
+    Get an iterator over the HashMap representation of all the toponym types
+    available in the system.
+    */
     public Iterator<HashMap<String,String>> getToponymTypesIterator() {
         return new CityTypesIterator(typeToponymsTrie.iterator());
     }
 
+    /**
+    Get the HashMap representation of the specified city.
+
+    @param city Instance of the city to be translated into HashMap.
+    */
     public HashMap<String,String> getMap(City city) {
         HashMap<String,String> map = new HashMap<String,String>();
         if (city != null) {
@@ -94,18 +140,12 @@ class CitiesController {
         return null;
     }
 
-    public HashMap<String,String> getMap(TypeToponym type) {
-        HashMap<String,String> map = new HashMap<String,String>();
-        if (type != null) {
-            map.put("name", type.getName());
-            map.put("category", type.getCategory());
-            map.put("code", type.getCode());
-            return map;
-        }
 
-        return null;
-    }
+    /**
+    Get the HashMap representation of the specified list of cities.
 
+    @param city List of the city instances to be translated into HashMaps.
+    */
     public List<HashMap<String,String>> getMap(List<City> cityList) {
         List<HashMap<String,String>> mapList = new LinkedList<HashMap<String,String>>();
         for (City city: cityList) {
@@ -150,8 +190,27 @@ class CitiesController {
         return null;
     }
 
+    /**
+    Create and save a city with the specified parameters.
 
-    public boolean addCity(String nameASCII, String nameUTF, double latitude, double longitude, String typeCode, int population) {
+    @param nameASCII ASCII name of the city.
+
+    @param nameUTF UTF8 name of the city.
+
+    @param latitude Latitude coordinate of the city. Must be in the range
+    -90 -- 90 or the city creation will fail.
+
+    @param longitude Longitude coordinate of the city. Must be in the
+    range -180 -- 80 or the city creation will fail.
+
+    @param typeCode Code of the toponym type for this city.
+
+    @param population Population of the city as an integer.
+
+    @return True if the city was created successfully, false otherwise.
+    */
+    public boolean addCity(String nameASCII, String nameUTF, double latitude, 
+        double longitude, String typeCode, int population) {
 
         City city;
         TypeToponym type = typeToponymsTrie.get(typeCode);
@@ -185,18 +244,47 @@ class CitiesController {
         return false; // point already exists
     }
 
+    /**
+    Get the list of HashMap representation of the cities with the specified
+    name. Note that there can be more than one city with the same name.
+
+    @param name UTF8 name of the cities to be retrieved.
+
+    */
     public List<HashMap<String,String>> getCitiesByName(String name) {
         return getMap(citiesTrie.getList(name));
     }
 
+    /**
+    Get the HashMap representation of the city with the specified
+    name and id. There can only be one city with a specified (name,id) pair.
+    Actually, the id identifies the city uniquely, but the name needs to be
+    specified for indexing reasons.
+
+    @param name UTF8 name of the city to be retrieved.
+
+    @param id Id of the city to be retrieved.
+    */
     public HashMap<String,String> getCityByNameAndId(String name, String id) {
         return getMap(citiesTrie.get(name, id));
     }
 
+
+    /**
+    Get the HashMap representation of the cities starting with the specified prefix.
+
+    @param name Prefix matching the start of the UTF8 name of the cities to be
+    retrieved.
+    */
     public Iterator<HashMap<String,String>> getCitiesPrefixIterator(String name) {
         return new CitiesIterator(citiesTrie.iteratorPrefix(name));
     }
 
+
+    /**
+    Modify the city matching the given UTF8-name and id, replacing the old values
+    with the new ones.
+    */
     public boolean modifyCity(String nameUTF, String id, String newNameASCII, String newNameUTF, double newLatitude, 
                                  double newLongitude, String newTypeCode, int newPopulation) {
         // erase old city from the quadtree and the trie
@@ -218,6 +306,13 @@ class CitiesController {
         return false;  // original city not found
     }
 
+    /**
+    Delete the specified city.
+
+    @param name UTF8 name of the city.
+
+    @param id Id of the city.
+    */
     public boolean deleteCity(String name, String id) {
         HashMap<String,String> city = getCityByNameAndId(name, id);
         if (city != null) {

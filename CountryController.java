@@ -1,5 +1,10 @@
 import java.util.*;
 
+/**
+This controller manages country-related data and serves as
+main connection with the presentation layer, since most use-cases
+start with specifying a country.
+*/
 public class CountryController {
 
     private Trie<Country> countriesTrie;
