@@ -21,21 +21,16 @@ public class ZonesController {
     //ArrayList<Zone> getZonesFromCountry(String countryCode);
 
     public boolean createZone(Country country, ArrayList<BorderPoint> zonePoints){
-        ArrayList<Zone> countryZones = country.getZones();
-
         try{
-            boolean isOk = true;
             try {
-            isOk = true; //LineController.checkGeometricalConsistenceForZone(zonePoints);
+                if (!LineController.checkGeometricalConsistenceForZone(zonePoints)) {
+                    System.out.println("Peta en el checkGeometricalConsistenceForZone");
+                    return false;
+                }
             } catch (Exception e) {
                 System.out.println("Invalid zone-points:"); e.printStackTrace();
             }
-
-            if (!isOk) {
-                System.out.println("Peta en el checkGeometricalConsistenceForZone");
-                return false;
-            }
-
+            
             Zone zone = new Zone(country);
 
             for (int i=0;i<zonePoints.size();i++) {
@@ -44,6 +39,7 @@ public class ZonesController {
                 borderPointsQuadTree.insert(zonePoints.get(i).getLatitude(), zonePoints.get(i).getLongitude(),zonePoints.get(i));
             }
 
+            ArrayList<Zone> countryZones = country.getZones();
             countryZones.add(zone);
             country.setZones(countryZones);
         } catch (Exception e) {
@@ -67,31 +63,35 @@ public class ZonesController {
     //Zone getZone(Integer id);
 
     public void addBorderPointZone(Zone zone, BorderPoint newBorderPoint){  //OR BOOLEAN?
-        // if the point is already in the QuadTree, simply add the new zone to it
-        Node<BorderPoint> node = borderPointsQuadTree.query(newBorderPoint.getLatitude(), newBorderPoint.getLongitude());
-        BorderPoint existingBorderPoint;
-        if (node != null) {
-            existingBorderPoint = node.value;
-            existingBorderPoint.getZones().add(zone);
-            zone.addBorderPoint(existingBorderPoint, zone.getBorderpoints().size());
-        }
-
+         // if the point is already in the QuadTree, simply add the new zone to it
+         Node<BorderPoint> node = borderPointsQuadTree.query(newBorderPoint.getLatitude(), newBorderPoint.getLongitude());
+         BorderPoint existingBorderPoint;
+         if (node != null) {
+             existingBorderPoint = node.value;
+             zone.addBorderPoint(existingBorderPoint, zone.getBorderpoints().size());
+             existingBorderPoint.addZone(zone);
+         }
+ 
         else {
             borderPointsQuadTree.insert(newBorderPoint.getLatitude(), newBorderPoint.getLongitude(), newBorderPoint);
-            newBorderPoint.getZones().add(zone);
             zone.addBorderPoint(newBorderPoint, zone.getBorderpoints().size());
-        }
+            newBorderPoint.addZone(zone);
+         }
+
     }
 
     public void modifyBorderPointZone(Zone zone, BorderPoint newBorderPoint, BorderPoint oldBorderPoint, int index){ //INDEX FROM 0 TO SIZE-1, //OR BOOLEAN?
         if (oldBorderPoint.getZones().size()==1) borderPointsQuadTree.remove(oldBorderPoint.getLatitude(), oldBorderPoint.getLongitude());
         borderPointsQuadTree.insert(newBorderPoint.getLatitude(), newBorderPoint.getLongitude(), newBorderPoint);
         zone.getBorderpoints().set(index, newBorderPoint);
+        newBorderPoint.addZone(zone);
     }
 
+    //Presentation layer should check that the zone is still geometrically ok and with at least 3 points
     public void deleteBorderPointZone(Zone zone, BorderPoint oldBorderPoint){    //OR BOOLEAN?
         if (oldBorderPoint.getZones().size()==1) borderPointsQuadTree.remove(oldBorderPoint.getLatitude(), oldBorderPoint.getLongitude());
         zone.removeBorderPoint(oldBorderPoint);
+        oldBorderPoint.removeZone(zone);
     }
 
     public boolean deleteZonesFromCountry(Country country){
@@ -133,4 +133,8 @@ public class ZonesController {
     }
 
     //Boolean validateCorrectGeographicZone(ArrayList<Point> points);
+
+    //public LineController getLineController() {
+        //return new LineController(DataStorage ds);
+    //}
 }
