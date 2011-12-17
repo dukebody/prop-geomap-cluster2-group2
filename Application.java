@@ -9,8 +9,6 @@ public class Application{
 	private static File file1;
 	private static File file2;
 	private static File file3 = new File("FeatureCodes_Cities.txt");
-	private static ArrayList<String> countries;
-	private static ArrayList<String> cities;
 	private static String country;
 	private static CountryController countryc;
 	private static ZonesController zonesc;
@@ -31,7 +29,13 @@ public class Application{
 		countryc = new CountryController(ds);
 		zonesc = new ZonesController(ds);
 		citiesc = new CitiesController(ds);
-        countries = new ArrayList<String>();
+
+		try {
+			loadToponymTypes();
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(frame, "The toponym types file couldn't be loaded. Make sure that a valid file named FeatureCodes_Cities.txt is present in the same folder of the application.",
+    	        "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	public static void getHomePanel(JPanel p){
@@ -61,41 +65,58 @@ public class Application{
 		if(!check) {
 			try {
 				loadBorderPoints();
-				frame.remove(p);
-		    	frame.add(new CountryPanel(countries));
-		        frame.setSize(350, 200);
-		        frame.setVisible(true);
-		        check = true;
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(frame, "The specified border file couldn't be loaded (wrong format)",
     	        "Error", JOptionPane.ERROR_MESSAGE);
 			}
-		} else {
+			try {
+				loadCities();
+		        check = true;
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(frame, "The specified toponyms file couldn't be loaded (wrong format)",
+    	        "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		
+		if (check) {
 			frame.remove(p);
-	    	frame.add(new CountryPanel(countries));
+	    	frame.add(new CountryPanel());
 	        frame.setSize(350, 200);
 	        frame.setVisible(true);
-	    	check = true;
 		}
 		
 
         
 	}
 	
+	private static void loadToponymTypes() throws Exception {
+
+		File fTypes = new File("FeatureCodes_Cities.txt");
+        TypesFileParser typesParser = new TypesFileParser(fTypes);
+        Iterator<HashMap<String,String>> itrTypes = typesParser.getIterator();
+        ToponymTypesDeserializer ttd = new ToponymTypesDeserializer(itrTypes, citiesc);
+    	ttd.generate();
+	}
+
 	private static void loadBorderPoints() throws Exception {
-		
-		countries = new ArrayList<String>();
 
 		BordersFileParser parserFronteres = new BordersFileParser(file1);
         Iterator<HashMap<String,String>> itrFronteres = parserFronteres.getIterator();
 		BorderPointsDeserializer bpd = new BorderPointsDeserializer(itrFronteres, countryc, zonesc);
 		bpd.generate();
-		Iterator<HashMap<String,String>> iter = countryc.getAllCountriesIterator();
 	}
 
 	private static void loadCities() throws Exception {
-		
-
+		System.out.println("Loading cities...");
+		try {
+			ToponymsFileParser parserToponyms = new ToponymsFileParser(file2);
+	        Iterator<HashMap<String,String>> itrToponyms = parserToponyms.getIterator();
+			CitiesDeserializer cd = new CitiesDeserializer(itrToponyms, citiesc);
+			cd.generate();
+		} catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		}
 	}
 	
 	public static void getOptionPanel(JPanel p, String c){
@@ -110,22 +131,10 @@ public class Application{
 	
 	public static void getMainCitiesPanel(JPanel p){
 		
-		setListCities();
-		
 		frame.remove(p);
-    	frame.add(new MainCitiesPanel(cities));
+    	frame.add(new MainCitiesPanel());
         frame.setSize(350, 200);
         frame.setVisible(true);
-		
-	}
-	
-	private static void setListCities(){
-		
-		cities = new ArrayList<String>();
-			
-		// TO BE IMPLEMENTED!!!
-		// cities is the ArrayList of the main cities of the chosen country!
-		
 		
 	}
 	
@@ -150,10 +159,13 @@ public class Application{
 		return file2;
 	}
 	
-	public static CountryController getCC(){
+	public static CountryController getCountryController(){
 		return countryc;
 	}
-	
+
+	public static CitiesController getCitiesController(){
+		return citiesc;
+	}
 	
 }
 

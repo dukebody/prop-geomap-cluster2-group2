@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.List;
 
 public class MainCitiesPanel extends JPanel implements ActionListener{
 	
@@ -13,21 +14,26 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
 	JPanel labelPanel;
 	JPanel buttonPanel;
 	JScrollPane listPanel;
-	String country;
+	String countryName;
     
-    public MainCitiesPanel(ArrayList<String> cList) {
+    public MainCitiesPanel() {
         super(new BorderLayout());
-        cities = cList;
+
+        countryName = Application.getCountry();
+
+        CountryController cc = Application.getCountryController();
+        List<HashMap<String,String>> mainCities = cc.getMainCitiesByPopulation(countryName, 10);  // XXX: Let the user input it
         
         label = new JLabel();
         back = new JButton();
       
         listModel = new DefaultListModel();
         
-        Iterator<String> iter = cities.iterator();
+        Iterator<HashMap<String,String>> iter = mainCities.iterator();
         while(iter.hasNext()){
-        	String country = iter.next();
-        	listModel.addElement(country);
+        	String name = iter.next().get("nameUTF").replaceAll("_", " ");
+            System.out.println(name);
+        	listModel.addElement(name);
         }
 
         list = new JList(listModel);
@@ -35,9 +41,9 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
 //        list.setLayoutOrientation(JList.VERTICAL);
 //        list.setVisibleRowCount(5);
         
-        country = Application.getCountry();
         
-        label.setText("The Main Cities of " + country + " are: ");
+        
+        label.setText("The Main Cities of " + countryName + " are: ");
         
         back.setText("GO BACK");
         back.addActionListener(this);
@@ -58,7 +64,7 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
     
     public void actionPerformed(ActionEvent e) {
     	
-    		Application.getOptionPanel(this, country);
+    		Application.getOptionPanel(this, countryName);
     	
     }
     

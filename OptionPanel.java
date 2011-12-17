@@ -67,7 +67,7 @@ public class OptionPanel extends JPanel implements ActionListener{
     	
     	if (e.getSource() == submit) {
     		
-    		CountryController cc = Application.getCC();
+    		CountryController cc = Application.getCountryController();
     		String country = Application.getCountry();
     		
 			if(rb1.isSelected()){

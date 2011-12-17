@@ -17,9 +17,8 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
 	JScrollPane listPanel;
 	String country;
     
-    public CountryPanel(ArrayList<String> cList) {
+    public CountryPanel() {
         super(new BorderLayout());
-        countries = cList;
         
         label = new JLabel();
         submit = new JButton();
@@ -27,7 +26,7 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
       
         listModel = new DefaultListModel();
         
-        CountryController cc = Application.getCC();
+        CountryController cc = Application.getCountryController();
         Iterator<HashMap<String,String>> iter = cc.getAllCountriesIterator();
         while(iter.hasNext()) {
         	String countryName = iter.next().get("name");
