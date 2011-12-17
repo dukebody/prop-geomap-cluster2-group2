@@ -181,4 +181,22 @@ public class IntegrationTest extends TestCase {
         System.out.println("OK");
     }
 
+    @Test
+    public void testGetCountryBorderPointsForDrawing() {
+        ArrayList<ArrayList<Double[]>> allPoints = countryc.getCountryBorderPointsForDrawing("Spain");
+        System.out.print("Checking that getCountryBorderPointsForDrawing for Spain is not empty...");
+        assertFalse(allPoints.isEmpty());
+        System.out.println("OK");
+
+        System.out.print("Checking that getCountryBorderPointsForDrawing for Spain has 16 zones...");
+        assertEquals(16, allPoints.size());
+        System.out.println("OK");
+
+        System.out.print("Checking that getCountryBorderPointsForDrawing for Spain has no empty zones...");
+        for (ArrayList<Double[]> zonePoints: allPoints) {
+            assertFalse(zonePoints.isEmpty());
+        }
+        System.out.println("OK");
+
+    }
 }

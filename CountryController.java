@@ -324,5 +324,20 @@ class CountryController {
     public Iterator<BorderPoint> getAllRawBorderPointsIterator() {
         return new RawBorderPointsIterator();
     }
+
+    public ArrayList<ArrayList<Double[]>> getCountryBorderPointsForDrawing(String countryName) {
+        ArrayList<ArrayList<Double[]>> allPoints = new ArrayList<ArrayList<Double[]>>();
+        Country country = getRawCountry(countryName);
+        for (Zone zone: country.getZones()) {
+            ArrayList<Double[]> zonePoints = new ArrayList<Double[]>();
+            for (BorderPoint bp: zone.getBorderpoints()) {
+                Double[] point = new Double[2];
+                point[0] = bp.getLongitude(); point[1] = bp.getLatitude();  // x, y (longitude, latitude)
+                zonePoints.add(point);
+            }
+            allPoints.add(zonePoints);
+        }
+        return allPoints;
+    }
 }
 
