@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+	A Zone is a container for all the points forming an individual area of a country.
+*/
 public class Zone implements IGetId {
 	private Country country;
 	private ArrayList<BorderPoint> borderpoints;

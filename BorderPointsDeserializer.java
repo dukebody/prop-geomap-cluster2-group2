@@ -1,21 +1,37 @@
 import java.lang.*;
 import java.util.*;
 
-
-class BorderPointsDeserializer implements IDeserializer {
+/**
+Component to transform the output of the BorderPointsFileParser into the
+proper countries and zones.
+*/
+public class BorderPointsDeserializer implements IDeserializer {
 
     private Iterator<HashMap<String,String>> itr;
     private CountryController cc;
     private ZonesController zc;
 
+    /**
+    Prepare a border points deserializer for the borderpoints HashMap representation
+    coming from the specified iterator.
 
-    public BorderPointsDeserializer(Iterator<HashMap<String,String>> itr, CountryController cc, ZonesController zc) {
+    @param itr Iterator of a BorderPointsFileParser.
+
+    @param cc CountryController to handle the country creation.
+
+    @param zc ZonesController to handle the zones creation.
+    */
+    public BorderPointsDeserializer(Iterator<HashMap<String,String>> itr, 
+        CountryController cc, ZonesController zc) {
         this.itr = itr;
         this.cc = cc;
         this.zc = zc;
 
     }
 
+    /**
+    Create all the countries with their zones and borderpoints coming from the iterator.
+    */
     public void generate() {
         Country curr_Country = null;
         String curr_CountryName = "INVALID_COUNTRYNAME";
