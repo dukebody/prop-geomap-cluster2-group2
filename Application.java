@@ -28,6 +28,7 @@ public class Application{
         frame.setVisible(true);
         
         ds = new DataStorage();
+        countries = new ArrayList<String>();
 	}
 	
 	public static void getHomePanel(JPanel p){
@@ -54,18 +55,31 @@ public class Application{
 		file1 = f1;
 		file2 = f2;
 		
-		if(!check){
-			setListCountries();
+		if(!check) {
+			try {
+				setListCountries();
+				frame.remove(p);
+		    	frame.add(new CountryPanel(countries));
+		        frame.setSize(350, 200);
+		        frame.setVisible(true);
+		        check = true;
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(frame, "The specified border file couldn't be loaded (wrong format)",
+    	        "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} else {
+			frame.remove(p);
+	    	frame.add(new CountryPanel(countries));
+	        frame.setSize(350, 200);
+	        frame.setVisible(true);
+	    	check = true;
 		}
 		
-		frame.remove(p);
-    	frame.add(new CountryPanel(countries));
-        frame.setSize(350, 200);
-        frame.setVisible(true);
+
         
 	}
 	
-	private static void setListCountries(){
+	private static void setListCountries() throws Exception {
 		
 		countries = new ArrayList<String>();
 		countryc = new CountryController(ds);
@@ -73,21 +87,17 @@ public class Application{
 		citiesc = new CitiesController(ds);
 		Iterator<HashMap<String,String>> itrFronteres = null;
 		
-		try{
+
 		BordersFileParser parserFronteres = new BordersFileParser(file1);
         itrFronteres = parserFronteres.getIterator();
-		}catch(Exception e){
-			System.out.println("File Error! " + e.getMessage());
-		}
-		
 		bpd = new BorderPointsDeserializer(itrFronteres, countryc, zonesc);
 		bpd.generate();
 		Iterator<HashMap<String,String>> iter = countryc.getAllCountriesIterator();
 		while(iter.hasNext()){
 			countries.add(iter.next().get("name"));
 		}
+
 		
-		check = true;
 		
 	}
 	

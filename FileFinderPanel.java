@@ -21,7 +21,7 @@ public class FileFinderPanel extends JPanel implements ActionListener{
 		find2 = new JButton();
 		submit = new JButton();
 		home = new JButton();
-		fc = new JFileChooser();
+		fc = new JFileChooser(System.getProperty("user.dir"));
 		
 		label1.setText("Choose Borders File:        ");
 		
@@ -81,7 +81,7 @@ public class FileFinderPanel extends JPanel implements ActionListener{
         } else if (e.getSource() == submit) {
         	
         	if(file1 != null && file2 != null){
-        		Application.getCountryPanel(this, file1, file2);
+                   Application.getCountryPanel(this, file1, file2);
         	}
         	else{
         		JOptionPane.showMessageDialog(null, "You have to choose both files!");
