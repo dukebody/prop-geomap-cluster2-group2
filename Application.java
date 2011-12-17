@@ -15,7 +15,7 @@ public class Application{
 	private static CountryController countryc;
 	private static ZonesController zonesc;
 	private static CitiesController citiesc;
-	private static BorderPointsDeserializer bpd;
+	
 	private static boolean check = false;
 	
 	public static void main(String[] args) throws InterruptedException{
@@ -28,6 +28,9 @@ public class Application{
         frame.setVisible(true);
         
         ds = new DataStorage();
+		countryc = new CountryController(ds);
+		zonesc = new ZonesController(ds);
+		citiesc = new CitiesController(ds);
         countries = new ArrayList<String>();
 	}
 	
@@ -57,7 +60,7 @@ public class Application{
 		
 		if(!check) {
 			try {
-				setListCountries();
+				loadBorderPoints();
 				frame.remove(p);
 		    	frame.add(new CountryPanel(countries));
 		        frame.setSize(350, 200);
@@ -79,26 +82,20 @@ public class Application{
         
 	}
 	
-	private static void setListCountries() throws Exception {
+	private static void loadBorderPoints() throws Exception {
 		
 		countries = new ArrayList<String>();
-		countryc = new CountryController(ds);
-		zonesc = new ZonesController(ds);
-		citiesc = new CitiesController(ds);
-		Iterator<HashMap<String,String>> itrFronteres = null;
-		
 
 		BordersFileParser parserFronteres = new BordersFileParser(file1);
-        itrFronteres = parserFronteres.getIterator();
-		bpd = new BorderPointsDeserializer(itrFronteres, countryc, zonesc);
+        Iterator<HashMap<String,String>> itrFronteres = parserFronteres.getIterator();
+		BorderPointsDeserializer bpd = new BorderPointsDeserializer(itrFronteres, countryc, zonesc);
 		bpd.generate();
 		Iterator<HashMap<String,String>> iter = countryc.getAllCountriesIterator();
-		while(iter.hasNext()){
-			countries.add(iter.next().get("name"));
-		}
+	}
 
+	private static void loadCities() throws Exception {
 		
-		
+
 	}
 	
 	public static void getOptionPanel(JPanel p, String c){

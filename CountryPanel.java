@@ -27,11 +27,11 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
       
         listModel = new DefaultListModel();
         
-        
-        Iterator<String> iter = countries.iterator();
-        while(iter.hasNext()){
-        	String country = iter.next();
-        	listModel.addElement(country.replaceAll("_", " "));
+        CountryController cc = Application.getCC();
+        Iterator<HashMap<String,String>> iter = cc.getAllCountriesIterator();
+        while(iter.hasNext()) {
+        	String countryName = iter.next().get("name");
+        	listModel.addElement(countryName.replaceAll("_", " "));
         }
 
         list = new JList(listModel);
