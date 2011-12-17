@@ -1,0 +1,10 @@
+Nom_UTF Nom_ASCII Noms_Alternatius Latitud Longitud CodiToponim Poblacio
+Parròquia_de_Sant_Julià_de_Lòria Parroquia_de_Sant_Julia_de_Loria Parroquia_de_Sant_Julia_de_Loria,Parroquia_de_Sant_Julià_de_Lòria,Sant_Julia,Sant_Julia_de_Loria,Sant_Julià,Sant_Julià_de_Lòria 42.46247 1.48247 ADM1 9448
+Sant_Julià_de_Lòria Sant_Julia_de_Loria San_Julia,San_Julià,San-Dzhulija-de-Lorija,San-Khulija-de-Lorija,Sant_Julia_de_Loria,Sant_Julià_de_Lòria,sheng_hu_li_ya-de_luo_li_ya,Сан-Джулия-де-Лория,Сан-Хулия-де-Лория,サン・ジュリア・デ・ロリア教区,圣胡利娅-德洛里亚,圣胡利娅－德洛里亚 42.46372 1.49129 PPLA 8022
+Pas_de_la_Casa Pas_de_la_Casa Pas_de_la_Kasa,Пас_де_ла_Каса 42.54277 1.73361 PPL 2363
+Parròquia_d'Ordino Parroquia_d'Ordino Ordino,Parroquia_d'Ordino,Parròquia_d'Ordino 42.59758 1.52573 ADM1 3467
+Ordino Ordino Ordino,ao_er_di_nuo,orudino_jiao_qu,Ордино,オルディノ教区,奥尔迪诺 42.55623 1.53319 PPLA 3066
+les_Escaldes les_Escaldes Ehskal'des-Ehndzhordani,Escaldes,Escaldes-Engordany,Les_Escaldes,esukarudesu=engorudani_jiao_qu,lai_sai_si_ka_er_de-en_ge_er_da,Эскальдес-Энджордани,エスカルデス＝エンゴルダニ教区,萊塞斯卡爾德-恩戈爾達,萊塞斯卡爾德－恩戈爾達 42.50729 1.53414 PPLA 15853
+Parròquia_de_la_Massana Parroquia_de_la_Massana La_Massana,Parroquia_de_la_Massana,Parròquia_de_la_Massana,la_Massana 42.56667 1.48333 ADM1 8953
+la_Massana la_Massana La_Macana,La_Massana,La_Maçana,La-Massana,la_Massana,ma_sa_na,Ла-Массана,ラ・マサナ教区,马萨纳 42.54499 1.51483 PPLA 7211
+l'Aldosa l'Aldosa NULL 42.58333 1.63333 PPL 195
