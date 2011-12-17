@@ -15,7 +15,7 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
 	JPanel labelPanel;
 	JPanel buttonPanel;
 	JScrollPane listPanel;
-	String country;
+	String countryName;
     
     public CountryPanel() {
         super(new BorderLayout());
@@ -66,13 +66,13 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
     	
     	if (e.getSource() == submit) {
     	
-			if(country != null){
+			if(countryName != null){
 				
 		        Object[] options = {"Yes", "No"};
-		        int n = JOptionPane.showOptionDialog(null, "Are you sure you want to choose " + country + "?", "Check",
+		        int n = JOptionPane.showOptionDialog(null, "Are you sure you want to choose " + countryName + "?", "Check",
 		                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		        if (n == JOptionPane.YES_OPTION) {
-		            Application.getOptionPanel(this, country);
+		            Application.getOptionPanel(this, countryName.replaceAll(" ", "_"));
 		        }
 				
 			}
@@ -89,7 +89,7 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
         if (e.getValueIsAdjusting() == false) {
  
             int index = list.getSelectedIndex();
-        	country = (String)listModel.get(index);
+        	countryName = (String)listModel.get(index);
        // 	JOptionPane.showMessageDialog(null, "The country you've selected is "+country);
             
         }

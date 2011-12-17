@@ -1,3 +1,5 @@
+import java.util.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -8,17 +10,20 @@ public class MapPanel extends JPanel implements ActionListener{
 	JButton back;
 	JPanel labelPanel;
 	JPanel buttonPanel;
+    MapCanvas mapCanvas;
 	JScrollPane scrollPanel;
-	String country;
+	String countryName;
     
     public MapPanel() {
         super(new BorderLayout());
         
         label = new JLabel();
         back = new JButton();
-        country = Application.getCountry();
+        countryName = Application.getCountryName();
+        System.out.println(countryName);
+        CountryController cc = Application.getCountryController();
         
-        label.setText("The Map of " + country + ": ");
+        label.setText("The Map of " + countryName + ": ");
         
         back.setText("GO BACK");
         back.addActionListener(this);
@@ -26,8 +31,20 @@ public class MapPanel extends JPanel implements ActionListener{
         labelPanel = new JPanel();
         labelPanel.add(label);
         
-    	scrollPanel = new JScrollPane();
-    	
+    	mapCanvas = new MapCanvas();
+
+        ArrayList<ArrayList<Double[]>> allPoints = new ArrayList<ArrayList<Double[]>>();
+        Iterator<HashMap<String,String>> itr =  cc.getAllCountriesIterator();
+        while (itr.hasNext()) {
+            String name  = itr.next().get("name");
+            ArrayList<ArrayList<Double[]>> countryPoints = cc.getCountryBorderPointsForDrawing(name);
+            for (ArrayList<Double[]> zonePoints: countryPoints) {
+                allPoints.add(zonePoints);
+            }
+        }
+        //ArrayList<ArrayList<Double[]>> allPoints = cc.getCountryBorderPointsForDrawing(countryName);
+        mapCanvas.setPoints(allPoints);
+
     	// HAS TO BE ADDED THE ACTUAL MAP TO THE scrollPanel!!!
    
     	
@@ -37,14 +54,14 @@ public class MapPanel extends JPanel implements ActionListener{
     	
         
         add(labelPanel, BorderLayout.NORTH);
-        add(scrollPanel, BorderLayout.CENTER);
+        add(mapCanvas, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
  
     }
     
     public void actionPerformed(ActionEvent e) {
     	
-    		Application.getOptionPanel(this, country);
+    		Application.getOptionPanel(this, countryName);
     	
     }
     

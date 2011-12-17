@@ -9,7 +9,7 @@ public class Application{
 	private static File file1;
 	private static File file2;
 	private static File file3 = new File("FeatureCodes_Cities.txt");
-	private static String country;
+	private static String countryName;
 	private static CountryController countryc;
 	private static ZonesController zonesc;
 	private static CitiesController citiesc;
@@ -121,7 +121,7 @@ public class Application{
 	
 	public static void getOptionPanel(JPanel p, String c){
 		
-		country = c;
+		countryName = c;
 		frame.remove(p);
     	frame.add(new OptionPanel());
         frame.setSize(350, 200);
@@ -142,13 +142,13 @@ public class Application{
 		
 		frame.remove(p);
     	frame.add(new MapPanel());
-        frame.setSize(350, 200);
+        frame.setSize(1200, 900);
         frame.setVisible(true);
 		
 	}
 	
-	public static String getCountry(){
-		return country;
+	public static String getCountryName(){
+		return countryName;
 	}
 	
 	public static File getBordersFile(){

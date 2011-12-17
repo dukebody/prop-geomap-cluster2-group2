@@ -43,7 +43,7 @@ public class OptionPanel extends JPanel implements ActionListener{
     	radioPanel.add(rb5);
 
     	radioPanel.setBorder(BorderFactory.createTitledBorder(
-    	           BorderFactory.createEtchedBorder(), "Options for " + Application.getCountry() + ": "));
+    	           BorderFactory.createEtchedBorder(), "Options for " + Application.getCountryName() + ": "));
     	
     	buttonPanel = new JPanel();
     	
@@ -68,19 +68,19 @@ public class OptionPanel extends JPanel implements ActionListener{
     	if (e.getSource() == submit) {
     		
     		CountryController cc = Application.getCountryController();
-    		String country = Application.getCountry();
+    		String countryName = Application.getCountryName();
     		
 			if(rb1.isSelected()){
-				double result = cc.getTotalSharedBorderLength(country.replaceAll(" ", "_"));
-				JOptionPane.showMessageDialog(null, "The borders length of " + country + " is: " + result + " km!");
+				double result = cc.getTotalSharedBorderLength(countryName.replaceAll(" ", "_"));
+				JOptionPane.showMessageDialog(null, "The borders length of " + countryName + " is: " + result + " km!");
 			}
 			else if(rb2.isSelected()){
-				double result = cc.getTotalCoastlineLength(country.replaceAll(" ", "_"));
-				JOptionPane.showMessageDialog(null, "The coastal length of " + country + " is: " + result + " km!");
+				double result = cc.getTotalCoastlineLength(countryName.replaceAll(" ", "_"));
+				JOptionPane.showMessageDialog(null, "The coastal length of " + countryName + " is: " + result + " km!");
 			}
 			else if(rb3.isSelected()){
-				double result = cc.getTotalCoastlineLength(country.replaceAll(" ", "_"))+cc.getTotalSharedBorderLength(country.replaceAll(" ", "_"));
-				JOptionPane.showMessageDialog(null, "The total length (boarders + coasts) of " + country + " is: " + result + " km!");
+				double result = cc.getTotalCoastlineLength(countryName.replaceAll(" ", "_"))+cc.getTotalSharedBorderLength(countryName.replaceAll(" ", "_"));
+				JOptionPane.showMessageDialog(null, "The total length (boarders + coasts) of " + countryName + " is: " + result + " km!");
 			}
 			else if(rb4.isSelected()){
 				Application.getMainCitiesPanel(this);

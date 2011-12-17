@@ -19,7 +19,7 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
     public MainCitiesPanel() {
         super(new BorderLayout());
 
-        countryName = Application.getCountry();
+        countryName = Application.getCountryName();
 
         CountryController cc = Application.getCountryController();
         List<HashMap<String,String>> mainCities = cc.getMainCitiesByPopulation(countryName, 10);  // XXX: Let the user input it
