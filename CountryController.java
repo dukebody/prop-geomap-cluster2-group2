@@ -447,12 +447,12 @@ public class CountryController {
 
     @param countryName Name of the country.
 
-    @return List of border points or null if the country wasn't found.
+    @return List of border points or an empty List if the country wasn't found.
     */
     public ArrayList<ArrayList<Double[]>> getCountryBorderPointsForDrawing(String countryName) {
         Country country = getRawCountry(countryName);
         if (country == null)  // country not found
-            return null;
+            return new ArrayList();;
         ArrayList<ArrayList<Double[]>> allPoints = new ArrayList<ArrayList<Double[]>>();
 
         for (Zone zone: country.getZones()) {
@@ -473,13 +473,13 @@ public class CountryController {
 
     @param countryName Name of the country.
 
-    @return ArrayList in the order (maxLong, minLong, maxLat, minLang) or null
+    @return ArrayList in the order (maxLong, minLong, maxLat, minLat) or an empty list
     if the country was not found.
     */
     public ArrayList<Double> getCountryExtremeValues(String countryName) {
         Country country = getRawCountry(countryName);
         if (country == null)  // country not found
-            return null;
+            return new ArrayList();
 
         ArrayList<Double> extremeValues = new ArrayList<Double>(4);
 
