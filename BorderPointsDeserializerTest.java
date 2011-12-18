@@ -66,7 +66,32 @@ public class BorderPointsDeserializerTest extends TestCase {
         assertEquals(2, zones.size());
         System.out.println("OK");
     }
-    
+
+    @Test
+    public void testAandBHasCorrectAreas() {
+        Country country = cc.getRawCountry("Antigua_and_Barbuda"); // XXX: This should be done by the zones controller!
+        ArrayList<Zone> zones = country.getZones();
+        Zone z1 = zones.get(0);
+        Zone z2 = zones.get(1);
+        List<BorderPoint> bps1 = z1.getBorderpoints();
+        List<BorderPoint> bps2 = z2.getBorderpoints();
+
+        System.out.print("Check that Antigua and Barbuda has the correct number of points in each area...");
+        assertEquals(25, bps1.size());
+        assertEquals(23, bps2.size());
+        System.out.println("OK");
+
+        BorderPoint bp1i = bps1.get(0);
+        BorderPoint bp2i = bps2.get(0);
+        BorderPoint bp1f = bps1.get(bps1.size()-1);
+        BorderPoint bp2f = bps2.get(bps2.size()-1);
+        System.out.print("Check that each zone of A and B has the correct initial and final bps...");
+        assertEquals(new Double("17.54055400"), bp1i.getLatitude());
+        assertEquals(new Double("16.98971900"), bp2i.getLatitude());
+        assertEquals(new Double("17.54055400"), bp1f.getLatitude());
+        assertEquals(new Double("16.98971900"), bp2f.getLatitude());
+        System.out.println("OK");
+    }
 
     @Test
     public void testArubaHas19Points() {
