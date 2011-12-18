@@ -225,6 +225,11 @@ public class IntegrationTest extends TestCase {
         assertTrue(countries.contains("Andorra"));
         assertFalse(countries.contains("Algeria"));
         System.out.println("OK");
+
+        countries = countryc.getCountriesInTheSameArea("UNEXISTENT");
+        System.out.print("Checking that getCountriesInTheSameaArea returns an empty list if the country does not exist...");
+        assertTrue(countries.isEmpty());
+        System.out.println("OK");
     }
 
     }
