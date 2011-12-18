@@ -1,5 +1,5 @@
 import java.awt.*;
-import java.awt.geom.Line2D;
+import java.awt.geom.*;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class MapCanvas extends Canvas {
 
         super.paint(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setBackground(Color.WHITE);
+        g2.setBackground(Color.BLACK);
 
         paintCountry(countryName, g2);
 
@@ -44,15 +44,29 @@ public class MapCanvas extends Canvas {
         setOffsetsAndScale(cc.getCountryExtremeValues(countryName));
 
         // paint the rest of the countries in black
-        g2.setColor(Color.BLACK);
+        g2.setColor(Color.GRAY);
         for (HashMap<String,String> map: cc.getNeighborCountries(countryName)) {
             paintPoints(cc.getCountryBorderPointsForDrawing(map.get("name")), g2);
         }
 
         // paint the selected country in blue
         //g2.drawString(countryName, 20, 20) ;
-        g2.setColor(Color.BLUE);
+        g2.setColor(Color.BLACK);
         paintPoints(cc.getCountryBorderPointsForDrawing(countryName), g2);
+        paintMainCitiesOfCountry(countryName, g2);
+    }
+
+    private void paintMainCitiesOfCountry(String countryName, Graphics2D g2) {
+        CountryController cc = Application.getCountryController();
+        for (HashMap<String,String> cityMap: cc.getMainCitiesByPopulation(countryName, 10)) {
+            String name = cityMap.get("nameUTF").replaceAll("_", " ");
+            Double longitude = xoffset + new Double(cityMap.get("longitude"))*scale;
+            Double latitude = yoffset - new Double(cityMap.get("latitude"))*scale;
+            Ellipse2D.Double point = new Ellipse2D.Double(longitude, latitude, 3, 3);
+            g2.draw(point);
+            g2.fill(point);
+            g2.drawString(name, Math.round(longitude), Math.round(latitude));
+        }
     }
 
     private void paintPoints(ArrayList<ArrayList<Double[]>> points, Graphics2D g2) {
@@ -79,7 +93,7 @@ public class MapCanvas extends Canvas {
         
         Double sizex = maxLong - minLong;
         Double sizey = maxLat - minLat;
-        scale = Math.min((800.0-gap)/sizex, (800.0-gap)/sizey);
+        scale = Math.min((900.0-gap)/sizex, (700.0-gap)/sizey);
 
         xoffset = -minLong*scale + gap;
         yoffset = maxLat*scale + gap;
