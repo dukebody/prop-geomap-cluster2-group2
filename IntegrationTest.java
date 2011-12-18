@@ -213,7 +213,18 @@ public class IntegrationTest extends TestCase {
             assertTrue(countryExtreme.get(2) >= zoneExtreme.get(2));
             assertTrue(countryExtreme.get(3) <= zoneExtreme.get(3));
             }
+        System.out.println("OK");
         }
-        
+
+    @Test
+    public void testGetCountriesInTheSameArea() {
+        List<String> countries = countryc.getCountriesInTheSameArea("Spain");
+        System.out.print("Checking that getCountriesInTheSameaArea returns the countries in the same area...");
+        assertTrue(countries.contains("Gibraltar"));
+        assertTrue(countries.contains("France"));
+        assertTrue(countries.contains("Andorra"));
+        assertFalse(countries.contains("Algeria"));
+        System.out.println("OK");
+    }
 
     }

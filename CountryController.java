@@ -513,5 +513,46 @@ public class CountryController {
 
         return extremeValues;
     }
+
+    /**
+    Get the countries in the same area of the specified one. I.e. the ones
+    that would appear in a map if one draws a bounding box covering all the
+    zones of the country.
+
+    @param countryName Name of the country.
+
+    @return List of names of the countries in the same area or empty list if
+    the specified country wasn't found.
+    */
+    public List<String> getCountriesInTheSameArea(String countryName) {
+        ArrayList<Double> extremeValues = getCountryExtremeValues(countryName);
+
+        ArrayList<String> countries = new ArrayList<String>();
+        if (extremeValues.isEmpty()) // country not found
+            return countries;
+
+        Double maxLong = extremeValues.get(0);
+        Double minLong= extremeValues.get(1);
+        Double maxLat = extremeValues.get(2);
+        Double minLat = extremeValues.get(3);
+
+        Interval<Double> intX = new Interval(minLat,maxLat);
+        Interval<Double> intY = new Interval(minLong,maxLong);
+        Interval2D<Double> rect = new Interval2D(intX, intY);
+
+        // get the nodes belonging to this rectangle
+        ArrayList<Node<BorderPoint>> nodes = borderPointsQuadTree.query2D(rect);
+        for (Node<BorderPoint> node: nodes) {
+            BorderPoint bp = node.value;
+            for (Zone zone: bp.getZones()) {
+                String name = zone.getCountry().getName();
+                if (!countries.contains(name)) {
+                    countries.add(name);
+                }
+            }
+        }
+
+        return countries;
+    }
 }
 
