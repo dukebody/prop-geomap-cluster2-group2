@@ -33,25 +33,10 @@ public class MapPanel extends JPanel implements ActionListener{
         
     	mapCanvas = new MapCanvas();
 
-        ArrayList<ArrayList<Double[]>> allPoints = new ArrayList<ArrayList<Double[]>>();
-        Iterator<HashMap<String,String>> itr =  cc.getAllCountriesIterator();
-        while (itr.hasNext()) {
-            String name  = itr.next().get("name");
-            ArrayList<ArrayList<Double[]>> countryPoints = cc.getCountryBorderPointsForDrawing(name);
-            for (ArrayList<Double[]> zonePoints: countryPoints) {
-                allPoints.add(zonePoints);
-            }
-        }
-        //ArrayList<ArrayList<Double[]>> allPoints = cc.getCountryBorderPointsForDrawing(countryName);
-        mapCanvas.setPoints(allPoints);
+        mapCanvas.setCountry(countryName);
 
-    	// HAS TO BE ADDED THE ACTUAL MAP TO THE scrollPanel!!!
-   
-    	
     	buttonPanel = new JPanel();
     	buttonPanel.add(back);
-    	
-    	
         
         add(labelPanel, BorderLayout.NORTH);
         add(mapCanvas, BorderLayout.CENTER);

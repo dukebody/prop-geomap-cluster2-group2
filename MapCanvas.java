@@ -13,27 +13,50 @@ public class MapCanvas extends Canvas {
     /**
      * 
      */
-    private static final long serialVersionUID = 1390605443082598731L;
-    private static int gapX = 30;
-    private static int gapY = 30;
-    private static int boardSize = 200;
-    private int sep;
-    private boolean init = false;
-    ArrayList<ArrayList<Double[]>> allPoints;
+
     private Graphics g2;
 
+    private Double scale = 3.0;
+    private Double xoffset = 0.0;
+    private Double yoffset = 0.0;
+
+    private Double gap = 100.0;
+
+    private String countryName;
 
     @Override
     public void paint(Graphics g) {
 
         super.paint(g);
         Graphics2D g2 = (Graphics2D) g;
-        Double scale = 3.0;
-        Double xoffset = 600.0;
-        Double yoffset = 300.0;
+        g2.setBackground(Color.WHITE);
 
-        ArrayList<ArrayList<Double[]>> allPoints = getPoints();
-        for (ArrayList<Double[]> zonePoints: allPoints) {
+        paintCountry(countryName, g2);
+
+    }
+
+    public void setCountry(String countryName) {
+        this.countryName = countryName;
+    }
+
+    private void paintCountry(String countryName, Graphics2D g2) {
+        CountryController cc = Application.getCountryController();
+        setOffsetsAndScale(cc.getCountryExtremeValues(countryName));
+
+        // paint the rest of the countries in black
+        g2.setColor(Color.BLACK);
+        for (HashMap<String,String> map: cc.getNeighborCountries(countryName)) {
+            paintPoints(cc.getCountryBorderPointsForDrawing(map.get("name")), g2);
+        }
+
+        // paint the selected country in blue
+        //g2.drawString(countryName, 20, 20) ;
+        g2.setColor(Color.BLUE);
+        paintPoints(cc.getCountryBorderPointsForDrawing(countryName), g2);
+    }
+
+    private void paintPoints(ArrayList<ArrayList<Double[]>> points, Graphics2D g2) {
+        for (ArrayList<Double[]> zonePoints: points) {
             for (int i = 0; i < zonePoints.size() - 1; i++) {
                 Double[] p1 = zonePoints.get(i);
                 Double[] p2 = zonePoints.get(i+1);
@@ -46,22 +69,21 @@ public class MapCanvas extends Canvas {
                     xoffset+zonePoints.get(0)[0]*scale, yoffset-zonePoints.get(0)[1]*scale));
 
         }
-
-        //g2.draw(new Line2D.Double(1.0,1.0, 300.0, 300.0));
-
-
-
     }
 
-    public void setPoints(ArrayList<ArrayList<Double[]>> allPoints) {
-        this.allPoints = allPoints;
-        init = true;
-    }
+    public void setOffsetsAndScale(ArrayList<Double> countryExtremeValues) {
+        Double maxLong = countryExtremeValues.get(0);
+        Double minLong= countryExtremeValues.get(1);
+        Double maxLat = countryExtremeValues.get(2);
+        Double minLat = countryExtremeValues.get(3);
+        
+        Double sizex = maxLong - minLong;
+        Double sizey = maxLat - minLat;
+        scale = Math.min((800.0-gap)/sizex, (800.0-gap)/sizey);
 
-    public ArrayList<ArrayList<Double[]>> getPoints() {
-        return this.allPoints;
+        xoffset = -minLong*scale + gap;
+        yoffset = maxLat*scale + gap;
     }
-
 
     @Override
     public void update(Graphics g2) {
