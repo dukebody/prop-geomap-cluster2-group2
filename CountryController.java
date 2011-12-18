@@ -275,9 +275,16 @@ public class CountryController {
     @param countryName Name of the country.
 
     @param topN Number of cities to return.
+
+    @return ArrayList of the cities, empty list if the country was not found.
     */
     public List<HashMap<String,String>> getMainCitiesByPopulation(String countryName, int topN) {
         Country country = countriesTrie.get(countryName);
+
+        if (country == null) {
+            return new ArrayList();
+        }
+
         List<HashMap<String,String>> mainCities = new ArrayList<HashMap<String,String>>();
         MinHeap<City> mh = new MinHeap<City>(); // build minheap with topPercentage items <-- This is IR-based
 
