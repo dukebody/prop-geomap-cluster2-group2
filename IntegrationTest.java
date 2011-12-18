@@ -218,12 +218,9 @@ public class IntegrationTest extends TestCase {
 
     @Test
     public void testGetCountriesInTheSameArea() {
-        List<String> countries = countryc.getCountriesInTheSameArea("Spain");
+        List<HashMap<String,String>> countries = countryc.getCountriesInTheSameArea("Spain");
         System.out.print("Checking that getCountriesInTheSameaArea returns the countries in the same area...");
-        assertTrue(countries.contains("Gibraltar"));
-        assertTrue(countries.contains("France"));
-        assertTrue(countries.contains("Andorra"));
-        assertFalse(countries.contains("Algeria"));
+        assertEquals(5, countries.size());
         System.out.println("OK");
 
         countries = countryc.getCountriesInTheSameArea("UNEXISTENT");
@@ -232,4 +229,4 @@ public class IntegrationTest extends TestCase {
         System.out.println("OK");
     }
 
-    }
+}

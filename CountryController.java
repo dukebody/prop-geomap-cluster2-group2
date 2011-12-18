@@ -515,19 +515,19 @@ public class CountryController {
     }
 
     /**
-    Get the countries in the same area of the specified one. I.e. the ones
-    that would appear in a map if one draws a bounding box covering all the
+    Get the HashMap representation of the countries in the same area of the specified one.
+    
+    I.e. the ones that would appear in a map if one draws a bounding box covering all the
     zones of the country.
 
     @param countryName Name of the country.
 
-    @return List of names of the countries in the same area or empty list if
-    the specified country wasn't found.
+    @return HashMap list of countries in the same area or empty list if the specified country wasn't found.
     */
-    public List<String> getCountriesInTheSameArea(String countryName) {
+    public List<HashMap<String,String>> getCountriesInTheSameArea(String countryName) {
         ArrayList<Double> extremeValues = getCountryExtremeValues(countryName);
 
-        ArrayList<String> countries = new ArrayList<String>();
+        ArrayList<HashMap<String,String>> countries = new ArrayList<HashMap<String,String>>();
         if (extremeValues.isEmpty()) // country not found
             return countries;
 
@@ -545,9 +545,9 @@ public class CountryController {
         for (Node<BorderPoint> node: nodes) {
             BorderPoint bp = node.value;
             for (Zone zone: bp.getZones()) {
-                String name = zone.getCountry().getName();
-                if (!countries.contains(name)) {
-                    countries.add(name);
+                HashMap<String,String> countryMap = getMap(zone.getCountry());
+                if (!countries.contains(countryMap)) {
+                    countries.add(countryMap);
                 }
             }
         }
