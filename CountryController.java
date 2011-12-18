@@ -1,4 +1,5 @@
 import java.util.*;
+import java.lang.Math;
 
 /**
 This controller manages country-related data and serves as
@@ -445,10 +446,15 @@ public class CountryController {
     (latitude, longitude).
 
     @param countryName Name of the country.
+
+    @return List of border points or null if the country wasn't found.
     */
     public ArrayList<ArrayList<Double[]>> getCountryBorderPointsForDrawing(String countryName) {
-        ArrayList<ArrayList<Double[]>> allPoints = new ArrayList<ArrayList<Double[]>>();
         Country country = getRawCountry(countryName);
+        if (country == null)  // country not found
+            return null;
+        ArrayList<ArrayList<Double[]>> allPoints = new ArrayList<ArrayList<Double[]>>();
+
         for (Zone zone: country.getZones()) {
             ArrayList<Double[]> zonePoints = new ArrayList<Double[]>();
             for (BorderPoint bp: zone.getBorderpoints()) {
@@ -459,6 +465,46 @@ public class CountryController {
             allPoints.add(zonePoints);
         }
         return allPoints;
+    }
+
+    /**
+    Get the most extreme values for the specified country. This will effectively
+    return the corners of the smallest rectangle containing the country.
+
+    @param countryName Name of the country.
+
+    @return ArrayList in the order (maxLong, minLong, maxLat, minLang) or null
+    if the country was not found.
+    */
+    public ArrayList<Double> getCountryExtremeValues(String countryName) {
+        Country country = getRawCountry(countryName);
+        if (country == null)  // country not found
+            return null;
+
+        ArrayList<Double> extremeValues = new ArrayList<Double>(4);
+
+        Double maxLong = -180.0;
+        Double minLong = 180.0;
+        Double maxLat = -90.0;
+        Double minLat = 90.0;
+
+        ArrayList<Double> zoneExtremeValues;
+        // for every zone
+        for (Zone zone: country.getZones()) {
+            // update the country extreme values
+            zoneExtremeValues = lc.getZoneExtremeValues(zone);
+            maxLong = Math.max(maxLong, zoneExtremeValues.get(0));
+            minLong = Math.min(minLong, zoneExtremeValues.get(1));
+            maxLat = Math.max(maxLat, zoneExtremeValues.get(2));
+            minLat = Math.min(minLat, zoneExtremeValues.get(3));
+        }
+
+        extremeValues.add(maxLong);
+        extremeValues.add(minLong);
+        extremeValues.add(maxLat);
+        extremeValues.add(minLat);
+
+        return extremeValues;
     }
 }
 

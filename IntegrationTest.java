@@ -199,4 +199,21 @@ public class IntegrationTest extends TestCase {
         System.out.println("OK");
 
     }
-}
+
+    @Test
+    public void testGetCountryExtremeValues() {
+        ArrayList<Double> countryExtreme = countryc.getCountryExtremeValues("Spain");
+        Country country = countryc.getRawCountry("Spain");
+
+        System.out.print("Checking that getCountryExtremeValues returns the most extreme values of all zones...");
+        for (Zone zone: country.getZones()) {
+            ArrayList<Double> zoneExtreme = linec.getZoneExtremeValues(zone);
+            assertTrue(countryExtreme.get(0) >= zoneExtreme.get(0));
+            assertTrue(countryExtreme.get(1) <= zoneExtreme.get(1));
+            assertTrue(countryExtreme.get(2) >= zoneExtreme.get(2));
+            assertTrue(countryExtreme.get(3) <= zoneExtreme.get(3));
+            }
+        }
+        
+
+    }
