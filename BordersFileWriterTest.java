@@ -36,7 +36,7 @@ public class BordersFileWriterTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         File file = new File("bords.txt");
-        File file2 = new File("BordersTest.txt");
+        File file2 = new File("data/Fronteres/test/BordersTest.txt");
         BordersFileWriter writer= new BordersFileWriter(file);
         BordersFileParser parser = new BordersFileParser(file2);
         writer.write(parser.getIterator());
@@ -53,7 +53,7 @@ public class BordersFileWriterTest extends TestCase {
     public void testEqualFiles() throws Exception {
         String thisLine1;
         FileInputStream fin1 =  new FileInputStream("bords.txt");
-        FileInputStream fin2 =  new FileInputStream("BordersTest.txt");
+        FileInputStream fin2 =  new FileInputStream("data/Fronteres/test/BordersTest.txt");
 
         System.out.print("Checking that convertion from file to hashmaps and back returns identical contents...");
         assertEquals(true, contentEquals(fin1, fin2));

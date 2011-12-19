@@ -17,7 +17,7 @@ public class BordersFileParserTest {
     @Test
     public void testOKFile() {
         try {
-            File f = new File("Fronteres.txt");
+            File f = new File("data/Fronteres/test/Fronteres_short.txt");
             BordersFileParser parser = new BordersFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             HashMap<String,String> map = new HashMap<String,String>();
@@ -47,7 +47,7 @@ public class BordersFileParserTest {
         System.out.println("Checking that loading files with weird characters in the middle fails...");
 
         try {
-            File f = new File("FronteresMiddleWrong.txt");
+            File f = new File("data/Fronteres/test/FronteresMiddleWrong.txt");
             BordersFileParser parser = new BordersFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 
@@ -63,7 +63,7 @@ public class BordersFileParserTest {
         System.out.println("Checking that loading a file with a blank ending line fails...");
 
         try {
-            File f = new File("FronteresBlankEndingLine.txt");
+            File f = new File("data/Fronteres/test/FronteresBlankEndingLine.txt");
             BordersFileParser parser = new BordersFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 
@@ -79,7 +79,7 @@ public class BordersFileParserTest {
         System.out.println("Checking that loading files with a completely different format fails...");
 
         try {
-            File f = new File("RandomTextFile.txt");
+            File f = new File("data/Fronteres/test/RandomTextFile.txt");
             BordersFileParser parser = new BordersFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 
@@ -95,7 +95,7 @@ public class BordersFileParserTest {
         System.out.println("Checking that loading files with wrong header format fails...");
 
         try {
-            File f = new File("FronteresWrongHeaders.txt");
+            File f = new File("data/Fronteres/test/FronteresWrongHeaders.txt");
             BordersFileParser parser = new BordersFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 
@@ -111,7 +111,7 @@ public class BordersFileParserTest {
         System.out.println("Checking that trying to get an element if hasNext() returns false fails...");
 
         try {
-            File f = new File("Fronteres.txt");
+            File f = new File("data/Fronteres/test/Fronteres_short.txt");
             BordersFileParser parser = new BordersFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 

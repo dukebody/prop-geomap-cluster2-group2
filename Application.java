@@ -18,7 +18,7 @@ public class Application{
 	private static JFrame frame;
 	private static File file1;
 	private static File file2;
-	private static File file3 = new File("FeatureCodes_Cities.txt");
+	private static File file3 = new File("data/Toponims/FeatureCodes_Cities.txt");
 	private static String countryName;
 	private static CountryController countryc;
 	private static ZonesController zonesc;

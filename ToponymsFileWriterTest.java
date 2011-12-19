@@ -36,7 +36,7 @@ public class ToponymsFileWriterTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         File file = new File("tops.txt");
-        File file2 = new File("ToponymsTest.txt");
+        File file2 = new File("data/Toponims/test/ToponymsTest.txt");
         ToponymsFileWriter writer= new ToponymsFileWriter(file);
         ToponymsFileParser parser = new ToponymsFileParser(file2);
         writer.write(parser.getIterator());
@@ -53,7 +53,7 @@ public class ToponymsFileWriterTest extends TestCase {
     public void testEqualFiles() throws Exception {
         String thisLine1;
         FileInputStream fin1 =  new FileInputStream("tops.txt");
-        FileInputStream fin2 =  new FileInputStream("ToponymsTest.txt");
+        FileInputStream fin2 =  new FileInputStream("data/Toponims/test/ToponymsTest.txt");
 
         System.out.print("Checking that convertion from file to hashmaps and back returns identical contents...");
         assertEquals(true, contentEquals(fin1, fin2));

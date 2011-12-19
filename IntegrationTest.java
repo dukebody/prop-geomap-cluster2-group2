@@ -37,19 +37,16 @@ public class IntegrationTest extends TestCase {
         citiesc = new CitiesController(ds);
         linec = new LineController(ds);
 
-        File fFronteres = new File("Fronteres_OurEurope.txt");
-        //File fFronteres = new File("Fronteres_A.txt");
+        File fFronteres = new File("data/Fronteres/test/Fronteres_OurEurope.txt");
         BordersFileParser parserFronteres = new BordersFileParser(fFronteres);
         Iterator<HashMap<String,String>> itrFronteres = parserFronteres.getIterator();
 
 
-        File fTypes = new File("FeatureCodes_Cities.txt");
+        File fTypes = new File("data/Toponims/FeatureCodes_Cities.txt");
         TypesFileParser typesParser = new TypesFileParser(fTypes);
         Iterator<HashMap<String,String>> itrTypes = typesParser.getIterator();
-        
 
-        //File fToponyms = new File("TopTop.txt");
-        File fToponyms = new File("TopTop.txt");
+        File fToponyms = new File("data/Toponims/test/Toponims_PopulatedShort.txt");
         ToponymsFileParser parserToponyms = new ToponymsFileParser(fToponyms);
         Iterator<HashMap<String,String>> itrToponyms = parserToponyms.getIterator();
 

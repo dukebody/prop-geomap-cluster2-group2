@@ -18,7 +18,7 @@ public class ToponymTypesDeserializerTest extends TestCase {
         DataStorage ds = new DataStorage();
         citiesc = new CitiesController(ds);
 
-        File ftypes = new File("FeatureCodes_Cities.txt");
+        File ftypes = new File("data/Toponims/FeatureCodes_Cities.txt");
         TypesFileParser typesParser = new TypesFileParser(ftypes);
         Iterator<HashMap<String,String>> typesItr = typesParser.getIterator();
         ttd = new ToponymTypesDeserializer(typesItr,citiesc);

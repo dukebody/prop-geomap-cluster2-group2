@@ -20,7 +20,7 @@ public class BorderPointsDeserializerTest extends TestCase {
         cc = new CountryController(ds);
         zc = new ZonesController(ds);
 
-        File f = new File("Fronteres_A.txt");
+        File f = new File("data/Fronteres/test/Fronteres_A.txt");
         BordersFileParser parser = new BordersFileParser(f);
         Iterator<HashMap<String,String>> itr = parser.getIterator();
 

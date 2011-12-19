@@ -21,7 +21,7 @@ public class ToponymsFileParserTest {
     @Test
     public void testOKFile() {
         try {
-            File f = new File("Toponims.txt");
+            File f = new File("data/Toponims/test/Toponims_short.txt");
             ToponymsFileParser parser = new ToponymsFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             HashMap<String,String> map = new HashMap<String,String>();
@@ -53,7 +53,7 @@ public class ToponymsFileParserTest {
         System.out.println("Checking that loading files with weird characters in the middle fails...");
 
         try {
-            File f = new File("ToponimsMiddleWrong.txt");
+            File f = new File("data/Toponims/test/ToponimsMiddleWrong.txt");
             ToponymsFileParser parser = new ToponymsFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 
@@ -69,7 +69,7 @@ public class ToponymsFileParserTest {
         System.out.println("Checking that loading a file with a blank ending line fails...");
 
         try {
-            File f = new File("ToponimsBlankEndingLine.txt");
+            File f = new File("data/Toponims/test/ToponimsBlankEndingLine.txt");
             ToponymsFileParser parser = new ToponymsFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 
@@ -85,7 +85,7 @@ public class ToponymsFileParserTest {
         System.out.println("Checking that loading files with a completely different format fails...");
 
         try {
-            File f = new File("RandomTextFile.txt");
+            File f = new File("data/Toponims/test/RandomTextFile.txt");
             ToponymsFileParser parser = new ToponymsFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 
@@ -101,7 +101,7 @@ public class ToponymsFileParserTest {
         System.out.println("Checking that loading files with wrong header format fails...");
 
         try {
-            File f = new File("ToponimsWrongHeaders.txt");
+            File f = new File("data/Toponims/test/ToponimsWrongHeaders.txt");
             ToponymsFileParser parser = new ToponymsFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 
@@ -117,7 +117,7 @@ public class ToponymsFileParserTest {
         System.out.println("Checking that trying to get an element if hasNext() returns false fails...");
 
         try {
-            File f = new File("Toponims.txt");
+            File f = new File("data/Toponims/test/Toponims_short.txt");
             ToponymsFileParser parser = new ToponymsFileParser(f);
             Iterator<HashMap<String,String>> itr = parser.getIterator();
             while (itr.hasNext()) { 

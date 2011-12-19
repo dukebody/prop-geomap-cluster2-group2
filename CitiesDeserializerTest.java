@@ -23,13 +23,13 @@ public class CitiesDeserializerTest extends TestCase {
         zonesc = new ZonesController(ds);
         citiesc = new CitiesController(ds);
 
-        File ftypes = new File("FeatureCodes_Cities.txt");
+        File ftypes = new File("data/Toponims/FeatureCodes_Cities.txt");
         TypesFileParser typesParser = new TypesFileParser(ftypes);
         Iterator<HashMap<String,String>> typesItr = typesParser.getIterator();
         ttd = new ToponymTypesDeserializer(typesItr,citiesc);
         ttd.generate();
 
-        File f = new File("Toponims10000Populated.txt");
+        File f = new File("data/Toponims/test/Toponims10000Populated.txt");
         ToponymsFileParser parser = new ToponymsFileParser(f);
         Iterator<HashMap<String,String>> itr = parser.getIterator();
 
