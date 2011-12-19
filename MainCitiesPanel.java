@@ -39,6 +39,7 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
             mainCities = cc.getMainCitiesByPopulation(countryName, nCities);
         } else {
             mainCities = cc.getAllCoastalBorderCities(countryName, dist);
+            nCities = mainCities.size();
         }
         
         label = new JLabel();

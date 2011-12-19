@@ -34,18 +34,6 @@ public class Application{
         frame.setLocation(500, 300);
         frame.setSize(450, 300);
         frame.setVisible(true);
-        
-        ds = new DataStorage();
-		countryc = new CountryController(ds);
-		zonesc = new ZonesController(ds);
-		citiesc = new CitiesController(ds);
-
-		try {
-			loadToponymTypes();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(frame, "The toponym types file couldn't be loaded. Make sure that a valid file named FeatureCodes_Cities.txt is present in the same folder of the application.",
-    	        "Error", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 	
 	public static JFrame getFrame() {
@@ -64,6 +52,18 @@ public class Application{
 	public static void getFileFinderPanel(JPanel p){
 		
 		check = false;
+        ds = new DataStorage();
+		countryc = new CountryController(ds);
+		zonesc = new ZonesController(ds);
+		citiesc = new CitiesController(ds);
+
+		try {
+			loadToponymTypes();
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(frame, "The toponym types file couldn't be loaded. Make sure that a valid file named FeatureCodes_Cities.txt is present in the same folder of the application.",
+    	        "Error", JOptionPane.ERROR_MESSAGE);
+		}
+
 		frame.remove(p);
     	frame.add(new FileFinderPanel());
         frame.setSize(400, 150);
@@ -122,15 +122,10 @@ public class Application{
 
 	private static void loadCities() throws Exception {
 		System.out.println("Loading cities...");
-		try {
-			ToponymsFileParser parserToponyms = new ToponymsFileParser(file2);
-	        Iterator<HashMap<String,String>> itrToponyms = parserToponyms.getIterator();
-			CitiesDeserializer cd = new CitiesDeserializer(itrToponyms, citiesc);
-			cd.generate();
-		} catch (Exception ex) {
-				ex.printStackTrace();
-				throw new Exception();
-		}
+		ToponymsFileParser parserToponyms = new ToponymsFileParser(file2);
+        Iterator<HashMap<String,String>> itrToponyms = parserToponyms.getIterator();
+		CitiesDeserializer cd = new CitiesDeserializer(itrToponyms, citiesc);
+		cd.generate();
 	}
 	
 	public static void getOptionPanel(JPanel p, String c){

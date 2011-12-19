@@ -36,7 +36,7 @@ public class MainCitiesCriteriaPanel extends JPanel implements ActionListener, L
 	JPanel buttonPanel;
 	
     String countryName;
-    List<String> typeCodes;
+    List<String> typeCodes = new ArrayList<String>();
     int nCities = 0;
     
     public MainCitiesCriteriaPanel() {
@@ -51,7 +51,7 @@ public class MainCitiesCriteriaPanel extends JPanel implements ActionListener, L
         labelPanel = new JPanel();
         labelPanel.add(label);
         
-        label.setText("Criteria to select main cities for " + countryName);
+        label.setText("Criteria to select main cities for " + countryName.replaceAll("_", " "));
 
 
         listModel = new DefaultListModel();
@@ -78,11 +78,11 @@ public class MainCitiesCriteriaPanel extends JPanel implements ActionListener, L
         distField = new JFormattedTextField(distFormat);
 
         nCitiesField.setMaximumSize(new Dimension(50,1));
-        nCitiesField.setColumns(4);
+        distField.setMaximumSize(new Dimension(50,1));
 
         rb1 = new JRadioButton("Filter by type", true);
         rb2 = new JRadioButton("Filter by number", false);
-        rb3 = new JRadioButton("Filter by distance to the coast (km)", false);
+        rb3 = new JRadioButton("Filter by distance to the borders (km)", false);
         
         ButtonGroup bgroup = new ButtonGroup();
         
@@ -122,7 +122,13 @@ public class MainCitiesCriteriaPanel extends JPanel implements ActionListener, L
     public void actionPerformed(ActionEvent e) {
     	if (e.getSource() == submit){
             if (rb1.isSelected()) {
-    		    Application.getMainCitiesPanel(this, typeCodes, 0, 0.0);
+                JFrame frame = Application.getFrame();
+                if (typeCodes.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Please select at least one toponym type.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    Application.getMainCitiesPanel(this, typeCodes, 0, 0.0);
+                }
             }
             else if (rb2.isSelected()) {
                 JFrame frame = Application.getFrame();

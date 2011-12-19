@@ -31,7 +31,7 @@ public class MapPanel extends JPanel implements ActionListener{
         countryName = Application.getCountryName();
         CountryController cc = Application.getCountryController();
         
-        label.setText("Map of " + countryName);
+        label.setText("Map of " + countryName.replaceAll("_", " "));
         
         back.setText("GO BACK");
         back.addActionListener(this);
