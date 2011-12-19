@@ -9,6 +9,7 @@ import java.util.*;
 
 /**
 Draws the map showing the selected country and its 10 main cities
+*/
 public class MapCanvas extends Canvas {
 
     private Graphics g2;
