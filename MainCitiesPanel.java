@@ -16,13 +16,20 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
 	JScrollPane listPanel;
 	String countryName;
     
-    public MainCitiesPanel() {
+    public MainCitiesPanel(List<String> typeCodes, int nCities) {
         super(new BorderLayout());
 
         countryName = Application.getCountryName();
 
         CountryController cc = Application.getCountryController();
-        List<HashMap<String,String>> mainCities = cc.getMainCitiesByPopulation(countryName, 10);  // XXX: Let the user input it
+
+        List<HashMap<String,String>> mainCities = new ArrayList<HashMap<String,String>>();
+        if (!typeCodes.isEmpty()) {
+            mainCities = cc.getMainCitiesByType(countryName, typeCodes);
+        }
+        else {
+            mainCities = cc.getMainCitiesByPopulation(countryName, nCities);
+        }
         
         label = new JLabel();
         back = new JButton();
@@ -42,8 +49,10 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
 //        list.setVisibleRowCount(5);
         
         
-        
-        label.setText("The Main Cities of " + countryName + " are: ");
+        if (!typeCodes.isEmpty())
+            label.setText("The main cities of " + countryName + " with the selected codes are: ");
+        else 
+            label.setText("The top " + nCities +" + main cities of " + countryName + " are: ");
         
         back.setText("GO BACK");
         back.addActionListener(this);

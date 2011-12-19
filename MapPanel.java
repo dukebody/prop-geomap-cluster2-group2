@@ -20,7 +20,6 @@ public class MapPanel extends JPanel implements ActionListener{
         label = new JLabel();
         back = new JButton();
         countryName = Application.getCountryName();
-        System.out.println(countryName);
         CountryController cc = Application.getCountryController();
         
         label.setText("The Map of " + countryName + ": ");

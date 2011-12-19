@@ -83,7 +83,7 @@ public class OptionPanel extends JPanel implements ActionListener{
 				JOptionPane.showMessageDialog(null, "The total length (boarders + coasts) of " + countryName + " is: " + result + " km!");
 			}
 			else if(rb4.isSelected()){
-				Application.getMainCitiesPanel(this);
+				Application.getMainCitiesCriteriaPanel(this);
 			}
 			else{
 				Application.getMapPanel(this);

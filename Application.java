@@ -38,6 +38,10 @@ public class Application{
 		}
 	}
 	
+	public static JFrame getFrame() {
+		return frame;
+	}
+
 	public static void getHomePanel(JPanel p){
 			
 		frame.remove(p);
@@ -129,13 +133,21 @@ public class Application{
     
 	}
 	
-	public static void getMainCitiesPanel(JPanel p){
+	public static void getMainCitiesPanel(JPanel p, List<String> typeCodes, int nCities){
 		
 		frame.remove(p);
-    	frame.add(new MainCitiesPanel());
+    	frame.add(new MainCitiesPanel(typeCodes, nCities));
         frame.setSize(350, 200);
         frame.setVisible(true);
 		
+	}
+
+	public static void getMainCitiesCriteriaPanel(JPanel p){
+		
+		frame.remove(p);
+    	frame.add(new MainCitiesCriteriaPanel());
+        frame.setSize(350, 500);
+        frame.setVisible(true);
 	}
 	
 	public static void getMapPanel(JPanel p){
