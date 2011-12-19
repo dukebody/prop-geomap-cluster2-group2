@@ -389,6 +389,47 @@ public class CountryController {
 
     }
 
+    /**
+    Get the main coastal and border cities of the specified country. (second implementation)
+
+    @param countryName Name of the country.
+
+    @param dist Distance to the coast or border to be considered coastal or border city.
+    */
+    public List<HashMap<String,String>> getAllCoastalBorderCities(String countryName, Double dist) {
+        Country country = countriesTrie.get(countryName);
+        List<HashMap<String,String>> allCities = new ArrayList<HashMap<String,String>>();
+        for (Zone zone: country.getZones()) {  // XXX: place this in the zone controller
+            // get the biggest rectangle containing the zone
+            ArrayList<Double> extremeValues = lc.getZoneExtremeValues(zone);
+            Double maxLat = extremeValues.get(2);
+            Double minLat = extremeValues.get(3);
+            Double maxLong = extremeValues.get(0);
+            Double minLong = extremeValues.get(1);
+            
+            Interval<Double> intX = new Interval(minLat,maxLat);
+            Interval<Double> intY = new Interval(minLong,maxLong);
+            Interval2D<Double> rect = new Interval2D(intX, intY);
+
+            List<Node<City>> nodeCities = new LinkedList<Node<City>>();
+            // get the cities belonging to this rectangle
+            ArrayList<Node<City>> nodes = citiesQuadTree.query2D(rect);
+            Iterator<Node<City>> nodesItr = nodes.iterator();
+            while (nodesItr.hasNext()) {
+                Node<City> nodeCity = nodesItr.next();
+                City city = nodeCity.value;
+                if (city.getZone().getId().equals(zone.getId())) {
+                    nodeCities.add(nodeCity);
+                }
+            }
+            ArrayList<City> mainCities = lc.getAllBorderCitiesFromZone(zone, nodeCities, dist);
+            for (City c: mainCities) {
+                allCities.add(cc.getMap(c));
+            }
+        }
+
+        return allCities;
+    }
 
     private class RawBorderPointsIterator implements Iterator<BorderPoint> {
 

@@ -24,7 +24,7 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
 	JScrollPane listPanel;
 	String countryName;
     
-    public MainCitiesPanel(List<String> typeCodes, int nCities) {
+    public MainCitiesPanel(List<String> typeCodes, int nCities, Double dist) {
         super(new BorderLayout());
 
         countryName = Application.getCountryName();
@@ -35,8 +35,10 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
         if (!typeCodes.isEmpty()) {
             mainCities = cc.getMainCitiesByType(countryName, typeCodes);
         }
-        else {
+        else if (nCities != 0) {
             mainCities = cc.getMainCitiesByPopulation(countryName, nCities);
+        } else {
+            mainCities = cc.getAllCoastalBorderCities(countryName, dist);
         }
         
         label = new JLabel();

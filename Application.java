@@ -143,10 +143,10 @@ public class Application{
     
 	}
 	
-	public static void getMainCitiesPanel(JPanel p, List<String> typeCodes, int nCities){
+	public static void getMainCitiesPanel(JPanel p, List<String> typeCodes, int nCities, Double dist){
 		
 		frame.remove(p);
-    	frame.add(new MainCitiesPanel(typeCodes, nCities));
+    	frame.add(new MainCitiesPanel(typeCodes, nCities, dist));
         frame.setSize(450, 300);
         frame.setVisible(true);
 		
