@@ -44,7 +44,7 @@ public class MapCanvas extends Canvas {
         setOffsetsAndScale(cc.getCountryExtremeValues(countryName));
 
         // paint the rest of the countries in black
-        g2.setColor(Color.GRAY);
+        g2.setColor(Color.LIGHT_GRAY);
         for (HashMap<String,String> map: cc.getCountriesInTheSameArea(countryName)) {
             paintPoints(cc.getCountryBorderPointsForDrawing(map.get("name")), g2);
         }

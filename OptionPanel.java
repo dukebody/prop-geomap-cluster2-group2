@@ -1,3 +1,5 @@
+import java.text.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -43,7 +45,7 @@ public class OptionPanel extends JPanel implements ActionListener{
     	radioPanel.add(rb5);
 
     	radioPanel.setBorder(BorderFactory.createTitledBorder(
-    	           BorderFactory.createEtchedBorder(), "Options for " + Application.getCountryName() + ": "));
+    	           BorderFactory.createEtchedBorder(), "Options for " + Application.getCountryName()));
     	
     	buttonPanel = new JPanel();
     	
@@ -66,21 +68,21 @@ public class OptionPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
     	
     	if (e.getSource() == submit) {
-    		
+    		DecimalFormat df = new DecimalFormat("#");
     		CountryController cc = Application.getCountryController();
     		String countryName = Application.getCountryName();
     		
 			if(rb1.isSelected()){
 				double result = cc.getTotalSharedBorderLength(countryName.replaceAll(" ", "_"));
-				JOptionPane.showMessageDialog(null, "The borders length of " + countryName + " is: " + result + " km!");
+				JOptionPane.showMessageDialog(null, "The borders length of " + countryName + " is: " + df.format(result) + " km!");
 			}
 			else if(rb2.isSelected()){
 				double result = cc.getTotalCoastlineLength(countryName.replaceAll(" ", "_"));
-				JOptionPane.showMessageDialog(null, "The coastal length of " + countryName + " is: " + result + " km!");
+				JOptionPane.showMessageDialog(null, "The coastal length of " + countryName + " is: " + df.format(result) + " km!");
 			}
 			else if(rb3.isSelected()){
 				double result = cc.getTotalCoastlineLength(countryName.replaceAll(" ", "_"))+cc.getTotalSharedBorderLength(countryName.replaceAll(" ", "_"));
-				JOptionPane.showMessageDialog(null, "The total length (boarders + coasts) of " + countryName + " is: " + result + " km!");
+				JOptionPane.showMessageDialog(null, "The total length (boarders + coasts) of " + countryName + " is: " + df.format(result) + " km!");
 			}
 			else if(rb4.isSelected()){
 				Application.getMainCitiesCriteriaPanel(this);

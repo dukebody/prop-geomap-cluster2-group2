@@ -22,7 +22,7 @@ public class MapPanel extends JPanel implements ActionListener{
         countryName = Application.getCountryName();
         CountryController cc = Application.getCountryController();
         
-        label.setText("The Map of " + countryName + ": ");
+        label.setText("Map of " + countryName);
         
         back.setText("GO BACK");
         back.addActionListener(this);

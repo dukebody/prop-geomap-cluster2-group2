@@ -103,7 +103,7 @@ public class Application{
 	}
 
 	private static void loadBorderPoints() throws Exception {
-
+		System.out.println("Loading border points...");
 		BordersFileParser parserFronteres = new BordersFileParser(file1);
         Iterator<HashMap<String,String>> itrFronteres = parserFronteres.getIterator();
 		BorderPointsDeserializer bpd = new BorderPointsDeserializer(itrFronteres, countryc, zonesc);

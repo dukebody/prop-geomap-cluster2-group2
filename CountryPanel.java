@@ -39,7 +39,7 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
         list.setVisibleRowCount(5);
         list.addListSelectionListener(this);
         
-        label.setText("Select a country: ");
+        label.setText("Select a country");
         
         submit.setText("SUBMIT");
         submit.addActionListener(this);
