@@ -97,7 +97,7 @@ public class CitiesController {
     /**
     Get the HashMap representation of the specified toponym type.
 
-    @param city Instance of the TypeToponym to be translated into HashMap.
+    @param type Instance of the TypeToponym to be translated into HashMap.
     */
     public HashMap<String,String> getMap(TypeToponym type) {
         HashMap<String,String> map = new HashMap<String,String>();
@@ -144,7 +144,7 @@ public class CitiesController {
     /**
     Get the HashMap representation of the specified list of cities.
 
-    @param city List of the city instances to be translated into HashMaps.
+    @param cityList List of the city instances to be translated into HashMaps.
     */
     public List<HashMap<String,String>> getMap(List<City> cityList) {
         List<HashMap<String,String>> mapList = new LinkedList<HashMap<String,String>>();
