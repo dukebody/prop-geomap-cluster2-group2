@@ -61,8 +61,8 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
     	buttonPanel = new JPanel();
     	
     	labelPanel.add(label);
-    	buttonPanel.add(submit);
     	buttonPanel.add(back);
+        buttonPanel.add(submit);
         
         add(labelPanel, BorderLayout.NORTH);
         add(listPanel, BorderLayout.CENTER);

@@ -60,9 +60,9 @@ public class FileFinderPanel extends JPanel implements ActionListener{
 		line2.add(find2);
 		
 		JPanel line3 = new JPanel();
-		line3.add(submit);
-		line3.add(submitWithValidation);
 		line3.add(home);
+		line3.add(submitWithValidation);
+		line3.add(submit);
 		  
 		add(line1, BorderLayout.NORTH);
 		add(line2, BorderLayout.CENTER);

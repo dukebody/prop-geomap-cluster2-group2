@@ -64,8 +64,8 @@ public class OptionPanel extends JPanel implements ActionListener{
     	back.setText("GO BACK");
     	back.addActionListener(this);
     	
-    	buttonPanel.add(submit);
     	buttonPanel.add(back);
+        buttonPanel.add(submit);
     	
     	add(radioPanel, BorderLayout.NORTH);
 		add(buttonPanel, BorderLayout.SOUTH);
