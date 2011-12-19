@@ -39,20 +39,15 @@ public class MainCitiesPanel extends JPanel implements ActionListener{
         Iterator<HashMap<String,String>> iter = mainCities.iterator();
         while(iter.hasNext()){
         	String name = iter.next().get("nameUTF").replaceAll("_", " ");
-            System.out.println(name);
         	listModel.addElement(name);
         }
 
         list = new JList(listModel);
         
-//        list.setLayoutOrientation(JList.VERTICAL);
-//        list.setVisibleRowCount(5);
-        
-        
         if (!typeCodes.isEmpty())
             label.setText("The main cities of " + countryName + " with the selected codes are: ");
         else 
-            label.setText("The top " + nCities +" + main cities of " + countryName + " are: ");
+            label.setText("The top " + nCities + " main cities of " + countryName + " are: ");
         
         back.setText("GO BACK");
         back.addActionListener(this);

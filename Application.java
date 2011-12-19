@@ -22,7 +22,7 @@ public class Application{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new HomePanel());
         frame.setLocation(500, 300);
-        frame.setSize(350, 200);
+        frame.setSize(450, 300);
         frame.setVisible(true);
         
         ds = new DataStorage();
@@ -46,7 +46,7 @@ public class Application{
 			
 		frame.remove(p);
     	frame.add(new HomePanel());
-        frame.setSize(350, 200);
+        frame.setSize(450, 300);
         frame.setVisible(true);
 	    
 	}
@@ -85,7 +85,7 @@ public class Application{
 		if (check) {
 			frame.remove(p);
 	    	frame.add(new CountryPanel());
-	        frame.setSize(350, 200);
+	        frame.setSize(450, 300);
 	        frame.setVisible(true);
 		}
 		
@@ -128,7 +128,7 @@ public class Application{
 		countryName = c;
 		frame.remove(p);
     	frame.add(new OptionPanel());
-        frame.setSize(350, 200);
+        frame.setSize(450, 300);
     	frame.setVisible(true);
     
 	}
@@ -137,7 +137,7 @@ public class Application{
 		
 		frame.remove(p);
     	frame.add(new MainCitiesPanel(typeCodes, nCities));
-        frame.setSize(350, 200);
+        frame.setSize(450, 300);
         frame.setVisible(true);
 		
 	}
