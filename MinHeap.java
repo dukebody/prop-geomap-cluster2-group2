@@ -3,7 +3,9 @@ import java.util.*;
 /**
    Taken from:
    http://comscigate.com/HW/cs31/src_code/ch21/pqueue/MinHeap.java
-   We consider a Heap a "basic" data structure. :)
+   
+   This is used to iteratively sort the cities of a country by population keeping
+   only the most N populated ones, where N is the size of the MinHeap.
 */
 public class MinHeap<T extends Comparable>
 {

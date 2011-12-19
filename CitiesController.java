@@ -1,6 +1,8 @@
 import java.util.*;
 
-
+/**
+This controller manages city-related operations.
+*/
 public class CitiesController {
 
     private Trie<City> citiesTrie;
@@ -10,7 +12,9 @@ public class CitiesController {
 
     private LineController lc;
 
-
+    /**
+    Iterator that transforms incoming cities into their HashMap representation.
+    */
     private class CitiesIterator implements Iterator<HashMap<String,String>> {
 
         private Iterator<City> trieIterator;
@@ -32,6 +36,9 @@ public class CitiesController {
         }
     }
 
+    /**
+    Iterator that transforms incoming toponym types into their HashMap representation.
+    */
     private class CityTypesIterator implements Iterator<HashMap<String,String>> {
 
         private Iterator<TypeToponym> trieIterator;
@@ -155,6 +162,16 @@ public class CitiesController {
         return mapList;
     }
 
+    /**
+    Determining the zone where this city belongs.
+
+    This is done getting the closer border points to the city and then exploring the zones
+    they are part of, checking if they're inside or not.
+
+    @param city City whose zone has to be determined.
+
+    @return Zone instance where the city belongs.
+    */
     private Zone calculateZone(City city) {
         // create a stack for open (to explore) zones and another for closed (explored) ones
         Stack<Zone> openZones = new Stack<Zone>();

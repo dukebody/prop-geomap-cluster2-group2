@@ -1,3 +1,8 @@
+/*
+Author: Israel Saeta Pérez
+*/
+
+
 import java.io.*;
 import java.lang.*;
 import java.util.*;
@@ -10,7 +15,11 @@ import org.junit.Test;
 
 import junit.textui.TestRunner;
 
-
+/**
+This test exercises the whole system, loading borderpoints, toponym types and cities
+and performing operations that involve many components at the same time and a complex
+data fixture and therefore can't be unit-tested easily.
+*/
 public class IntegrationTest extends TestCase {
 
     public static void main(String[] args) {

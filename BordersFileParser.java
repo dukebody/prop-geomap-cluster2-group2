@@ -14,6 +14,11 @@ with the data of the file.
 */
 public class BordersFileParser extends FileParser {
 
+    /**
+    Create a new BordersFileParser using the specified filehandler.
+
+    @param f File handler.
+    */
     public BordersFileParser(File f) throws FileNotFoundException {
         _reader = new BufferedReader(new FileReader(f));
 

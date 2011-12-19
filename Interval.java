@@ -1,11 +1,7 @@
-/*************************************************************************
- *  Compilation:  javac Interval.java
- *  Execution:    java Interval
- *
- *  Implementation of an interval.
- *
- *************************************************************************/
-
+/**
+Helper class for the QuadTree taken from:
+http://algs4.cs.princeton.edu/92search/Interval.java.html
+*/
 public class Interval<Key extends Comparable<Key>> { 
     public final Key low;      // left endpoint
     public final Key high;     // right endpoint

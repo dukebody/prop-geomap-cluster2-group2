@@ -321,12 +321,16 @@ public class CountryController {
             }
         }
 
+        // sort the cities in the minheap
+        ArrayList<City> cities = new ArrayList<City>();
         while (mh.size() > 0)
-            mainCities.add(cc.getMap(mh.remove()));
+            cities.add(mh.remove());
+        Collections.sort(cities, Collections.reverseOrder());
+
+        for (City c: cities)
+            mainCities.add(cc.getMap(c));
 
         return mainCities;
-        // at the end, sort the top elements in the minheap
-
     }
 
     /**
@@ -431,6 +435,9 @@ public class CountryController {
         return allCities;
     }
 
+    /**
+    Iterator over ALL instances of BorderPoints present in the system.
+    */
     private class RawBorderPointsIterator implements Iterator<BorderPoint> {
 
         private Iterator<Country> countryItr;

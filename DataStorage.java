@@ -2,6 +2,13 @@
 author: Israel
 */
 
+/**
+This class encapsulates the whole data storage of the living application. Everytime a new
+DataStorage instance is created we get a new fresh empty data workspace.
+
+An instance of this class is expected to be passed to the constructor of every controller
+for them to get hold of any data storage resource needed.
+*/
 class DataStorage {
     private QuadTree<BorderPoint> borderPointsQuadTree;
     private QuadTree<City> citiesQuadTree;

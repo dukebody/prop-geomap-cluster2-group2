@@ -1,11 +1,7 @@
-/*************************************************************************
- *  Compilation:  javac Interval2D.java
- *  Execution:    java Interval2D
- *
- *  Implementation of 2D interval.
- *
- *************************************************************************/
-
+/**
+Helper class for the QuadTree taken from:
+http://algs4.cs.princeton.edu/92search/Interval2D.java.html
+*/
 public class Interval2D<Key extends Comparable<Key>> { 
     public final Interval<Key> intervalX;   // x-interval
     public final Interval<Key> intervalY;   // y-interval
