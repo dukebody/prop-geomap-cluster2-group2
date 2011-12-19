@@ -3,9 +3,21 @@
  * and open the template in the editor.
  */
 
+// package Controllers;
 
-import java.util.ArrayList;
-import java.util.List;
+// import Beans.BorderPoint;
+// import Beans.City;
+// import Beans.Country;
+// import Beans.DataStorage;
+// import Beans.Interval;
+// import Beans.Interval2D;
+// import Beans.Zone;
+// import Beans.Line;
+// import Beans.Node;
+// import Beans.Point;
+// import Beans.QuadTree;
+import java.util.*;
+import java.math.*;
 
 /**
  *
@@ -206,6 +218,30 @@ public class LineController {
         return "";
     }
 
+    public static Zone seekZoneWherePointBelongsTo(Point point, QuadTree<BorderPoint> allCountriesPoints){
+        ArrayList<String> checkedZones = new ArrayList<String>();
+        BorderPoint checkedPoint = null;
+        Zone zone = null;
+
+        ArrayList<Node<BorderPoint>> nodes =  allCountriesPoints.getCloserNodes(point.getLatitude(), point.getLongitude(), 0.5, 0.5);
+
+        for (int i=0;i<nodes.size();i++) {
+            checkedPoint = nodes.get(i).value;
+
+            for (int j=0;j<checkedPoint.getZones().size();j++) {
+                zone = checkedPoint.getZones().get(j);
+                if (!checkedZones.contains(zone.getId())) {
+                    if (checkIfPointIsInsideZone(point, zone)) {
+                        return zone;
+                    }
+                    checkedZones.add(zone.getId());
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static boolean checkGeometricalConsistenceForZone(ArrayList<BorderPoint> zonePoints){
         //Check the valid points
         if (zonePoints == null) return false;
@@ -247,10 +283,10 @@ public class LineController {
                 try {
                     if ((zonePoints.get(i).getLatitude() == zonePoints.get(aux).getLatitude()) &&
                         (zonePoints.get(i).getLongitude() == zonePoints.get(aux).getLongitude())) {
-                        System.out.println("problemas aquí0 en "+i+"!");
+                        System.out.println("problemas aqui0 en "+i+"!");
                         return false;
                     } //else repeatedPointCheck.add(zonePoints.get(i));
-                } catch (Exception e) { System.out.println("peta aquí0 en "+i+": "+e.getMessage()); }
+                } catch (Exception e) { System.out.println("peta aqui0 en "+i+": "+e.getMessage()); }
             }
 
             //Store old points info as the ones for being compared with the following ones
@@ -271,14 +307,14 @@ public class LineController {
                 //Chech that the current pendent is not the exact same as the previous one
                 try {
                     if ((altCont > 0) && checkIfOppositePendents(localPointA, localPointB, altPointsA.get(altCont - 1), altPointsB.get(altCont - 1))) {
-                        System.out.println("problemas aquí1 en "+i+"! (consecutive lines with OPPOSITE pendents)");
+                        System.out.println("problemas aqui1 en "+i+"! (consecutive lines with OPPOSITE pendents)");
                         return false;
                     }
-                } catch (Exception e) { System.out.println("peta aquí1 en "+i+": "+e.getMessage()); }
+                } catch (Exception e) { System.out.println("peta aqui1 en "+i+": "+e.getMessage()); }
 
                 localPendent = calculatePendent(localPointA, localPointB);
                 localCuttingPoint = calculateCuttingPoint(localPointA, localPointB);
-            } catch (Exception e) { System.out.println("peta aquí2 en "+i+": "+e.getMessage()); }
+            } catch (Exception e) { System.out.println("peta aqui2 en "+i+": "+e.getMessage()); }
 
             if (i > 1) {
                 //Make loop to previous lines and check that current line doesn't cut or get cut at any point
@@ -327,10 +363,10 @@ public class LineController {
                                      ((crossY > minorYRange1) && (crossY < majorYRange1))) &&
                                     (((crossX > minorXRange2) && (crossX < majorXRange2)) &&
                                      ((crossY > minorYRange2) && (crossY < majorYRange2)))) {
-                                    System.out.println("problemas aquí2.1 en "+i+", "+j+"!");
+                                    System.out.println("problemas aqui2.1 en "+i+", "+j+"!");
                                     return false;
                                 }
-                            } catch (Exception e) { System.out.println("peta aquí3 en "+i+": "+e.getMessage()); }
+                            } catch (Exception e) { System.out.println("peta aqui3 en "+i+": "+e.getMessage()); }
                         }
                     }
                 }
@@ -339,7 +375,6 @@ public class LineController {
 
         return true;
     }
-
 
     public static boolean checkIfPointIsInsideZone(Point point, Zone zone){
         //Check the points exist and points can form an area
@@ -474,7 +509,7 @@ public class LineController {
     }
 
     //assumes wrongly long as Y and lat as X, but caculates correctly
-    public static boolean checkIfPointBelongsToZone(Zone zone, double pointLat, double pointLong){
+    public static boolean checkIfPointBelongsToZone(Point point, Zone zone){
         List<BorderPoint> zonePoints = zone.getBorderpoints();
 
         //Check the valid points
@@ -485,6 +520,8 @@ public class LineController {
 
         //Check that zone is even close to the point
         ArrayList<Double> extremes = getZoneExtremeValues(zone);
+        double pointLong = point.getLongitude();
+        double pointLat = point.getLatitude();
 
         if ((extremes.get(0) < pointLong) || (extremes.get(1) > pointLong) ||
             (extremes.get(2) < pointLat) || (extremes.get(3) > pointLat)) return false;
@@ -503,59 +540,59 @@ public class LineController {
         double y2 = 0;
 
         for (int i=0;i<zonePoints.size();i++) {
-            x1 = zonePoints.get(i).getLatitude();
-            y1 = zonePoints.get(i).getLongitude();
-            if ((x1 == pointLat) && (y1 == pointLong)) return true;
+            y1 = zonePoints.get(i).getLatitude();
+            x1 = zonePoints.get(i).getLongitude();
+            if ((y1 == pointLat) && (x1 == pointLong)) return true;
             if (i == 0) {
-                x0 = zonePoints.get(zonePoints.size()-1).getLatitude();
+                x0 = zonePoints.get(zonePoints.size()-1).getLongitude();
             } else {
-                x0 = zonePoints.get(i-1).getLatitude();
+                x0 = zonePoints.get(i-1).getLongitude();
             }
             if ((i+1) == zonePoints.size()) {
-                x2 = zonePoints.get(0).getLatitude();
-                y2 = zonePoints.get(0).getLongitude();
+                x2 = zonePoints.get(0).getLongitude();
+                y2 = zonePoints.get(0).getLatitude();
             } else {
-                x2 = zonePoints.get(i+1).getLatitude();
-                y2 = zonePoints.get(i+1).getLongitude();
+                x2 = zonePoints.get(i+1).getLongitude();
+                y2 = zonePoints.get(i+1).getLatitude();
             }
             if (i < zonePoints.size()-2) {
-                x3 = zonePoints.get(i+2).getLatitude();
+                x3 = zonePoints.get(i+2).getLongitude();
             } else if (i == zonePoints.size()-2) {
-                x3 = zonePoints.get(0).getLatitude();
+                x3 = zonePoints.get(0).getLongitude();
             } else {
-                x3 = zonePoints.get(1).getLatitude();
+                x3 = zonePoints.get(1).getLongitude();
             }
 
-            if ((pointLat == x1) && (pointLat == x2) && (((pointLong >= y1) && (pointLong <= y2)) || ((pointLong >= y2) && (pointLong <= y1)))) {
+            if ((pointLong == x1) && (pointLong == x2) && (((pointLat >= y1) && (pointLat <= y2)) || ((pointLat >= y2) && (pointLat <= y1)))) {
                 return true;
-            } else if(((pointLat > x1) && (pointLat < x2)) || ((pointLat > x2) && (pointLat < x1))) {
-                pendent = calculatePendent(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cutPoint = calculateCuttingPoint(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                crossPoints.add(new Double((pointLat * pendent) + cutPoint));
-            } else if ((pointLat == x1) && (pointLat < x2) && (x0 < pointLat)) {
-                pendent = calculatePendent(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cutPoint = calculateCuttingPoint(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cross = new Double((pointLat * pendent) + cutPoint);
+            } else if(((pointLong > x1) && (pointLong < x2)) || ((pointLong > x2) && (pointLong < x1))) {
+                pendent = calculatePendent(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cutPoint = calculateCuttingPoint(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                crossPoints.add(new Double((pointLong * pendent) + cutPoint));
+            } else if ((pointLong == x1) && (pointLong < x2) && (x0 < pointLong)) {
+                pendent = calculatePendent(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cutPoint = calculateCuttingPoint(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cross = new Double((pointLong * pendent) + cutPoint);
                 if (crossPoints.isEmpty() || !crossPoints.contains(cross)) crossPoints.add(cross);
-            } else if ((pointLat == x2) && (pointLat > x1) && (x3 > pointLat)) {
-                pendent = calculatePendent(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cutPoint = calculateCuttingPoint(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cross = new Double((pointLat * pendent) + cutPoint);
+            } else if ((pointLong == x2) && (pointLong > x1) && (x3 > pointLong)) {
+                pendent = calculatePendent(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cutPoint = calculateCuttingPoint(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cross = new Double((pointLong * pendent) + cutPoint);
                 if (crossPoints.isEmpty() || !crossPoints.contains(cross)) crossPoints.add(cross);
-            } else if ((pointLat == x2) && (pointLat < x1) && (x3 < pointLat)) {
-                pendent = calculatePendent(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cutPoint = calculateCuttingPoint(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cross = new Double((pointLat * pendent) + cutPoint);
+            } else if ((pointLong == x2) && (pointLong < x1) && (x3 < pointLong)) {
+                pendent = calculatePendent(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cutPoint = calculateCuttingPoint(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cross = new Double((pointLong * pendent) + cutPoint);
                 if (crossPoints.isEmpty() || !crossPoints.contains(cross)) crossPoints.add(cross);
-            } else if ((pointLat == x1) && (pointLat > x2) && (x0 > pointLat)) {
-                pendent = calculatePendent(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cutPoint = calculateCuttingPoint(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cross = new Double((pointLat * pendent) + cutPoint);
+            } else if ((pointLong == x1) && (pointLong > x2) && (x0 > pointLong)) {
+                pendent = calculatePendent(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cutPoint = calculateCuttingPoint(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cross = new Double((pointLong * pendent) + cutPoint);
                 if (crossPoints.isEmpty() || !crossPoints.contains(cross)) crossPoints.add(cross);
-            } else if ((pointLat == x1) || (pointLat == x2)) {
-                pendent = calculatePendent(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cutPoint = calculateCuttingPoint(new BorderPoint(x1, y1), new BorderPoint(x2, y2));
-                cross = new Double((pointLat * pendent) + cutPoint);
+            } else if ((pointLong == x1) || (pointLong == x2)) {
+                pendent = calculatePendent(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cutPoint = calculateCuttingPoint(new BorderPoint(y1, x1), new BorderPoint(y2, x2));
+                cross = new Double((pointLong * pendent) + cutPoint);
                 if (!crossPoints.contains(cross) && !touchPoints.contains(cross)) touchPoints.add(cross);
             }
         }
@@ -563,7 +600,7 @@ public class LineController {
         //System.out.print("-touch size: " + touchPoints.size());
 
         for (int i=0;i<(touchPoints.size());i++) {
-            if (pointLong == touchPoints.get(i)) {
+            if (pointLat == touchPoints.get(i)) {
                 //System.out.println("");
                 return true;
             }
@@ -581,8 +618,8 @@ public class LineController {
 
         for (int i=0;i<(crossPoints.size()-1);i++) {
             if ((i % 2) == 0) {
-                if ((pointLong >= crossPoints.get(i)) && (pointLong <= crossPoints.get(i+1))) return true;
-                else if((pointLong <= crossPoints.get(i)) && (pointLong >= crossPoints.get(i+1))) return true;
+                if ((pointLat >= crossPoints.get(i)) && (pointLat <= crossPoints.get(i+1))) return true;
+                else if((pointLat <= crossPoints.get(i)) && (pointLat >= crossPoints.get(i+1))) return true;
             }
         }
 
@@ -608,8 +645,7 @@ public class LineController {
         return crossPoint;
     }
 
-
-    private static double calculatePendent(BorderPoint pointA, BorderPoint pointB){
+    private static double calculatePendent(Point pointA, Point pointB){
         if (pointB.getLatitude() == pointA.getLatitude()) return 0;
         else if ((pointB.getLongitude() == pointA.getLongitude()) &&
                  ((pointB.getLatitude() - pointA.getLatitude()) > 0)) return Double.POSITIVE_INFINITY;
@@ -619,7 +655,7 @@ public class LineController {
                                (pointB.getLongitude() - pointA.getLongitude()));
     }
 
-    private static double calculateCuttingPoint(BorderPoint pointA, BorderPoint pointB){
+    private static double calculateCuttingPoint(Point pointA, Point pointB){
         if ((pointB.getLatitude() * pointA.getLongitude()) ==
             (pointA.getLatitude() * pointB.getLongitude())) return 0;
         else if ((pointA.getLongitude() == pointB.getLongitude()) &&
@@ -633,7 +669,7 @@ public class LineController {
                                (pointA.getLongitude() - pointB.getLongitude()));
     }
 
-    private static boolean checkIfOppositePendents(BorderPoint point1A, BorderPoint point1B, BorderPoint point2A, BorderPoint point2B){
+    private static boolean checkIfOppositePendents(Point point1A, Point point1B, Point point2A, Point point2B){
         if (calculatePendent(point1A, point1B) == calculatePendent(point2A, point2B)) {
             int s1 = 1;
             int s2 = 1;
@@ -647,7 +683,7 @@ public class LineController {
             else if (((point2B.getLongitude() - point2A.getLongitude()) < 0) &&
                      ((point2B.getLatitude() - point2A.getLatitude()) >= 0)) s2 = -1;
 
-            if ((s1 - s2) == 0) return true;
+            if ((s1 + s2) == 0) return true;
             else return false;
         } else return false;
     }
@@ -694,5 +730,65 @@ public class LineController {
         extremeValues.add(minLat);
 
         return extremeValues;
+    }
+
+    public ArrayList<City> getAllBorderCitiesFromZone(Zone zone, List<Node<City>> areaCities, Double refDistance){
+        ArrayList<City> borderCities = new ArrayList<City>();
+        BorderPoint pointA = null;
+        BorderPoint pointB = null;
+        City city = null;
+        
+        for (int j=0;j<zone.getBorderpoints().size();j++) {
+            pointA = zone.getBorderpoints().get(j);
+            if ((j + 1) == zone.getBorderpoints().size()) pointB = zone.getBorderpoints().get(0);
+            else pointB = zone.getBorderpoints().get(j+1);
+
+            Iterator<Node<City>> cityItr = areaCities.iterator();
+
+            while (cityItr.hasNext()) {
+                city = cityItr.next().value;
+                if ((!borderCities.contains(city)) && (city.getZone().getId().equals(zone.getId()))) {
+                    if (getMinDistanceFromPointToLine(city, new Line(pointA, pointB)) <= refDistance) {
+                        borderCities.add(city);
+                    }
+                }
+            }
+        }
+
+        return borderCities;
+    }
+
+    private static double getMinDistanceFromPointToLine(Point point, Line line){
+        double d1 = point.getLinearDistanceTo(line.getPoints()[0]);
+        double d2 = point.getLinearDistanceTo(line.getPoints()[1]);
+        double se = line.getLength();
+
+        if ((d2 > d1) && (((Math.pow(d1, d1) + Math.pow(d2, d2)) < Math.pow(se, se)) ||
+                          ((Math.pow(d1, d1) + Math.pow(d2, d2)) == Math.pow(se, se)))) {
+            return d1;
+        } else if ((d1 > d2) && (((Math.pow(d1, d1) + Math.pow(d2, d2)) < Math.pow(se, se)) ||
+                                 ((Math.pow(d1, d1) + Math.pow(d2, d2)) == Math.pow(se, se)))) {
+            return d2;
+        } else {
+            return getDistanceBetweenPointAndLine(point, line);
+        }
+    }
+
+    private static double getDistanceBetweenPointAndLine(Point point, Line line){
+        if (line.getPoints()[0].getLongitude() == line.getPoints()[1].getLongitude()) {
+            //Parallel line to Y axis (Latitude)
+            return Math.abs(point.getLongitude() - line.getPoints()[0].getLongitude());
+        } else {
+            double pendent = calculatePendent(line.getPoints()[0], line.getPoints()[1]);
+            double cutPoint = calculateCuttingPoint(line.getPoints()[0], line.getPoints()[1]);
+            if (pendent == 0) {
+                //Parallel line to X axis (Longitude)
+                return Math.abs(point.getLatitude() - cutPoint);
+            } else {
+                //Any other case
+                return Math.abs((pendent + point.getLongitude()) - point.getLatitude() + cutPoint) /
+                       Math.sqrt(Math.pow(pendent, pendent) + 1);
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 public class ZonesController {
 
     private QuadTree<BorderPoint> borderPointsQuadTree;
+    private boolean validateZones = false;
 
     public ZonesController(DataStorage ds){
         borderPointsQuadTree = ds.getBorderPointsQuadTree();
@@ -21,29 +22,23 @@ public class ZonesController {
     //ArrayList<Zone> getZonesFromCountry(String countryCode);
 
     public boolean createZone(Country country, ArrayList<BorderPoint> zonePoints) throws NullPointerException {
-        // try{
-            // try {
-            //     if (!LineController.checkGeometricalConsistenceForZone(zonePoints)) {
-            //         System.out.println("Peta en el checkGeometricalConsistenceForZone");
-            //         return false;
-            //     }
-            // } catch (Exception e) {
-            //     System.out.println("Invalid zone-points:"); e.printStackTrace();
-            // }
-            
-            Zone zone = new Zone(country);
-
-            for (BorderPoint bp: zonePoints) {
-                addBorderPointZone(zone, bp);
+        try {
+            if (validateZones && !LineController.checkGeometricalConsistenceForZone(zonePoints)) {
+                return false;
             }
+        } catch (Exception e) {
+            System.out.println("Invalid zone-points:"); e.printStackTrace();
+        }
+        
+        Zone zone = new Zone(country);
 
-            ArrayList<Zone> countryZones = country.getZones();
-            countryZones.add(zone);
-            //country.setZones(countryZones);
-        // } catch (Exception e) {
-        //     System.out.println("Exception at creating a new zone for country "+country.getName()+": "+e.getMessage());
-        //     return false;
-        // }
+        for (BorderPoint bp: zonePoints) {
+            addBorderPointZone(zone, bp);
+        }
+
+        ArrayList<Zone> countryZones = country.getZones();
+        countryZones.add(zone);
+
 
         return true;
     }
@@ -131,9 +126,7 @@ public class ZonesController {
         return true;
     }
 
-    //Boolean validateCorrectGeographicZone(ArrayList<Point> points);
-
-    //public LineController getLineController() {
-        //return new LineController(DataStorage ds);
-    //}
+    public void setValidateZones(boolean flag) {
+        validateZones = flag;
+    }
 }

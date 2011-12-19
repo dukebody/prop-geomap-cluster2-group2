@@ -105,7 +105,7 @@ public class Application{
 	
 	private static void loadToponymTypes() throws Exception {
 
-		File fTypes = new File("FeatureCodes_Cities.txt");
+		File fTypes = file3;
         TypesFileParser typesParser = new TypesFileParser(fTypes);
         Iterator<HashMap<String,String>> itrTypes = typesParser.getIterator();
         ToponymTypesDeserializer ttd = new ToponymTypesDeserializer(itrTypes, citiesc);
@@ -189,5 +189,8 @@ public class Application{
 		return citiesc;
 	}
 	
+	public static void setValidateZones(boolean flag) {
+		zonesc.setValidateZones(flag);
+	}
 }
 

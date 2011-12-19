@@ -13,7 +13,7 @@ Lets the user select files to load the borders and the toponyms from.
 */
 public class FileFinderPanel extends JPanel implements ActionListener{
 	
-	JButton find1, find2, submit, home;
+	JButton find1, find2, submit, submitWithValidation, home;
     JLabel label1, label2;
 	JFrame frame;
     JFileChooser fc;
@@ -28,6 +28,7 @@ public class FileFinderPanel extends JPanel implements ActionListener{
 		find1 = new JButton();
 		find2 = new JButton();
 		submit = new JButton();
+		submitWithValidation = new JButton();
 		home = new JButton();
 		fc = new JFileChooser(System.getProperty("user.dir"));
 		
@@ -43,6 +44,9 @@ public class FileFinderPanel extends JPanel implements ActionListener{
 		
 		submit.setText("SUBMIT");
 		submit.addActionListener(this);
+
+		submitWithValidation.setText("SUBMIT & VALIDATE");
+		submitWithValidation.addActionListener(this);
 		
 		home.setText("HOME");
 		home.addActionListener(this);
@@ -57,6 +61,7 @@ public class FileFinderPanel extends JPanel implements ActionListener{
 		
 		JPanel line3 = new JPanel();
 		line3.add(submit);
+		line3.add(submitWithValidation);
 		line3.add(home);
 		  
 		add(line1, BorderLayout.NORTH);
@@ -89,13 +94,23 @@ public class FileFinderPanel extends JPanel implements ActionListener{
         } else if (e.getSource() == submit) {
         	
         	if(file1 != null && file2 != null){
+                   Application.setValidateZones(false);
                    Application.getCountryPanel(this, file1, file2);
         	}
         	else{
         		JOptionPane.showMessageDialog(null, "You have to choose both files!");
         	}
         	
-        } else if (e.getSource() == home) {
+        } else if (e.getSource() == submitWithValidation) {
+        	
+	    	if(file1 != null && file2 != null){
+	               Application.setValidateZones(true);
+	               Application.getCountryPanel(this, file1, file2);
+	    	}
+	    	else{
+	    		JOptionPane.showMessageDialog(null, "You have to choose both files!");
+	    	}
+    	} else if (e.getSource() == home) {
         	
         	Application.getHomePanel(this);
         	
