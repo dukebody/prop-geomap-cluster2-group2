@@ -1,8 +1,16 @@
+/*
+Author: Georgi Ivanov
+*/
+
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
+/**
+Lets the user select files to load the borders and the toponyms from.
+*/
 public class FileFinderPanel extends JPanel implements ActionListener{
 	
 	JButton find1, find2, submit, home;

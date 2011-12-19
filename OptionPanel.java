@@ -1,9 +1,16 @@
+/*
+Author: Georgi Ivanov
+*/
+
 import java.text.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+Lets the user select the information to calculate and show. Displays basic dialogs with simple info.
+*/
 public class OptionPanel extends JPanel implements ActionListener{
 	
 	

@@ -1,7 +1,17 @@
+/*
+Authors: Georgi Ivanov and Israel Saeta Pérez
+*/
+
+
 import java.io.*;
 import javax.swing.*;
 import java.util.*;
 
+
+/**
+This is the main thread for the whole application and
+controls the presentation layer flow.
+*/
 public class Application{
 
 	private static DataStorage ds;

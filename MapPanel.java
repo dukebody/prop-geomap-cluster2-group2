@@ -1,9 +1,18 @@
+/*
+Authors: Georgi Ivanov and Israel Saeta Pérez
+*/
+
+
 import java.util.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
+/**
+Panel for showing a map of the selected country and its main cities.
+*/
 public class MapPanel extends JPanel implements ActionListener{
 	
 	JLabel label;

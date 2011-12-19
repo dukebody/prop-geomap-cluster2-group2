@@ -1,9 +1,17 @@
+/*
+Authors: Georgi Ivanov and Israel Saeta Pérez
+*/
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.util.List;
 
+
+/**
+Shows the main cities of a country according to specified criteria.
+*/
 public class MainCitiesPanel extends JPanel implements ActionListener{
 	
 	ArrayList<String> cities;

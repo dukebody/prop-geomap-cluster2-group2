@@ -1,9 +1,17 @@
+/*
+Author: Georgi Ivanov
+*/
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
 
+
+/**
+Shows the list of all loaded countries for the user to select one.
+*/
 public class CountryPanel extends JPanel implements ActionListener, ListSelectionListener{
 	
 	ArrayList<String> countries;
@@ -88,26 +96,4 @@ public class CountryPanel extends JPanel implements ActionListener, ListSelectio
             
         }
     }
-    
-    
- 
-//    public static void main(String s[]) {
-//    	
-//    	ArrayList<String> list = new ArrayList<String>();
-//		list.add("Joro");
-//		list.add("Tony");
-//		list.add("Samy");
-//		list.add("Tsveta");
-//		list.add("Bobi");
-//		list.add("Borka");
-//		list.add("Gosho");
-//		list.add("Antoaneta");
-//		
-//        JFrame frame = new JFrame("List Model Example");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setContentPane(new CountryPanel(list));
-//        frame.setSize(520, 400);
-//        frame.setVisible(true);
-//      }
-    
 }

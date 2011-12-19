@@ -1,7 +1,15 @@
+/*
+Author: Georgi Ivanov
+*/
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
+/**
+Welcome window.
+*/
 public class HomePanel extends JPanel implements ActionListener{
 	
 	JButton jButton1, jButton2;

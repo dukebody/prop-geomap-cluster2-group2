@@ -1,18 +1,15 @@
+/*
+Author: Israel Saeta Pérez
+*/
+
 import java.awt.*;
 import java.awt.geom.*;
 
 import java.util.*;
 
 /**
- *
- * @author javier
- */
-
+Draws the map showing the selected country and its 10 main cities
 public class MapCanvas extends Canvas {
-
-    /**
-     * 
-     */
 
     private Graphics g2;
 
